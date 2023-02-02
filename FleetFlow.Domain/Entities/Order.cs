@@ -10,8 +10,8 @@ namespace FleetFlow.Domain.Entities
 {
     public class Order : Auditable
     {
-        public int UserId { get; set; }
-        public int AddressId { get; set; }
+        public long UserId { get; set; }
+        public long AddressId { get; set; }
         public OrderStatus Status { get; set; } = OrderStatus.Pending;
         public ICollection<OrderItem> OrderItems { get; set; }
     }

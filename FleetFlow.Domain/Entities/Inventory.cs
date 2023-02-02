@@ -10,9 +10,9 @@ namespace FleetFlow.Domain.Entities
 {
     public class Inventory : Auditable
     {
-        public int ProductId { get; set; }
+        public long ProductId { get; set; }
         public int Amount { get; set; }
-        public int LocationId { get; set; }
-        public int MerchantId { get; set; }
+        public long LocationId { get; set; }
+        public long MerchantId { get; set; }
     }
 }

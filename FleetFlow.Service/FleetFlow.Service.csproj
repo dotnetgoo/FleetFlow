@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\FleetFlow.DAL\FleetFlow.DAL.csproj" />
+    <ProjectReference Include="..\FleetFlow.Domain\FleetFlow.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
