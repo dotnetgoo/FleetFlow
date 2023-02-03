@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FleetFlow.DAL.IRepositories
 {
-    public interface IRepository<TEntity>
+    public interface IRepository<TEntity> where TEntity : class
     {
         Task<TEntity> InsertAsync(TEntity user);
         Task<TEntity> UpdateAsync(long id, TEntity user);
