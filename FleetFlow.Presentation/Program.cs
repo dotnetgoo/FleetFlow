@@ -6,9 +6,9 @@ namespace FleetFlow.Presentation
 {
     public class Program
     {
+        private static IUserService userService = new UserService();
         static void Main(string[] args)
         {
-            IUserService userService = new UserService();
             userService.GetAllByRoleAsync();
         }
     }
