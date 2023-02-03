@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FleetFlow.DAL.Repositories
 {
-    public class Repository<TEntity> : IRepository<TEntity>
+    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : class
     {
         public Task<bool> DeleteAsync(long id)
         {
