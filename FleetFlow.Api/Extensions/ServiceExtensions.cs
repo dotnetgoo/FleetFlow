@@ -17,6 +17,7 @@ namespace FleetFlow.Api.Extensions
         /// <param name="services"></param>
         public static void AddCustomServices(this IServiceCollection services)
         {
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserService, UserService>();
         }
 

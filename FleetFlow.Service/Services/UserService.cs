@@ -14,17 +14,16 @@ namespace FleetFlow.Service.Services
 {
     public class UserService : IUserService
     {
-        private readonly IRepository<User> userRepository;
-
-        public UserService(IRepository<User> userRepository)
+        private readonly IUnitOfWork unitOfWork;
+        public UserService(IUnitOfWork unitOfWork)
         {
-            this.userRepository = userRepository;
+            this.unitOfWork = unitOfWork;
         }
 
         public async Task<User> AddAsync(User user)
         {
             // check for exist user
-            var existUser = await userRepository
+            var existUser = await unitOfWork.Users
                 .SelectAsync(p => p.Phone == user.Phone);
             
             if (existUser != null)
@@ -32,19 +31,23 @@ namespace FleetFlow.Service.Services
                 throw new Exception("User already exist");
             }
 
-            return await userRepository.InsertAsync(user);
+            var result = await unitOfWork.Users.InsertAsync(user);
+
+            await unitOfWork.SaveChangesAsync();
+
+            return result;
         }
 
         public Task<IEnumerable<User>> GetAllAsync()
         {
-            var users = userRepository.SelectAllAsync();
+            var users = unitOfWork.Users.SelectAllAsync();
 
             return users;
         }
 
         public Task<IEnumerable<User>> GetAllByRoleAsync(UserRole role = UserRole.Admin)
         {
-            var users = userRepository.SelectAllAsync(u => u.Role == role);
+            var users = unitOfWork.Users.SelectAllAsync(u => u.Role == role);
 
             return users;
         }
