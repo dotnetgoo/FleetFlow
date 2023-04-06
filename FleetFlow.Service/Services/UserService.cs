@@ -14,8 +14,12 @@ namespace FleetFlow.Service.Services
 {
     public class UserService : IUserService
     {
-        private readonly IRepository<User> userRepository 
-            = new Repository<User>();
+        private readonly IRepository<User> userRepository;
+
+        public UserService(IRepository<User> userRepository)
+        {
+            this.userRepository = userRepository;
+        }
 
         public async Task<User> AddAsync(User user)
         {
