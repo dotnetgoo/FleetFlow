@@ -10,9 +10,13 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-// builder.Services.AddDbContext<FleetFlowDbContext>(options => 
-//     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-    
+
+// Registrate DbContext to DI container
+builder.Services.AddDbContext<FleetFlowDbContext>(
+    options =>
+        options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection") 
+        ?? throw new InvalidOperationException("Cannot access server!"), b => b.MigrationsAssembly("FleetFlow.Api")));
+
 builder.Services.AddCustomServices();
 
 var app = builder.Build();

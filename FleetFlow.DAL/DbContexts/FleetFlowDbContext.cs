@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FleetFlow.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,20 +5,10 @@ namespace FleetFlow.DAL.DbContexts
 {
     public class FleetFlowDbContext : DbContext
     {
-        public FleetFlowDbContext()
+        public FleetFlowDbContext(DbContextOptions<FleetFlowDbContext> options)
+            : base(options)
         {
-            
-        }
-
-        // public FleetFlowDbContext(DbContextOptions<FleetFlowDbContext> options)
-        //     : base(options)
-        // {
-
-        // }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql("Host=localhost; User Id=postgres; Password=root; Database=FleetFlowDb;");
+            Database.Migrate();
         }
 
         public DbSet<Address> Addresses { get; set; }
