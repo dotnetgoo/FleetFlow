@@ -2,6 +2,7 @@
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Commons;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq.Expressions;
 
 namespace FleetFlow.DAL.Repositories
@@ -15,8 +16,6 @@ namespace FleetFlow.DAL.Repositories
             this.dbContext = dbContext;
             this.dbSet = dbContext.Set<TEntity>();
         }
-
-        #region Delete
         /// <summary>
         /// Deletes first item that matched expression and keep track of it until change saved
         /// </summary>
@@ -34,9 +33,7 @@ namespace FleetFlow.DAL.Repositories
 
             return false;
         }
-        #endregion
 
-        #region Insert
         /// <summary>
         /// Inserts element to a table and keep track of it until change saved
         /// </summary>
@@ -48,9 +45,7 @@ namespace FleetFlow.DAL.Repositories
 
             return entry.Entity;
         }
-        #endregion
 
-        #region Save
         /// <summary>
         /// Saves tracking changes and write them to database permenantly
         /// </summary>
@@ -59,17 +54,13 @@ namespace FleetFlow.DAL.Repositories
         {
             await dbContext.SaveChangesAsync();
         }
-        #endregion
 
-        #region Select All
         /// <summary>
         /// Selects all element of table
         /// </summary>
         /// <returns></returns>
         public IQueryable<TEntity> SelectAll() => this.dbSet;
-        #endregion
 
-        #region Select
         /// <summary>
         /// selects element from a table specified with expression
         /// </summary>
@@ -77,8 +68,7 @@ namespace FleetFlow.DAL.Repositories
         /// <returns></returns>
         public async Task<TEntity> SelectAsync(Expression<Func<TEntity, bool>> expression)
             => await this.dbSet.FirstOrDefaultAsync(expression);
-        #endregion
-        #region Update
+
         /// <summary>
         /// Updates entity and keep track of it until change saved
         /// </summary>
@@ -87,10 +77,9 @@ namespace FleetFlow.DAL.Repositories
         /// <returns></returns>
         public async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            var entry = this.dbSet.Update(entity);
+            EntityEntry<TEntity> entryentity = this.dbContext.Update(entity);
 
-            return await Task.FromResult(entry.Entity);
+            return entryentity.Entity;
         }
-        #endregion
     }
 }
