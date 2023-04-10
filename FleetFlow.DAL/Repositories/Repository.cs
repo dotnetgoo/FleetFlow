@@ -78,10 +78,19 @@ namespace FleetFlow.DAL.Repositories
         public async Task<TEntity> SelectAsync(Expression<Func<TEntity, bool>> expression)
             => await this.dbSet.FirstOrDefaultAsync(expression);
         #endregion
-
-        public Task<TEntity> UpdateAsync(long id, TEntity entity)
+        #region Update
+        /// <summary>
+        /// Updates entity and keep track of it until change saved
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public async Task<TEntity> UpdateAsync(TEntity entity)
         {
-            throw new NotImplementedException();
+            var entry = this.dbSet.Update(entity);
+
+            return await Task.FromResult(entry.Entity);
         }
+        #endregion
     }
 }
