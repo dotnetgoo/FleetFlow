@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using FleetFlow.Api.Models;
 using FleetFlow.Service.Exceptions;
 
 namespace FleetFlow.Api.Middlewares
@@ -19,15 +16,25 @@ namespace FleetFlow.Api.Middlewares
         {
             try
             {
-                // try to do it
+                await next(context);
             }
             catch(FleetFlowException exception)
             {
-                // handle request
+                context.Response.StatusCode = exception.Code;
+                await context.Response.WriteAsJsonAsync(new Response
+                {
+                    Code = exception.Code,
+                    Error = exception.Message
+                });
             }
             catch(Exception exception)
             {
-                // handle request
+                context.Response.StatusCode = 500;
+                await context.Response.WriteAsJsonAsync(new Response
+                {
+                   Code = 500,
+                   Error = exception.Message 
+                });
             }
         }
     }

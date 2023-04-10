@@ -14,11 +14,11 @@ namespace FleetFlow.DAL.DbContexts
             
         }
 
-        // public FleetFlowDbContext(DbContextOptions<FleetFlowDbContext> options)
-        //     : base(options)
-        // {
+        public FleetFlowDbContext(DbContextOptions<FleetFlowDbContext> options)
+            : base(options)
+        {
 
-        // }
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
