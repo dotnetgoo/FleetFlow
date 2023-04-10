@@ -3,6 +3,7 @@ using FleetFlow.DAL.Repositories;
 using FleetFlow.Domain.Entities;
 using FleetFlow.Domain.Enums;
 using FleetFlow.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,16 +39,19 @@ namespace FleetFlow.Service.Services
             return result;
         }
 
-        public Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
-            var users = unitOfWork.Users.SelectAllAsync();
+            var users = await unitOfWork.Users.SelectAll()
+                .ToListAsync();
 
             return users;
         }
 
-        public Task<IEnumerable<User>> GetAllByRoleAsync(UserRole role = UserRole.Admin)
+        public async Task<IEnumerable<User>> GetAllByRoleAsync(UserRole role = UserRole.Admin)
         {
-            var users = unitOfWork.Users.SelectAllAsync(u => u.Role == role);
+            var users = await unitOfWork.Users.SelectAll()
+                .Where(u => u.Role == role)
+                .ToListAsync();
 
             return users;
         }
