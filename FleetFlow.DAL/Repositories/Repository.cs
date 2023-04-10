@@ -79,9 +79,19 @@ namespace FleetFlow.DAL.Repositories
             => await this.dbSet.FirstOrDefaultAsync(expression);
         #endregion
 
-        public Task<TEntity> UpdateAsync(long id, TEntity entity)
+        public async Task<TEntity> UpdateAsync(long id, TEntity entity)
         {
-            throw new NotImplementedException();
+            var existingEntity = await dbContext.Set<TEntity>().FindAsync(id);
+
+            if (existingEntity == null)
+                return null;
+
+            dbContext.Entry(existingEntity).CurrentValues.SetValues(entity);
+
+            await dbContext.SaveChangesAsync();
+
+            return existingEntity;
         }
+
     }
 }
