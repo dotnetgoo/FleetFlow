@@ -11,5 +11,8 @@ namespace FleetFlow.Domain.Entities
         public string Country { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+
+        public ICollection<Merchant> Merchants { get; set; }
+        public ICollection<Order> Orders { get; set; }
     }
 }

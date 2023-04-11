@@ -25,6 +25,7 @@ namespace FleetFlow.DAL.DbContexts
             optionsBuilder.UseNpgsql("Host=localhost; User Id=postgres; Password=root; Database=FleetFlowDb;");
         }
 
+
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Location> Locations { get; set; }
@@ -33,5 +34,10 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Address>()
+        }
     }
 }

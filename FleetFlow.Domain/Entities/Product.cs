@@ -1,10 +1,4 @@
 ﻿using FleetFlow.Domain.Commons;
-using FleetFlow.Domain.Enums;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FleetFlow.Domain.Entities
 {
@@ -14,6 +8,10 @@ namespace FleetFlow.Domain.Entities
         public string Serial { get; set; }
         public decimal Price { get; set; }
         public decimal Weight { get; set; }
-        public ProductCategoryType? Category { get; set; }
+        public long CategoryId { get; set; }
+        public ProductCategory Category { get; set; }
+
+        public ICollection<Inventory> Inventories { get; set; }
+        public ICollection<OrderItem> OrderItems { get; set; }
     }
 }
