@@ -11,4 +11,8 @@
     <ProjectReference Include="..\FleetFlow.Domain\FleetFlow.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTOs\" />
+  </ItemGroup>
+
 </Project>
