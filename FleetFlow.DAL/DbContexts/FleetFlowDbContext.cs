@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FleetFlow.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,7 +7,7 @@ namespace FleetFlow.DAL.DbContexts
     {
         public FleetFlowDbContext()
         {
-            
+
         }
 
         public FleetFlowDbContext(DbContextOptions<FleetFlowDbContext> options)
@@ -37,7 +33,61 @@ namespace FleetFlow.DAL.DbContexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Address>()
+            #region Fluent API relations
+            modelBuilder.Entity<Inventory>()
+                .HasOne(i => i.Product)
+                .WithMany(p => p.Inventories)
+                .HasForeignKey(i => i.ProductId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Inventory>()
+                .HasOne(i => i.Location)
+                .WithMany()
+                .HasForeignKey(i => i.LocationId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Inventory>()
+                .HasOne(i => i.Merchant)
+                .WithMany(m => m.Inventories)
+                .HasForeignKey(i => i.MerchantId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Merchant>()
+                .HasOne(m => m.Address)
+                .WithMany(a => a.Merchants)
+                .HasForeignKey(m => m.AddressId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.User)
+                .WithMany(u => u.Orders)
+                .HasForeignKey(o => o.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Address)
+                .WithMany(a => a.Orders)
+                .HasForeignKey(o => o.AddressId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(item => item.Order)
+                .WithMany(o => o.OrderItems)
+                .HasForeignKey(item => item.OrderId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(item => item.Product)
+                .WithMany(p => p.OrderItems)
+                .HasForeignKey(item => item.ProductId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Product>()
+                .HasOne(p => p.Category)
+                .WithMany(c => c.Products)
+                .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.NoAction);
+            #endregion
         }
     }
 }

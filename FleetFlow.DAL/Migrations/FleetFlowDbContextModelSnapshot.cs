@@ -90,6 +90,10 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("LocationId");
+
+                    b.HasIndex("MerchantId");
+
                     b.HasIndex("ProductId");
 
                     b.ToTable("Inventories");
@@ -236,8 +240,8 @@ namespace FleetFlow.DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<int?>("Category")
-                        .HasColumnType("integer");
+                    b.Property<long>("CategoryId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -259,7 +263,31 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("FleetFlow.Domain.Entities.ProductCategory", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ProductCategory");
                 });
 
             modelBuilder.Entity("FleetFlow.Domain.Entities.User", b =>
@@ -276,7 +304,10 @@ namespace FleetFlow.DAL.Migrations
                     b.Property<string>("Email")
                         .HasColumnType("text");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("FirstName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
                         .HasColumnType("text");
 
                     b.Property<string>("Password")
@@ -298,11 +329,27 @@ namespace FleetFlow.DAL.Migrations
 
             modelBuilder.Entity("FleetFlow.Domain.Entities.Inventory", b =>
                 {
-                    b.HasOne("FleetFlow.Domain.Entities.Product", "Product")
+                    b.HasOne("FleetFlow.Domain.Entities.Location", "Location")
                         .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
+
+                    b.HasOne("FleetFlow.Domain.Entities.Merchant", "Merchant")
+                        .WithMany("Inventories")
+                        .HasForeignKey("MerchantId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("FleetFlow.Domain.Entities.Product", "Product")
+                        .WithMany("Inventories")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Location");
+
+                    b.Navigation("Merchant");
 
                     b.Navigation("Product");
                 });
@@ -310,9 +357,9 @@ namespace FleetFlow.DAL.Migrations
             modelBuilder.Entity("FleetFlow.Domain.Entities.Merchant", b =>
                 {
                     b.HasOne("FleetFlow.Domain.Entities.Address", "Address")
-                        .WithMany()
+                        .WithMany("Merchants")
                         .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Address");
@@ -321,15 +368,15 @@ namespace FleetFlow.DAL.Migrations
             modelBuilder.Entity("FleetFlow.Domain.Entities.Order", b =>
                 {
                     b.HasOne("FleetFlow.Domain.Entities.Address", "Address")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("AddressId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("FleetFlow.Domain.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Address");
@@ -348,13 +395,13 @@ namespace FleetFlow.DAL.Migrations
                     b.HasOne("FleetFlow.Domain.Entities.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("FleetFlow.Domain.Entities.Product", "Product")
-                        .WithMany()
+                        .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Inventory");
@@ -364,9 +411,49 @@ namespace FleetFlow.DAL.Migrations
                     b.Navigation("Product");
                 });
 
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Product", b =>
+                {
+                    b.HasOne("FleetFlow.Domain.Entities.ProductCategory", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Address", b =>
+                {
+                    b.Navigation("Merchants");
+
+                    b.Navigation("Orders");
+                });
+
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Merchant", b =>
+                {
+                    b.Navigation("Inventories");
+                });
+
             modelBuilder.Entity("FleetFlow.Domain.Entities.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Product", b =>
+                {
+                    b.Navigation("Inventories");
+
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("FleetFlow.Domain.Entities.ProductCategory", b =>
+                {
+                    b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("FleetFlow.Domain.Entities.User", b =>
+                {
+                    b.Navigation("Orders");
                 });
 #pragma warning restore 612, 618
         }
