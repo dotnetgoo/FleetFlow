@@ -19,7 +19,6 @@ namespace FleetFlow.Service.Services
             _mapper = mapper;
             _unitOfWork = unitOfWork;
         }
-
         public async Task<Product> CreatAsync(ProductCreationDto creationDto)
         {
             var product = await this._unitOfWork.Products.SelectAsync(srn => srn.Serial == creationDto.Serial);
@@ -34,7 +33,6 @@ namespace FleetFlow.Service.Services
 
                 return restored;
         }
-
         public async Task<bool> DeleteAsync(Expression<Func<Product, bool>> expression)
         {
             Product product = await this._unitOfWork.Products.SelectAsync(expression);
@@ -46,7 +44,6 @@ namespace FleetFlow.Service.Services
 
             return isDeleted;
         }
-
         public async Task<IEnumerable<Product>> GetAllAsync()
         {
             var products = this._unitOfWork.Products.SelectAll();
@@ -55,7 +52,6 @@ namespace FleetFlow.Service.Services
                 throw new FleetFlowException(404, "Product not found");
 
             return products;
-
         }
         public async Task<Product> GetByIdAsync(Expression<Func<Product, bool>> expression)
         {
@@ -66,7 +62,6 @@ namespace FleetFlow.Service.Services
 
             return product;
         }
-
         public async Task<Product> UpdateAsync(Expression<Func<Product,bool>> expression, ProductCreationDto productDto)
         {
             Product product =
@@ -76,12 +71,10 @@ namespace FleetFlow.Service.Services
                 throw new FleetFlowException(404, "Couldn't found product for given Id");
 
             var mapped = this._mapper.Map<Product>(productDto);
-
             var updated  = await this._unitOfWork.Products.UpdateAsync(mapped);
             await this._unitOfWork.SaveChangesAsync();
 
             return updated;
-            
         }
     }
 }
