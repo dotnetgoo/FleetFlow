@@ -9,12 +9,12 @@ using System.Threading.Tasks;
 
 namespace FleetFlow.Service.Interfaces
 {
-    public interface ProductService
+    public interface IProductService
     {
         public Task<Product> CreatAsync(ProductCreationDto creationDto);
         public Task<bool> DeleteAsync(Expression<Func<Product, bool>> exception);
         public Task<Product> UpdateAsync(Expression<Func<Product, bool>> exception,ProductCreationDto productCreationDto);
-        public Task<Product> GetAllAsync();
+        public Task<IEnumerable<Product>> GetAllAsync();
         public Task<Product> GetByIdAsync(Expression<Func<Product, bool>> expression);
 
     }

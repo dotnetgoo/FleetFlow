@@ -26,19 +26,13 @@ namespace FleetFlow.Service.Services
             if (product is not null)
                 throw new FleetFlowException(409, "Product Already exists");
 
-            try
-            {
                 var mapped = this._mapper.Map<Product>(product);
                 mapped.CreatedAt = DateTime.UtcNow;
                 var restored = await this._unitOfWork.Products.InsertAsync(mapped);
+
                 await this._unitOfWork.SaveChangesAsync();
 
                 return restored;
-            }
-            catch
-            {
-                throw new FleetFlowException();
-            }
         }
 
         public async Task<bool> DeleteAsync(Expression<Func<Product, bool>> expression)
@@ -63,7 +57,6 @@ namespace FleetFlow.Service.Services
             return products;
 
         }
-
         public async Task<Product> GetByIdAsync(Expression<Func<Product, bool>> expression)
         {
             Product product = await this._unitOfWork.Products.SelectAsync(expression);
@@ -74,10 +67,10 @@ namespace FleetFlow.Service.Services
             return product;
         }
 
-        public async Task<Product> UpdateAsync(long id, ProductCreationDto productDto)
+        public async Task<Product> UpdateAsync(Expression<Func<Product,bool>> expression, ProductCreationDto productDto)
         {
             Product product =
-                await this._unitOfWork.Products.SelectAsync((p) => p.Id == id);
+                await this._unitOfWork.Products.SelectAsync(expression);
 
             if (product is null)
                 throw new FleetFlowException(404, "Couldn't found product for given Id");
