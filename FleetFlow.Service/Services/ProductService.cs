@@ -65,16 +65,13 @@ public class ProductService : IProductService
     }
     public async Task<Product> UpdateAsync(Expression<Func<Product, bool>> expression, ProductCreationDto productDto)
     {
-        Product product =
-            await this._unitOfWork.Products.SelectAsync(expression);
-
+        var product = await this._unitOfWork.Products.SelectAsync(expression);
         if (product is null)
             throw new FleetFlowException(404, "Couldn't found product for given Id");
 
-        var mapped = this._mapper.Map<Product>(productDto);
-        var updated = await this._unitOfWork.Products.UpdateAsync(product.Id, mapped);
+        var mapped = this._mapper.Map(productDto, product);
         await this._unitOfWork.SaveChangesAsync();
 
-        return updated;
+        return mapped;
     }
 }

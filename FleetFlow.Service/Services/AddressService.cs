@@ -20,18 +20,18 @@ public class AddressService : IAddressService
     public async Task<AddressForResultDto> AddAsync(AddressForCreationDto address)
     {
         // Check for exist Address
-        var CheckAddress = this.unitOfWork.Addresses.SelectAsync(x => x.ZipCode == address.ZipCode);
-        if (CheckAddress is not null)
+        var checkAddress = await this.unitOfWork.Addresses.SelectAsync(x => x.ZipCode == address.ZipCode);
+        if (checkAddress is not null)
         {
             throw new FleetFlowException(409, "Address already exist");
         }
 
         var mapped = this.mapper.Map<Address>(address);
-        var InsertResult = await this.unitOfWork.Addresses.InsertAsync(mapped);
+        var insertResult = await this.unitOfWork.Addresses.InsertAsync(mapped);
         await this.unitOfWork.SaveChangesAsync();
 
-        var Result = this.mapper.Map<AddressForResultDto>(InsertResult);
-        return Result;
+        var result = this.mapper.Map<AddressForResultDto>(insertResult);
+        return result;
     }
 
     public async Task<bool> DeleteAsync(Expression<Func<Address, bool>> predicate)
@@ -70,20 +70,15 @@ public class AddressService : IAddressService
 
     public async Task<AddressForResultDto> UpdateAsync(Expression<Func<Address, bool>> predicate, AddressForCreationDto dto)
     {
-        var address =
-               await this.unitOfWork.Addresses.SelectAsync(predicate);
-
+        var address = await this.unitOfWork.Addresses.SelectAsync(predicate);
         if (address is null)
             throw new FleetFlowException(404, "Couldn't found Address");
 
-        var mapped = this.mapper.Map<Address>(dto);
+        var mapped = this.mapper.Map(dto, address);
+        mapped.UpdatedAt = DateTime.UtcNow;
 
-        var updated = await this.unitOfWork.Addresses.UpdateAsync(address.Id, mapped);
-        updated.UpdatedAt = DateTime.UtcNow;
         await this.unitOfWork.SaveChangesAsync();
 
-        var result = this.mapper.Map<AddressForResultDto>(updated);
-
-        return result;
+        return this.mapper.Map<AddressForResultDto>(mapped);
     }
 }

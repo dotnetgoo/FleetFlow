@@ -13,7 +13,7 @@ namespace FleetFlow.Service.Interfaces
     public interface IAddressService
     {
         Task<AddressForResultDto> AddAsync(AddressForCreationDto address);
-        Task<bool> DeleteAsync(Expression<Func<Address, bool>> predicate)
+        Task<bool> DeleteAsync(Expression<Func<Address, bool>> predicate);
         Task<AddressForResultDto> UpdateAsync(Expression<Func<Address, bool>> predicate, AddressForCreationDto dto);
         Task<AddressForResultDto> GetAsync(Expression<Func<Address, bool>> predicate);
         Task<IEnumerable<AddressForResultDto>> GetAllAsync(Expression<Func<Address, bool>> predicate);
