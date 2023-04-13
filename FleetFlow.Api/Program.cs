@@ -1,5 +1,6 @@
 using FleetFlow.Api.Extensions;
 using FleetFlow.DAL.DbContexts;
+using FleetFlow.Service.Mappers;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,9 +15,8 @@ builder.Services.AddSwaggerGen();
 // dotnet ef --project ..\FleetFlow.DAL\ migrations add [MigrationName]
 builder.Services.AddDbContext<FleetFlowDbContext>(options => 
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
-
-
 builder.Services.AddCustomServices();
+builder.Services.AddAutoMapper(typeof(MapperProfile));
 
 var app = builder.Build();
 

@@ -4,7 +4,7 @@ namespace FleetFlow.Domain.Congirations;
 
 public class PaginationParams
 {
-    private const int _maxPageSize = 10;
+    private const int _maxPageSize = 20;
     private int _pageSize;
     public int PageSize
     {

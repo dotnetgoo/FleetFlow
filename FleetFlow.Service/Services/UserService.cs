@@ -1,6 +1,8 @@
 ﻿using FleetFlow.DAL.IRepositories;
+using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities;
 using FleetFlow.Domain.Enums;
+using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,9 +34,10 @@ namespace FleetFlow.Service.Services
             return result;
         }
 
-        public async Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IEnumerable<User>> GetAllAsync(PaginationParams @params)
         {
             var users = await unitOfWork.Users.SelectAll()
+                .ToPagedList(@params)
                 .ToListAsync();
 
             return users;
