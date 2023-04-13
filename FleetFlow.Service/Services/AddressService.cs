@@ -32,12 +32,7 @@ public class AddressService : IAddressService
 
     public async Task<bool> DeleteAsync(Expression<Func<Address, bool>> predicate)
     {
-        var address = await unitOfWork.SelectAsync(predicate);
-        if (address == null)
-            throw new CustomExeption(404, "Not Found!");
-        await userRepository.DeleteAsync(predicate);
-        await userRepository.SaveAsync();
-        return true;
+        
     }
 
     public Task<IEnumerable<AddressForResultDto>> GetAllAsync(Expression<Func<Address, bool>> predicate)

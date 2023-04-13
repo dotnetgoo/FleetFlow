@@ -9,6 +9,8 @@ namespace FleetFlow.Service.Mappers
         public MapperProfile()
         {
             CreateMap<Product,ProductCreationDto>().ReverseMap();
+            CreateMap<Address, AddressForCreationDto>().ReverseMap();
+            CreateMap<Address, AddressForResultDto>().ReverseMap();
         }
     }
 }
