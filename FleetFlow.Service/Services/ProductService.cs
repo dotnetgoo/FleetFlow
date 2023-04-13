@@ -50,6 +50,8 @@ public class ProductService : IProductService
         if (products is null)
             throw new FleetFlowException(404, "Product not found");
 
+        var Result = this._mapper.Map<IEnumerable<Product>>(products);
+
         return products;
     }
     public async Task<Product> GetByIdAsync(Expression<Func<Product, bool>> expression)
