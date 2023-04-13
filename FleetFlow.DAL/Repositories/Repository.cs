@@ -2,6 +2,7 @@
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Commons;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Linq.Expressions;
 
 namespace FleetFlow.DAL.Repositories
@@ -15,14 +16,12 @@ namespace FleetFlow.DAL.Repositories
             this.dbContext = dbContext;
             this.dbSet = dbContext.Set<TEntity>();
         }
-
-        #region Delete
         /// <summary>
         /// Deletes first item that matched expression and keep track of it until change saved
         /// </summary>
         /// <param name="expression"></param>
         /// <returns>true if action is successful, false if unable to delete</returns>
-        public async Task<bool> DeleteAsync(Expression<Func<TEntity, bool>> expression)
+        public async ValueTask<bool> DeleteAsync(Expression<Func<TEntity, bool>> expression)
         {
             var entity = await this.SelectAsync(expression);
 
@@ -34,54 +33,84 @@ namespace FleetFlow.DAL.Repositories
 
             return false;
         }
-        #endregion
 
-        #region Insert
+        /// <summary>
+        /// Deletes all elements if expression matches
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        public bool DeleteMany(Expression<Func<TEntity, bool>> expression)
+        {
+            var entities = dbSet.Where(expression);
+            if (entities.Any())
+            {
+                this.dbSet.RemoveRange(entities);
+
+                return true;
+            }
+
+            return false;
+        }
+
         /// <summary>
         /// Inserts element to a table and keep track of it until change saved
         /// </summary>
         /// <param name="entity"></param>
         /// <returns></returns>
-        public async Task<TEntity> InsertAsync(TEntity entity)
+        public async ValueTask<TEntity> InsertAsync(TEntity entity)
         {
-            var entry = await this.dbSet.AddAsync(entity);
+            EntityEntry<TEntity> entry = await this.dbSet.AddAsync(entity);
 
             return entry.Entity;
         }
-        #endregion
 
-        #region Save
         /// <summary>
         /// Saves tracking changes and write them to database permenantly
         /// </summary>
         /// <returns></returns>
-        public async Task SaveAsync()
+        public async ValueTask SaveAsync()
         {
             await dbContext.SaveChangesAsync();
         }
-        #endregion
 
-        #region Select All
         /// <summary>
-        /// Selects all element of table
+        /// Selects all elements from table that matches condition and include relations
         /// </summary>
         /// <returns></returns>
-        public IQueryable<TEntity> SelectAll() => this.dbSet;
-        #endregion
+        public IQueryable<TEntity> SelectAll(Expression<Func<TEntity, bool>> expression = null, string[] includes = null)
+        {
+            IQueryable<TEntity> query = expression is null ? this.dbSet : this.dbSet.Where(expression);
 
-        #region Select
+            if (includes is not null)
+            {
+                foreach (string include in includes)
+                {
+                    query = query.Include(include);
+                }
+            }
+
+            return query;
+        }
+
         /// <summary>
-        /// selects element from a table specified with expression
+        /// selects element from a table specified with expression and can includes relations
         /// </summary>
         /// <param name="expression"></param>
         /// <returns></returns>
-        public async Task<TEntity> SelectAsync(Expression<Func<TEntity, bool>> expression)
-            => await this.dbSet.FirstOrDefaultAsync(expression);
-        #endregion
+        public async ValueTask<TEntity> SelectAsync(Expression<Func<TEntity, bool>> expression, string[] includes = null)
+            => await this.SelectAll(expression, includes).FirstOrDefaultAsync();
 
-        public Task<TEntity> UpdateAsync(long id, TEntity entity)
+        /// <summary>
+        /// Updates entity and keep track of it until change saved
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="entity"></param>
+        /// <returns></returns>
+        public TEntity Update(TEntity entity)
         {
-            throw new NotImplementedException();
+            EntityEntry<TEntity> entryentity = this.dbContext.Update(entity);
+
+            return entryentity.Entity;
         }
     }
 }

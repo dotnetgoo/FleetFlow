@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using FleetFlow.DAL.DbContexts;
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Entities;
@@ -15,7 +11,7 @@ namespace FleetFlow.DAL.Repositories
         public UnitOfWork(FleetFlowDbContext dbContext)
         {
             this.dbContext = dbContext;
-            
+
             Users = new Repository<User>(dbContext);
             Addresses = new Repository<Address>(dbContext);
             Inventories = new Repository<Inventory>(dbContext);
@@ -42,7 +38,7 @@ namespace FleetFlow.DAL.Repositories
 
         public async Task<bool> SaveChangesAsync()
         {
-            return await dbContext.SaveChangesAsync() > 0; 
+            return await dbContext.SaveChangesAsync() > 0;
         }
     }
 }
