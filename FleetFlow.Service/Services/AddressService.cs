@@ -79,6 +79,7 @@ public class AddressService : IAddressService
         var mapped = this.mapper.Map<Address>(dto);
 
         var updated = await this.unitOfWork.Addresses.UpdateAsync(address.Id, mapped);
+        updated.UpdatedAt = DateTime.UtcNow;
         await this.unitOfWork.SaveChangesAsync();
 
         var result = this.mapper.Map<AddressForResultDto>(updated);
