@@ -12,6 +12,8 @@ namespace FleetFlow.Service.Mappers
 
             CreateMap<Address, AddressForCreationDto>().ReverseMap();
             CreateMap<Address, AddressForResultDto>().ReverseMap();
+            CreateMap<User, UserForCreationDto>().ReverseMap();
+            CreateMap<User, UserForResultDto>().ReverseMap();
         }
     }
 }
