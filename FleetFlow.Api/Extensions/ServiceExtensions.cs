@@ -19,6 +19,7 @@ namespace FleetFlow.Api.Extensions
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IAddressService, AddressService>();
         }
     }
 }

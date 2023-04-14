@@ -6,22 +6,11 @@ namespace FleetFlow.DAL.DbContexts
 {
     public class FleetFlowDbContext : DbContext
     {
-        public FleetFlowDbContext()
-        {
-
-        }
-
         public FleetFlowDbContext(DbContextOptions<FleetFlowDbContext> options)
             : base(options)
         {
 
         }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseNpgsql("Host=localhost; User Id=postgres; Password=root; Database=FleetFlowDb;");
-        }
-
 
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
