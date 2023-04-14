@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.Service", "FleetFlow.Service\FleetFlow.Service.csproj", "{D8854641-0477-4C79-B251-821BC068D649}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.Service", "src\FleetFlow.Service\FleetFlow.Service.csproj", "{D8854641-0477-4C79-B251-821BC068D649}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.DAL", "FleetFlow.DAL\FleetFlow.DAL.csproj", "{2093E5B1-96F6-4A07-B9BD-B26E943ADE70}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.DAL", "src\FleetFlow.DAL\FleetFlow.DAL.csproj", "{2093E5B1-96F6-4A07-B9BD-B26E943ADE70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.Domain", "FleetFlow.Domain\FleetFlow.Domain.csproj", "{4115B9B4-7D7E-4DF9-84D9-11B1ED241247}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.Domain", "src\FleetFlow.Domain\FleetFlow.Domain.csproj", "{4115B9B4-7D7E-4DF9-84D9-11B1ED241247}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.Api", "FleetFlow.Api\FleetFlow.Api.csproj", "{C208FF19-D276-47CF-B4AC-BC2B1881181A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.Api", "src\FleetFlow.Api\FleetFlow.Api.csproj", "{C208FF19-D276-47CF-B4AC-BC2B1881181A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.Web", "FleetFlow.Web\FleetFlow.Web.csproj", "{7D79A80A-B9E1-4A62-ABF7-CC0F4BEB1053}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.Web", "src\FleetFlow.Web\FleetFlow.Web.csproj", "{7D79A80A-B9E1-4A62-ABF7-CC0F4BEB1053}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
