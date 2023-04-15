@@ -20,7 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commons\" />
+    <Folder Include="Commons\Attributes\" />
+    <Folder Include="Commons\Validations\" />
   </ItemGroup>
 
 </Project>
