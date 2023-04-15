@@ -19,9 +19,4 @@
     <ProjectReference Include="..\FleetFlow.Domain\FleetFlow.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Commons\Attributes\" />
-    <Folder Include="Commons\Validations\" />
-  </ItemGroup>
-
 </Project>
