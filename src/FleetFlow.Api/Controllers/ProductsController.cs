@@ -12,28 +12,27 @@ namespace FleetFlow.Api.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductService productService;
-        
         public ProductsController(IProductService productService)
         {
             this.productService = productService;
         }
+
         /// <summary>
         /// Get all products
         /// </summary>
         /// <returns></returns>
-
         [HttpGet]
         public async ValueTask<IActionResult> GetAllAsync()
         {
             var products = await productService.GetAllAsync();
             return Ok(products);
         }
+
         /// <summary>
         /// Get by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-
         [HttpGet("Id")]
         public async ValueTask<IActionResult> GetByIdAsync(long id)
         {
@@ -41,17 +40,17 @@ namespace FleetFlow.Api.Controllers
         }
 
         /// <summary>
-        /// 
+        /// Create new product
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-
         [HttpPost]
         public async ValueTask<IActionResult> PostAsync([FromBody] ProductCreationDto dto)
         {
             var createdProduct = await productService.CreatAsync(dto);
             return Ok(createdProduct);
         }
+
         /// <summary>
         /// Update product
         /// </summary>
@@ -64,6 +63,7 @@ namespace FleetFlow.Api.Controllers
             var product = await productService.UpdateAsync(product => product.Id == id, dto);
             return Ok(product);
         }
+
         /// <summary>
         /// Delete user by id
         /// </summary>
