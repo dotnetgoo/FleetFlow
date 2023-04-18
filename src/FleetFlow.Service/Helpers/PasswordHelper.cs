@@ -1,16 +1,15 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Security;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FleetFlow.Service.Extentions
+namespace FleetFlow.Service.Helpers
 {
-    public static class StringExtention
+    public class PasswordHelper
     {
-        public static string Encrypt(this string password)
+        public static string Encrypt(string password)
         {
             using(SHA256 sha256HASH = SHA256.Create())
             {
