@@ -1,4 +1,5 @@
 using FleetFlow.Api.Extensions;
+using FleetFlow.Api.Middlewares;
 using FleetFlow.DAL.DbContexts;
 using FleetFlow.Service.Mappers;
 using Microsoft.EntityFrameworkCore;
@@ -27,6 +28,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<ExceptionHandlerMiddleware>();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
