@@ -31,7 +31,7 @@ namespace FleetFlow.Api.Middlewares
             }
             catch(Exception exception)
             {
-                this.logger.LogError(exception.ToString());
+                this.logger.LogError($"{exception}\n\n");
                 context.Response.StatusCode = 500;
                 await context.Response.WriteAsJsonAsync(new Response
                 {
