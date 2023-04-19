@@ -36,7 +36,7 @@ namespace FleetFlow.Api.Controllers
         [HttpGet("Id")]
         public async ValueTask<IActionResult> GetByIdAsync(long id)
         {
-            return Ok(await productService.GetByIdAsync(product => product.Id == id));
+            return Ok(await productService.GetByIdAsync(id));
         }
 
         /// <summary>
@@ -60,7 +60,7 @@ namespace FleetFlow.Api.Controllers
         [HttpPut("Id")]
         public async ValueTask<ActionResult<Product>> PutAsync(long id, [FromBody] ProductCreationDto dto)
         {
-            var product = await productService.UpdateAsync(product => product.Id == id, dto);
+            var product = await productService.UpdateAsync(id, dto);
             return Ok(product);
         }
 
@@ -71,6 +71,6 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpDelete("{Id}")]
         public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
-            => Ok(await productService.DeleteAsync(product => product.Id == id));
+            => Ok(await productService.DeleteAsync(id));
     }
 }

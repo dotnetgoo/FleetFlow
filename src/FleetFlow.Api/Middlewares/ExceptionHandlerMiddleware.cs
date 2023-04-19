@@ -1,5 +1,6 @@
 using FleetFlow.Api.Models;
 using FleetFlow.Service.Exceptions;
+using Serilog;
 
 namespace FleetFlow.Api.Middlewares
 {
