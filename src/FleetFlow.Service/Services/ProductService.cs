@@ -32,13 +32,14 @@ public class ProductService : IProductService
 
         return restored;
     }
-    public async Task<bool> DeleteAsync(Expression<Func<Product, bool>> expression)
+    public async Task<bool> DeleteAsync(long id)
     {
-        Product product = await this._unitOfWork.Products.SelectAsync(expression);
-        if (product is null)
-            throw new FleetFlowException(404, "Couldn't find product for this given Id");
-
-        bool isDeleted = await this._unitOfWork.Products.DeleteAsync(expression);
+        
+        bool isDeleted = await this._unitOfWork.Products.DeleteAsync(p => p.Id == id);
+        if (isDeleted)
+        {
+			throw new FleetFlowException(404, "Couldn't find product for this given Id");
+		}
         await this._unitOfWork.SaveChangesAsync();
 
         return isDeleted;
@@ -54,18 +55,18 @@ public class ProductService : IProductService
 
         return products;
     }
-    public async Task<Product> GetByIdAsync(Expression<Func<Product, bool>> expression)
+    public async Task<Product> GetByIdAsync(long id)
     {
-        Product product = await this._unitOfWork.Products.SelectAsync(expression);
+        Product product = await this._unitOfWork.Products.SelectAsync(p=>p.Id==id);
 
         if (product is null)
             throw new FleetFlowException(404, "Product Not Found");
 
         return product;
     }
-    public async Task<Product> UpdateAsync(Expression<Func<Product, bool>> expression, ProductCreationDto productDto)
+    public async Task<Product> UpdateAsync(long id, ProductCreationDto productDto)
     {
-        var product = await this._unitOfWork.Products.SelectAsync(expression);
+        var product = await this._unitOfWork.Products.SelectAsync(p=>p.Id==id);
         if (product is null)
             throw new FleetFlowException(404, "Couldn't found product for given Id");
 

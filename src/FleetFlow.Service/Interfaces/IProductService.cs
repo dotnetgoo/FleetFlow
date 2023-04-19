@@ -12,10 +12,10 @@ namespace FleetFlow.Service.Interfaces
     public interface IProductService
     {
         public Task<Product> CreatAsync(ProductCreationDto creationDto);
-        public Task<bool> DeleteAsync(Expression<Func<Product, bool>> exception);
-        public Task<Product> UpdateAsync(Expression<Func<Product, bool>> exception,ProductCreationDto productCreationDto);
+        public Task<bool> DeleteAsync(long id);
+        public Task<Product> UpdateAsync(long id,ProductCreationDto productCreationDto);
         public Task<IEnumerable<Product>> GetAllAsync();
-        public Task<Product> GetByIdAsync(Expression<Func<Product, bool>> expression);
+        public Task<Product> GetByIdAsync(long id);
 
     }
 }
