@@ -1,24 +1,22 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+using Org.BouncyCastle.Crypto.Generators;
 
 namespace FleetFlow.Service.Helpers
 {
     public class PasswordHelper
     {
-        public static string Encrypt(string password)
+        public static (string passwordHash, string salt) Hash(string password)
         {
-            using(SHA256 sha256HASH = SHA256.Create())
-            {
-                var hashedBytes = sha256HASH.ComputeHash(Encoding.UTF8.GetBytes(password));
+            string salt = Guid.NewGuid().ToString();
+            string strongpassword = salt + password;
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(strongpassword);
+            return (passwordHash, salt);
+        }
 
-                var hashedPassword = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
-
-                return hashedPassword;
-            }
+        public static bool Verify(string password, string salt, string passwordHash)
+        {
+            string strongpassword = salt + password;
+            var result = BCrypt.Net.BCrypt.Verify(strongpassword, passwordHash);
+            return result;
         }
     }
 }
