@@ -30,14 +30,6 @@ builder.Logging.AddSerilog(logger);
 builder.Services.AddCustomServices();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 
-//Logger
-var logger = new LoggerConfiguration()
-  .ReadFrom.Configuration(builder.Configuration)
-  .Enrich.FromLogContext()
-  .CreateLogger();
-builder.Logging.ClearProviders();
-builder.Logging.AddSerilog(logger);
-
 
 
 var app = builder.Build();

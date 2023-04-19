@@ -50,7 +50,7 @@ public class AddressService : IAddressService
         if (addressQuery is null)
             throw new FleetFlowException(404, "Address not found");
 
-        var addresses = addressQuery.ToPagedList(@params).ToListAsync();
+        var addresses = await addressQuery.ToPagedList(@params).ToListAsync();
         return this.mapper.Map<IEnumerable<AddressForResultDto>>(addresses);
     }
 
