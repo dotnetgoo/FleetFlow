@@ -28,7 +28,7 @@ namespace FleetFlow.Service.Services
             if(user is null)
                 throw new FleetFlowException(400, "Email or password is wrong");
 
-            if(user.Password != dto.Password)
+            if(user.PasswordHash != dto.Password)
                 throw new FleetFlowException(400, "Email or password is wrong");
 
             return this.mapper.Map<UserForResultDto>(user);
