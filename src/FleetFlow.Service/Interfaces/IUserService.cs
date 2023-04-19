@@ -14,10 +14,10 @@ namespace FleetFlow.Service.Interfaces
     public interface IUserService
     {
         Task<UserForResultDto> AddAsync(UserForCreationDto dto);
-        Task<IEnumerable<User>> GetAllAsync(PaginationParams @params);
-        Task<IEnumerable<User>> GetAllByRoleAsync(UserRole role = UserRole.Admin);
-        Task<bool> DeleteAsync(Expression<Func<User, bool>> predicate);
-        Task<UserForResultDto> GetAsync(Expression<Func<User, bool>> expression);
-        Task<UserForResultDto> UpdateAsync(Expression<Func<User, bool>> expression, UserForCreationDto dto);
+        Task<IEnumerable<UserForResultDto>> RetrieveAllAsync(PaginationParams @params);
+        Task<IEnumerable<UserForResultDto>> RetrieveAllByRoleAsync(PaginationParams @params,UserRole role = UserRole.Admin);
+        Task<bool> RemoveAsync(long id);
+        Task<UserForResultDto> RetrieveByIdAsync(long id);
+        Task<UserForResultDto> ModifyAsync(long id, UserForUpdateDto dto);
     }
 }
