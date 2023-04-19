@@ -1,5 +1,6 @@
 ﻿using FleetFlow.Domain.Commons;
 using FleetFlow.Domain.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace FleetFlow.Domain.Entities
 {
