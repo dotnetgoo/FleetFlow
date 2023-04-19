@@ -57,7 +57,7 @@ public class ProductService : IProductService
     }
     public async Task<Product> GetByIdAsync(long id)
     {
-        Product product = await this._unitOfWork.Products.SelectAsync(p=>p.Id==id);
+        Product product = await this._unitOfWork.Products.SelectAsync(p => p.Id==id);
 
         if (product is null)
             throw new FleetFlowException(404, "Product Not Found");
