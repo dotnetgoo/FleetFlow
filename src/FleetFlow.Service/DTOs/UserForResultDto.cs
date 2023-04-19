@@ -1,10 +1,13 @@
 ﻿using FleetFlow.Domain.Entities;
 using FleetFlow.Domain.Enums;
+using System.ComponentModel;
 
 namespace FleetFlow.Service.DTOs;
 public class UserForResultDto
 {
+    [DisplayName("First Name")]
     public string FirstName { get; set; }
+    [DisplayName("LastName")]
     public string LastName { get; set; }
     public string Phone { get; set; }
     public string Email { get; set; }
