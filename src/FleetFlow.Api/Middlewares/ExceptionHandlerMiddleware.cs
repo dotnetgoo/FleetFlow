@@ -8,6 +8,7 @@ namespace FleetFlow.Api.Middlewares
     {
         private readonly RequestDelegate next;
         private readonly ILogger<ExceptionHandlerMiddleware> logger;
+
         public ExceptionHandlerMiddleware(RequestDelegate next, ILogger<ExceptionHandlerMiddleware> logger)
         {
             this.next = next;
@@ -31,9 +32,7 @@ namespace FleetFlow.Api.Middlewares
             }
             catch(Exception exception)
             {
-                // logs the exception to file
-                this.logger.LogError($"{exception.Message}\n");
-
+                this.logger.LogError($"{exception}\n\n");
                 context.Response.StatusCode = 500;
                 await context.Response.WriteAsJsonAsync(new Response
                 {
