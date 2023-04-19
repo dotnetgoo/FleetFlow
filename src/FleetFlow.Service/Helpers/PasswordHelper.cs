@@ -1,24 +1,27 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace FleetFlow.Service.Helpers
 {
     public class PasswordHelper
     {
-        public static string Encrypt(string password)
+        /// <summary>
+        /// Hash password 
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public static string Hash(string password)
         {
-            using(SHA256 sha256HASH = SHA256.Create())
-            {
-                var hashedBytes = sha256HASH.ComputeHash(Encoding.UTF8.GetBytes(password));
+            return BCrypt.Net.BCrypt.HashPassword(password);
+        }
 
-                var hashedPassword = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+        /// <summary>
+        /// verify its correct
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="passwordHash"></param>
+        /// <returns></returns>
+        public static bool Verify(string password, string passwordHash)
+        {
+            return BCrypt.Net.BCrypt.Verify(password,passwordHash);
 
-                return hashedPassword;
-            }
         }
     }
 }
