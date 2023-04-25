@@ -12,6 +12,9 @@ namespace FleetFlow.Api.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductService productService;
+
+        public int FromQuery { get; private set; }
+
         public ProductsController(IProductService productService)
         {
             this.productService = productService;
@@ -22,11 +25,9 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async ValueTask<IActionResult> GetAllAsync()
-        {
-            var products = await productService.RetrieveAllAsync();
-            return Ok(products);
-        }
+        public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
+            => Ok(await productService.RetrieveAllAsync(@params));
+
 
         /// <summary>
         /// Get by id
