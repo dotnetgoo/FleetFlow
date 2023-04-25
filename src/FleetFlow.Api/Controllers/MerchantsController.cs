@@ -57,7 +57,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("{Id}")]
+        [HttpDelete("Id")]
         public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
             => Ok(await merchantService.RemoveAsync(id));
 

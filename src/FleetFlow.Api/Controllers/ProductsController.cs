@@ -12,6 +12,9 @@ namespace FleetFlow.Api.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IProductService productService;
+
+        public int FromQuery { get; private set; }
+
         public ProductsController(IProductService productService)
         {
             this.productService = productService;
@@ -22,11 +25,9 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async ValueTask<IActionResult> GetAllAsync()
-        {
-            var products = await productService.GetAllAsync();
-            return Ok(products);
-        }
+        public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
+            => Ok(await productService.RetrieveAllAsync(@params));
+
 
         /// <summary>
         /// Get by id
@@ -36,7 +37,7 @@ namespace FleetFlow.Api.Controllers
         [HttpGet("Id")]
         public async ValueTask<IActionResult> GetByIdAsync(long id)
         {
-            return Ok(await productService.GetByIdAsync(id));
+            return Ok(await productService.RetrieveByIdAsync(id));
         }
 
         /// <summary>
@@ -45,9 +46,9 @@ namespace FleetFlow.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
-        public async ValueTask<IActionResult> PostAsync([FromBody] ProductCreationDto dto)
+        public async ValueTask<IActionResult> PostAsync([FromBody] ProductForCreationDto dto)
         {
-            var createdProduct = await productService.CreatAsync(dto);
+            var createdProduct = await productService.AddAsync(dto);
             return Ok(createdProduct);
         }
 
@@ -58,9 +59,9 @@ namespace FleetFlow.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPut("Id")]
-        public async ValueTask<ActionResult<Product>> PutAsync(long id, [FromBody] ProductCreationDto dto)
+        public async ValueTask<ActionResult<Product>> PutAsync(long id, [FromBody] ProductForCreationDto dto)
         {
-            var product = await productService.UpdateAsync(id, dto);
+            var product = await productService.ModifyAsync(id, dto);
             return Ok(product);
         }
 
@@ -69,8 +70,8 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("{Id}")]
+        [HttpDelete("Id")]
         public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
-            => Ok(await productService.DeleteAsync(id));
+            => Ok(await productService.RemoveAsync(id));
     }
 }

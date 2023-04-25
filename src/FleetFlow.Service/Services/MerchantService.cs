@@ -29,7 +29,7 @@ namespace FleetFlow.Service.Services
         {
             // Check if merchant with the same email already exists
             var merchant = await this.unitOfWork.Merchants.SelectAsync(m => m.Email == dto.Email);
-            if (merchant == null)
+            if (merchant != null)
                 throw new FleetFlowException(400, "Merchant already exists");
 
             // Map DTO to Entity and set CreatedAt to current time in UTC
