@@ -22,6 +22,7 @@ namespace FleetFlow.Api.Extensions
             services.AddScoped<IAddressService, AddressService>();
             services.AddScoped<IMerchantService, MerchantService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<ILocationService, LocationService>();
         }
     }
 }

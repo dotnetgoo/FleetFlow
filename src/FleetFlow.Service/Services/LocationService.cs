@@ -75,12 +75,12 @@ namespace FleetFlow.Service.Services
             if (location is null)
                 throw new FleetFlowException(404, "Not found");
 
-            var updatedLocation = this.mapper.Map(dto, location);
-            updatedLocation.UpdatedAt = DateTime.UtcNow;
+            var modifiedLocation = this.mapper.Map(dto, location);
+            modifiedLocation.UpdatedAt = DateTime.UtcNow;
 
             await this.unitOfWork.SaveChangesAsync();
 
-            return this.mapper.Map<LocationForResultDto>(updatedLocation);
+            return this.mapper.Map<LocationForResultDto>(modifiedLocation);
         }
     }
 }

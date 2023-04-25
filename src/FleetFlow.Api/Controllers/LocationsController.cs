@@ -1,4 +1,5 @@
-﻿using FleetFlow.Service.DTOs;
+﻿using FleetFlow.Domain.Congirations;
+using FleetFlow.Service.DTOs;
 using FleetFlow.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,8 +9,8 @@ namespace FleetFlow.Api.Controllers
     [Route("api/[controller]")]
     public class LocationsController : ControllerBase
     {
-        private readonly IlocationService locationService;
-        public LocationsController(IlocationService locationService)
+        private readonly ILocationService locationService;
+        public LocationsController(ILocationService locationService)
         {
             this.locationService = locationService;
         }
@@ -19,11 +20,9 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async ValueTask<IActionResult> GetAllAsync()
-        {
-            var locations = await locationService.GetAllAsync();
-            return Ok(locations);
-        }
+        public async ValueTask<IActionResult> GetAllAsync([FromQuery]PaginationParams @params)
+            =>Ok(await locationService.RetrieveAllAsync(@params));
+
 
         /// <summary>
         /// Get by id
@@ -32,7 +31,7 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpGet("Id")]
         public async ValueTask<IActionResult> GetByIdAsync(long id)
-            => Ok(await locationService.GetAsync(location => location.Id == id));
+            => Ok(await locationService.RetrieveByIdAsync(id));
 
         /// <summary>
         /// Create location
@@ -51,7 +50,7 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpPut("Id")]
         public async ValueTask<ActionResult<LocationForResultDto>> PutAsync(LocationForCreationDto dto, long id)
-            => Ok(await locationService.UpdateAsync(location => location.Id == id, dto));
+            => Ok(await locationService.ModifyAsync(id, dto));
 
         /// <summary>
         /// Delete by id
@@ -60,6 +59,6 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpDelete("Id")]
         public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
-            => Ok(await locationService.DeleteAsync(location => location.Id.Equals(id)));
+            => Ok(await locationService.RemoveAsync(id));
     }
 }

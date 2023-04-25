@@ -9,7 +9,7 @@ namespace FleetFlow.Service.Interfaces
     {
         Task<LocationForResultDto> AddAsync(LocationForCreationDto dto);
         Task<bool> RemoveAsync(long id);
-        Task<LocationForResultDto> ModifiedAsync(long id, LocationForCreationDto dto);
+        Task<LocationForResultDto> ModifyAsync(long id, LocationForCreationDto dto);
         Task<LocationForResultDto> RetrieveByIdAsync(long id);
         Task<IEnumerable<LocationForResultDto>> RetrieveAllAsync(PaginationParams @params);
     }
