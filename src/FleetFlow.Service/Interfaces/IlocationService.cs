@@ -5,12 +5,12 @@ using System.Linq.Expressions;
 
 namespace FleetFlow.Service.Interfaces
 {
-    public interface IlocationService
+    public interface ILocationService
     {
-        Task<LocationForResultDto> AddAsync(LocationForCreationDto address);
-        Task<bool> DeleteAsync(Expression<Func<Location, bool>> predicate);
-        Task<LocationForResultDto> UpdateAsync(Expression<Func<Location, bool>> predicate, LocationForCreationDto dto);
-        Task<LocationForResultDto> GetAsync(Expression<Func<Location, bool>> predicate);
-        Task<IEnumerable<LocationForResultDto>> GetAllAsync(Expression<Func<Location, bool>> predicate = null, string search = null);
+        Task<LocationForResultDto> AddAsync(LocationForCreationDto dto);
+        Task<bool> RemoveAsync(long id);
+        Task<LocationForResultDto> ModifiedAsync(long id, LocationForCreationDto dto);
+        Task<LocationForResultDto> RetrieveByIdAsync(long id);
+        Task<IEnumerable<LocationForResultDto>> RetrieveAllAsync(PaginationParams @params);
     }
 }

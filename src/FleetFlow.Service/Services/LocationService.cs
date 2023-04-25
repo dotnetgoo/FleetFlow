@@ -10,7 +10,7 @@ using System.Linq.Expressions;
 
 namespace FleetFlow.Service.Services
 {
-    public class LocationService : IlocationService
+    public class LocationService : ILocationService
     {
         private readonly IUnitOfWork unitOfWork;
         private readonly IMapper mapper;
