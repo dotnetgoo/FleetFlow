@@ -38,7 +38,7 @@ namespace FleetFlow.DAL.Repositories
 
         public async Task<bool> SaveChangesAsync()
         {
-            return await dbContext.SaveChangesAsync() > 0;
+            return await dbContext.SaveChangesAsync() >= 0;
         }
     }
 }
