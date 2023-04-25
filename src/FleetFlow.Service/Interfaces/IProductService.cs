@@ -15,7 +15,7 @@ namespace FleetFlow.Service.Interfaces
         public Task<ProductForResultDto> AddAsync(ProductForCreationDto dto);
         public Task<bool> RemoveAsync(long id);
         public Task<ProductForResultDto> ModifyAsync(long id,ProductForCreationDto dto);
-        public Task<IEnumerable<ProductForResultDto>> RetrieveAllAsync();
+        public Task<IEnumerable<ProductForResultDto>> RetrieveAllAsync(PaginationParams @params);
         public Task<ProductForResultDto>RetrieveByIdAsync(long id);
 
     }

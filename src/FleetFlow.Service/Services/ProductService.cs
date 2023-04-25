@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using FleetFlow.DAL.IRepositories;
+using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities;
 using FleetFlow.Service.DTOs;
 using FleetFlow.Service.Exceptions;
+using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces;
 using System.Linq.Expressions;
 
@@ -45,9 +47,10 @@ public class ProductService : IProductService
 
         return true;
     }
-    public async Task<IEnumerable<ProductForResultDto>> RetrieveAllAsync()
+    public async Task<IEnumerable<ProductForResultDto>> RetrieveAllAsync(PaginationParams @params)
     {
-        var products = this.unitOfWork.Products.SelectAll();
+        var products = this.unitOfWork.Products.SelectAll()
+                                            .ToPagedList(@params).ToList();
 
         if (products is null)
             throw new FleetFlowException(404, "Product not found");
