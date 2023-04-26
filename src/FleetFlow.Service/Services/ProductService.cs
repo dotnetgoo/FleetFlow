@@ -6,6 +6,7 @@ using FleetFlow.Service.DTOs;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace FleetFlow.Service.Services;
@@ -49,8 +50,8 @@ public class ProductService : IProductService
     }
     public async Task<IEnumerable<ProductForResultDto>> RetrieveAllAsync(PaginationParams @params)
     {
-        var products = this.unitOfWork.Products.SelectAll()
-                                            .ToPagedList(@params).ToList();
+        var products = await this.unitOfWork.Products.SelectAll()
+            .ToPagedList(@params).ToListAsync();
 
         if (products is null)
             throw new FleetFlowException(404, "Product not found");

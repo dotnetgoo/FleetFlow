@@ -6,6 +6,7 @@ using FleetFlow.Service.DTOs;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetFlow.Service.Services
 {
@@ -100,8 +101,8 @@ namespace FleetFlow.Service.Services
         public async Task<IEnumerable<MerchantForResultDto>> RetrieveAllAsync(PaginationParams @params)
         {
             // Retrieve all merchants with pagination parameters
-            var merchants = this.unitOfWork.Merchants.SelectAll(includes: new string[] {"Address"})
-                                .ToPagedList(@params).ToList();
+            var merchants = await this.unitOfWork.Merchants.SelectAll(includes: new string[] {"Address"})
+                                .ToPagedList(@params).ToListAsync();
 
             // Map entities to DTOs and return as IEnumerable
             return this.mapper.Map<IEnumerable<MerchantForResultDto>>(merchants);

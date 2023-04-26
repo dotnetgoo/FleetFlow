@@ -6,6 +6,7 @@ using FleetFlow.Service.DTOs;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Math.EC.Rfc7748;
 using System.Linq.Expressions;
 
@@ -54,8 +55,8 @@ namespace FleetFlow.Service.Services
 
         public async Task<IEnumerable<LocationForResultDto>> RetrieveAllAsync(PaginationParams @params)
         {
-            var locations = this.unitOfWork.Locations.SelectAll()
-                                         .ToPagedList(@params).ToList();
+            var locations = await this.unitOfWork.Locations.SelectAll()
+                                         .ToPagedList(@params).ToListAsync();
 
             return this.mapper.Map<IEnumerable<LocationForResultDto>>(locations);
         }
