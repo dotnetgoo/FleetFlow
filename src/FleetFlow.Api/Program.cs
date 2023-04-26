@@ -1,7 +1,9 @@
 using FleetFlow.Api.Extensions;
 using FleetFlow.Api.Middlewares;
+using FleetFlow.Api.Models;
 using FleetFlow.DAL.DbContexts;
 using FleetFlow.Service.Mappers;
+using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -31,6 +33,12 @@ builder.Logging.AddSerilog(logger);
 builder.Services.AddCustomServices();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 
+// Convert Api Url name to dashcase
+builder.Services.AddControllers(options =>
+{
+    options.Conventions.Add(new RouteTokenTransformerConvention(
+                                        new ConfigureApiUrlName()));
+});
 
 
 var app = builder.Build();
