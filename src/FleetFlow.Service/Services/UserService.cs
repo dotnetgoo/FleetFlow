@@ -12,96 +12,120 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq.Expressions;
 
-namespace FleetFlow.Service.Services
+namespace FleetFlow.Service.Services;
+
+public class UserService : IUserService
 {
-    public class UserService : IUserService
+    private readonly IUnitOfWork unitOfWork;
+    private readonly IMapper mapper;
+    public UserService(IUnitOfWork unitOfWork, IMapper mapper)
     {
-        private readonly IUnitOfWork unitOfWork;
-        private readonly IMapper mapper;
-        public UserService(IUnitOfWork unitOfWork , IMapper mapper)
-        {
-            this.unitOfWork = unitOfWork;
-            this.mapper = mapper;
-        }
+        this.unitOfWork = unitOfWork;
+        this.mapper = mapper;
+    }
 
-        public async Task<UserForResultDto> AddAsync(UserForCreationDto dto)
-        {
-            // check for exist user
-            var existUser = await unitOfWork.Users
-                .SelectAsync(p => p.Phone == dto.Phone);            
-            if (existUser != null)
-            {
-                throw new FleetFlowException(400,"User already exist");
-            }
+    /// <summary>
+    /// Adds new User to database
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    /// <exception cref="FleetFlowException"></exception>
+    public async Task<UserForResultDto> AddAsync(UserForCreationDto dto)
+    {
+        // check for exist user
+        var existUser = await unitOfWork.Users.SelectAsync(p => p.Phone == dto.Phone);
+        if (existUser != null)
+            throw new FleetFlowException(409, "User already exist");
 
-            var mapped = this.mapper.Map<User>(dto);
-            mapped.CreatedAt = DateTime.UtcNow;
+        var mapped = this.mapper.Map<User>(dto);
+        mapped.CreatedAt = DateTime.UtcNow;
+        var addedModel = await unitOfWork.Users.InsertAsync(mapped);
 
-            var result = await unitOfWork.Users.InsertAsync(mapped);
+        await unitOfWork.SaveChangesAsync();
 
-            var temp = this.mapper.Map<UserForResultDto>(result);
-            await unitOfWork.SaveChangesAsync();
+        return this.mapper.Map<UserForResultDto>(addedModel);
+    }
 
-            return temp;
-        }
+    /// <summary>
+    /// Removed user from database by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="FleetFlowException"></exception>
+    public async Task<bool> RemoveAsync(long id)
+    {
+        var user = await this.unitOfWork.Users.SelectAsync(u => u.Id == id);
+        if (user is null)
+            throw new FleetFlowException(404, "Couldn't find user for this given Id");
 
-        public async Task<bool> DeleteAsync(Expression<Func<User, bool>> predicate)
-        {
-            var user = await this.unitOfWork.Users.SelectAsync(predicate);
-            if (user is null) throw new FleetFlowException(404, "Couldn't find user for this given Id");
+        await this.unitOfWork.Users.DeleteAsync(u => u.Id == id);
 
-            bool IsDeleted = await this.unitOfWork.Users.DeleteAsync(predicate);
-            await this.unitOfWork.SaveChangesAsync();
+        await this.unitOfWork.SaveChangesAsync();
 
-            return IsDeleted;
-        }
+        return true;
+    }
 
-        public async Task<IEnumerable<User>> GetAllAsync(PaginationParams @params)
-        {
-            var users = await unitOfWork.Users.SelectAll()
-                .ToPagedList(@params)
-                .ToListAsync();
+    /// <summary>
+    /// Retrieves all users from database with pagination
+    /// </summary>
+    /// <param name="params"></param>
+    /// <returns></returns>
+    public async Task<IEnumerable<UserForResultDto>> RetrieveAllAsync(PaginationParams @params)
+    {
+        var users = await unitOfWork.Users.SelectAll()
+                                    .ToPagedList(@params).ToListAsync();
 
-            return users;
-        }
+        return this.mapper.Map<IEnumerable<UserForResultDto>>(users);
+    }
 
-        public async Task<IEnumerable<User>> GetAllByRoleAsync(UserRole role = UserRole.Admin)
-        {
-            var users = await unitOfWork.Users.SelectAll()
-                .Where(u => u.Role == role)
-                .ToListAsync();
+    /// <summary>
+    /// Retrieves all user from database with pagination by role
+    /// </summary>
+    /// <param name="params"></param>
+    /// <param name="role"></param>
+    /// <returns></returns>
+    public async Task<IEnumerable<UserForResultDto>> RetrieveAllByRoleAsync(PaginationParams @params, UserRole role = UserRole.Admin)
+    {
+        var users = await unitOfWork.Users.SelectAll()
+                        .Where(u => u.Role == role).ToPagedList(@params).ToListAsync();
 
-            return users;
-        }
+        return this.mapper.Map<IEnumerable<UserForResultDto>>(users);
 
-        public async Task<UserForResultDto> GetAsync(Expression<Func<User, bool>> expression)
-        {
-            var user = await this.unitOfWork.Users.SelectAsync(expression);
+    }
 
-            if (user is null)
-                throw new FleetFlowException(404, "User Not Found");
+    /// <summary>
+    /// Retrieves user from database by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <returns></returns>
+    /// <exception cref="FleetFlowException"></exception>
+    public async Task<UserForResultDto> RetrieveByIdAsync(long id)
+    {
+        var user = await this.unitOfWork.Users.SelectAsync(u => u.Id == id);
+        if (user is null)
+            throw new FleetFlowException(404, "User Not Found");
 
-            var mapped = this.mapper.Map<UserForResultDto>(user);
+        return this.mapper.Map<UserForResultDto>(user);
+    }
 
-            return mapped;
-        }
+    /// <summary>
+    /// Modified user by id
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    /// <exception cref="FleetFlowException"></exception>
+    public async Task<UserForResultDto> ModifyAsync(long id, UserForUpdateDto dto)
+    {
+        var user = await this.unitOfWork.Users.SelectAsync(u => u.Id == id);
+        if (user is null)
+            throw new FleetFlowException(404, "Couldn't found user for given Id");
 
-        public async Task<UserForResultDto> UpdateAsync(Expression<Func<User, bool>> expression, UserForCreationDto dto)
-        {
-            var user = await this.unitOfWork.Users.SelectAsync(expression);
-            if (user is null)
-                throw new FleetFlowException(404, "Couldn't found user for given Id");
+        var modifiedUser = this.mapper.Map(dto, user);
+        modifiedUser.UpdatedAt = DateTime.UtcNow;
 
-            user.Phone = dto.Phone;
-            user.FirstName = dto.FirstName;
-            user.LastName = dto.LastName;
-            user.Email = dto.Email;
-            user.UpdatedAt = DateTime.UtcNow;
+        await this.unitOfWork.SaveChangesAsync();
 
-            var result = this.mapper.Map<UserForResultDto>(user);
-            await this.unitOfWork.SaveChangesAsync();
-
-            return result;
-        }
+        return this.mapper.Map<UserForResultDto>(user);
     }
 }

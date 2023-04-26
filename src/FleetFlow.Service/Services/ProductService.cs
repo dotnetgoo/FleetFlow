@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using FleetFlow.DAL.IRepositories;
+using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities;
 using FleetFlow.Service.DTOs;
 using FleetFlow.Service.Exceptions;
+using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces;
 using System.Linq.Expressions;
 
@@ -10,68 +12,72 @@ namespace FleetFlow.Service.Services;
 
 public class ProductService : IProductService
 {
-    private readonly IMapper _mapper;
-    private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper mapper;
+    private readonly IUnitOfWork unitOfWork;
 
     public ProductService(IMapper mapper, IUnitOfWork unitOfWork)
     {
-        _mapper = mapper;
-        _unitOfWork = unitOfWork;
+        this.mapper = mapper;
+        this.unitOfWork = unitOfWork;
     }
-    public async Task<Product> CreatAsync(ProductCreationDto creationDto)
+    public async Task<ProductForResultDto> AddAsync(ProductForCreationDto dto)
     {
-        var product = await this._unitOfWork.Products.SelectAsync(srn => srn.Serial == creationDto.Serial);
+        var product = await this.unitOfWork.Products.SelectAsync(srn => srn.Serial == dto.Serial);
         if (product is not null)
             throw new FleetFlowException(409, "Product Already exists");
 
-        var mapped = this._mapper.Map<Product>(product);
-        mapped.CreatedAt = DateTime.UtcNow;
-        var restored = await this._unitOfWork.Products.InsertAsync(mapped);
+        var mappedProduct = this.mapper.Map<Product>(dto);
+        mappedProduct.CreatedAt = DateTime.UtcNow;
+        var addedProduct = await this.unitOfWork.Products.InsertAsync(mappedProduct);
 
-        await this._unitOfWork.SaveChangesAsync();
+        await this.unitOfWork.SaveChangesAsync();
 
-        return restored;
+        return this.mapper.Map<ProductForResultDto>(addedProduct);
     }
-    public async Task<bool> DeleteAsync(Expression<Func<Product, bool>> expression)
+    public async Task<bool> RemoveAsync(long id)
     {
-        Product product = await this._unitOfWork.Products.SelectAsync(expression);
+        
+        var product = await this.unitOfWork.Products.SelectAsync(p => p.Id == id);
         if (product is null)
-            throw new FleetFlowException(404, "Couldn't find product for this given Id");
+			throw new FleetFlowException(404, "Couldn't find product for this given Id");
 
-        bool isDeleted = await this._unitOfWork.Products.DeleteAsync(expression);
-        await this._unitOfWork.SaveChangesAsync();
+        await this.unitOfWork.Products.DeleteAsync(p => p.Id == id);
 
-        return isDeleted;
+        await this.unitOfWork.SaveChangesAsync();
+
+        return true;
     }
-    public async Task<IEnumerable<Product>> GetAllAsync()
+    public async Task<IEnumerable<ProductForResultDto>> RetrieveAllAsync(PaginationParams @params)
     {
-        var products = this._unitOfWork.Products.SelectAll();
+        var products = this.unitOfWork.Products.SelectAll()
+                                            .ToPagedList(@params).ToList();
 
         if (products is null)
             throw new FleetFlowException(404, "Product not found");
 
-        var Result = this._mapper.Map<IEnumerable<Product>>(products);
+        return this.mapper.Map<IEnumerable<ProductForResultDto>>(products);
 
-        return products;
     }
-    public async Task<Product> GetByIdAsync(Expression<Func<Product, bool>> expression)
+    public async Task<ProductForResultDto> RetrieveByIdAsync(long id)
     {
-        Product product = await this._unitOfWork.Products.SelectAsync(expression);
+        var product = await this.unitOfWork.Products.SelectAsync(p => p.Id==id);
 
         if (product is null)
             throw new FleetFlowException(404, "Product Not Found");
 
-        return product;
+        return this.mapper.Map<ProductForResultDto>(product);
     }
-    public async Task<Product> UpdateAsync(Expression<Func<Product, bool>> expression, ProductCreationDto productDto)
+    public async Task<ProductForResultDto> ModifyAsync(long id, ProductForCreationDto dto)
     {
-        var product = await this._unitOfWork.Products.SelectAsync(expression);
+        var product = await this.unitOfWork.Products.SelectAsync(p=>p.Id==id);
         if (product is null)
             throw new FleetFlowException(404, "Couldn't found product for given Id");
 
-        var mapped = this._mapper.Map(productDto, product);
-        await this._unitOfWork.SaveChangesAsync();
+        var modifiedProduct = this.mapper.Map(dto, product);
+        modifiedProduct.UpdatedAt = DateTime.UtcNow;
 
-        return mapped;
+        await this.unitOfWork.SaveChangesAsync();
+
+        return this.mapper.Map<ProductForResultDto>(modifiedProduct);
     }
 }

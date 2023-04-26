@@ -1,8 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FleetFlow.Domain.Congirations;
+﻿using FleetFlow.Domain.Congirations;
+using FleetFlow.Domain.Entities;
 using FleetFlow.Service.DTOs;
 using FleetFlow.Service.Interfaces;
 using FleetFlow.Service.Services;
@@ -12,22 +9,25 @@ namespace FleetFlow.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    public class ProductsController : ControllerBase
     {
-        private readonly IUserService userService;
-        public UsersController(IUserService userService)
+        private readonly IProductService productService;
+
+        public int FromQuery { get; private set; }
+
+        public ProductsController(IProductService productService)
         {
-            this.userService = userService;
+            this.productService = productService;
         }
 
         /// <summary>
-        /// Get all merchants
+        /// Get all products
         /// </summary>
-        /// <param name="params"></param>
         /// <returns></returns>
         [HttpGet]
         public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
-            => Ok(await userService.RetrieveAllAsync(@params));
+            => Ok(await productService.RetrieveAllAsync(@params));
+
 
         /// <summary>
         /// Get by id
@@ -36,34 +36,42 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpGet("Id")]
         public async ValueTask<IActionResult> GetByIdAsync(long id)
-            => Ok(await userService.RetrieveByIdAsync(id));
+        {
+            return Ok(await productService.RetrieveByIdAsync(id));
+        }
 
         /// <summary>
-        /// Create new merchant
+        /// Create new product
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
-        public async ValueTask<ActionResult<MerchantForResultDto>> PostAsync(UserForCreationDto dto)
-            => Ok(await userService.AddAsync(dto));
+        public async ValueTask<IActionResult> PostAsync([FromBody] ProductForCreationDto dto)
+        {
+            var createdProduct = await productService.AddAsync(dto);
+            return Ok(createdProduct);
+        }
 
         /// <summary>
-        /// Update merchant info
+        /// Update product
         /// </summary>
         /// <param name="id"></param>
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPut("Id")]
-        public async ValueTask<ActionResult<MerchantForResultDto>> PutAsync(long id, UserForUpdateDto dto)
-            => Ok(await userService.ModifyAsync(id, dto));
+        public async ValueTask<ActionResult<Product>> PutAsync(long id, [FromBody] ProductForCreationDto dto)
+        {
+            var product = await productService.ModifyAsync(id, dto);
+            return Ok(product);
+        }
 
         /// <summary>
-        /// Delete by id
+        /// Delete user by id
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("Id")]
         public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
-            => Ok(await userService.RemoveAsync(id));
+            => Ok(await productService.RemoveAsync(id));
     }
 }

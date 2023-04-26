@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FleetFlow.Service.DTOs
 {
-    public class ProductCreationDto
+    public class ProductForCreationDto
     {
         [Required(ErrorMessage = "Name is required")]
         [StringLength(30 , MinimumLength = 2)]

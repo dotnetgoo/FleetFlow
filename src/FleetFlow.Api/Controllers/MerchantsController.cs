@@ -1,23 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FleetFlow.Domain.Congirations;
+﻿using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs;
 using FleetFlow.Service.Interfaces;
-using FleetFlow.Service.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    public class MerchantsController : ControllerBase
     {
-        private readonly IUserService userService;
-        public UsersController(IUserService userService)
+        private readonly IMerchantService merchantService;
+        public MerchantsController(IMerchantService merchantService)
         {
-            this.userService = userService;
+            this.merchantService = merchantService;
         }
 
         /// <summary>
@@ -26,8 +21,8 @@ namespace FleetFlow.Api.Controllers
         /// <param name="params"></param>
         /// <returns></returns>
         [HttpGet]
-        public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
-            => Ok(await userService.RetrieveAllAsync(@params));
+        public async ValueTask<IActionResult> GetAllAsync([FromQuery]PaginationParams @params)
+            => Ok(await merchantService.RetrieveAllAsync(@params));
 
         /// <summary>
         /// Get by id
@@ -36,7 +31,7 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpGet("Id")]
         public async ValueTask<IActionResult> GetByIdAsync(long id)
-            => Ok(await userService.RetrieveByIdAsync(id));
+            => Ok(await merchantService.RetrieveByIdAsync(id));
 
         /// <summary>
         /// Create new merchant
@@ -44,8 +39,8 @@ namespace FleetFlow.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
-        public async ValueTask<ActionResult<MerchantForResultDto>> PostAsync(UserForCreationDto dto)
-            => Ok(await userService.AddAsync(dto));
+        public async ValueTask<ActionResult<MerchantForResultDto>> PostAsync(MerchantForCreationDto dto)
+            => Ok(await merchantService.AddAsync(dto));
 
         /// <summary>
         /// Update merchant info
@@ -54,8 +49,8 @@ namespace FleetFlow.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPut("Id")]
-        public async ValueTask<ActionResult<MerchantForResultDto>> PutAsync(long id, UserForUpdateDto dto)
-            => Ok(await userService.ModifyAsync(id, dto));
+        public async ValueTask<ActionResult<MerchantForResultDto>> PutAsync(long id, MerchantForCreationDto dto)
+            => Ok(await merchantService.ModifyAsync(id, dto));
 
         /// <summary>
         /// Delete by id
@@ -64,6 +59,7 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpDelete("Id")]
         public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
-            => Ok(await userService.RemoveAsync(id));
+            => Ok(await merchantService.RemoveAsync(id));
+
     }
 }

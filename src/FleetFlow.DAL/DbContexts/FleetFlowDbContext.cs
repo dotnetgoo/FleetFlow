@@ -9,7 +9,7 @@ namespace FleetFlow.DAL.DbContexts
         public FleetFlowDbContext(DbContextOptions<FleetFlowDbContext> options)
             : base(options)
         {
-
+            Database.Migrate();
         }
 
         public DbSet<Address> Addresses { get; set; }
@@ -48,13 +48,13 @@ namespace FleetFlow.DAL.DbContexts
                 .HasOne(m => m.Address)
                 .WithMany(a => a.Merchants)
                 .HasForeignKey(m => m.AddressId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.NoAction); 
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.User)
-                .WithMany(u => u.Orders)
+                .WithMany()
                 .HasForeignKey(o => o.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Address)
