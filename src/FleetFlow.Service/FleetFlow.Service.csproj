@@ -18,6 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FleetFlow.DAL\FleetFlow.DAL.csproj" />
     <ProjectReference Include="..\FleetFlow.Domain\FleetFlow.Domain.csproj" />
+    <ProjectReference Include="..\FleetFlow.Shared\FleetFlow.Shared.csproj" />
   </ItemGroup>
 
 </Project>
