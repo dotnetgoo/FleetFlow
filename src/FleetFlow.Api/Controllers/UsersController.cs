@@ -6,11 +6,12 @@ using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs;
 using FleetFlow.Service.Interfaces;
 using FleetFlow.Service.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
 {
-    [ApiController]
+    [ApiController, Authorize]
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
@@ -43,7 +44,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost, AllowAnonymous]
         public async ValueTask<ActionResult<MerchantForResultDto>> PostAsync(UserForCreationDto dto)
             => Ok(await userService.AddAsync(dto));
 
