@@ -13,12 +13,10 @@ namespace FleetFlow.Api.Controllers
         {
             _authService = authService;
         }
-
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate(string username, string password)
         {
-            return Ok(await this._authService.GenerateTokenAsync(username, password));
-            
+            return Ok( await this._authService.)
         }
     }
 }
