@@ -26,7 +26,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="params"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Admin")]
         public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
             => Ok(await userService.RetrieveAllAsync(@params));
 

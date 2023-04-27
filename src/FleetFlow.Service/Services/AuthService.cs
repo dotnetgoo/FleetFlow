@@ -49,7 +49,7 @@ public class AuthService : IAuthService
             Audience = configuration["JWT:Audience"],
             Issuer = configuration["JWT:Issuer"],
             IssuedAt = DateTime.UtcNow,
-            Expires = DateTime.UtcNow.AddSeconds(double.Parse(configuration["JWT:Expire"])),
+            Expires = DateTime.UtcNow.AddMinutes(double.Parse(configuration["JWT:Expire"])),
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
         };
