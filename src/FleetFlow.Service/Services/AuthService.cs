@@ -46,6 +46,8 @@ public class AuthService : IAuthService
                  new Claim(ClaimTypes.Role, user.Role.ToString()),
                  new Claim(ClaimTypes.Name, user.FirstName)
             }),
+            Audience = configuration["JWT:Audience"],
+            Issuer = configuration["JWT:Issuer"],
             IssuedAt = DateTime.UtcNow,
             Expires = DateTime.UtcNow.AddMinutes(double.Parse(configuration["JWT:Expire"])),
             SigningCredentials = new SigningCredentials(

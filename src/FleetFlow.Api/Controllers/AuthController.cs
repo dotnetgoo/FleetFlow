@@ -1,4 +1,5 @@
-﻿using FleetFlow.Service.Interfaces;
+﻿using FleetFlow.Service.DTOs;
+using FleetFlow.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
@@ -7,16 +8,16 @@ namespace FleetFlow.Api.Controllers
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
-        private readonly IAuthService _authService;
+        private readonly IAuthService authService;
 
         public AuthController(IAuthService authService)
         {
-            _authService = authService;
+            this.authService = authService;
         }
         [HttpPost("authenticate")]
-        public async Task<IActionResult> Authenticate(string username, string password)
+        public async Task<IActionResult> AuthenticateAsync(LoginDto dto)
         {
-            return Ok(await this._authService.AuthentificateAsync(username, password);
+            return Ok(await this.authService.AuthenticateAsync(dto.Email, dto.Password));
         }
     }
 }
