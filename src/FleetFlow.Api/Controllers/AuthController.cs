@@ -16,7 +16,7 @@ namespace FleetFlow.Api.Controllers
         [HttpPost("authenticate")]
         public async Task<IActionResult> Authenticate(string username, string password)
         {
-            return Ok( await this._authService.)
+            return Ok(await this._authService.AuthentificateAsync(username, password);
         }
     }
 }
