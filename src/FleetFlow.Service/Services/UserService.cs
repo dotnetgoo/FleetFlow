@@ -128,4 +128,22 @@ public class UserService : IUserService
 
         return this.mapper.Map<UserForResultDto>(user);
     }
+
+    /// <summary>
+    /// Get User if email and password are correct
+    /// </summary>
+    /// <param name="email"></param>
+    /// <param name="password"></param>
+    /// <returns></returns>
+    /// <exception cref="FleetFlowException"></exception>
+    public async Task<UserForResultDto> CheckUserAsync(string email, string password)
+    {
+        var user = await this.unitOfWork.Users
+            .SelectAsync(u => u.Email == email && u.Password == password);
+
+        if (user is null)
+            throw new FleetFlowException(400, "Email or password is incorrect");
+
+        return this.mapper.Map<UserForResultDto>(user);
+    }
 }
