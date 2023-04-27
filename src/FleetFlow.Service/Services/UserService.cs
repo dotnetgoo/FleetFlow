@@ -7,6 +7,7 @@ using FleetFlow.Service.DTOs;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces;
+using FleetFlow.Shared.Helpers;
 using MailKit.Net.Imap;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -39,6 +40,7 @@ public class UserService : IUserService
 
         var mapped = this.mapper.Map<User>(dto);
         mapped.CreatedAt = DateTime.UtcNow;
+        mapped.Password = PasswordHelper.Hash(dto.Password);
         var addedModel = await unitOfWork.Users.InsertAsync(mapped);
 
         await unitOfWork.SaveChangesAsync();
@@ -129,21 +131,6 @@ public class UserService : IUserService
         return this.mapper.Map<UserForResultDto>(user);
     }
 
-    /// <summary>
-    /// Get User if email and password are correct
-    /// </summary>
-    /// <param name="email"></param>
-    /// <param name="password"></param>
-    /// <returns></returns>
-    /// <exception cref="FleetFlowException"></exception>
-    public async Task<UserForResultDto> CheckUserAsync(string email, string password)
-    {
-        var user = await this.unitOfWork.Users
-            .SelectAsync(u => u.Email == email && u.Password == password);
-
-        if (user is null)
-            throw new FleetFlowException(400, "Email or password is incorrect");
-
-        return this.mapper.Map<UserForResultDto>(user);
-    }
+    public async Task<User> RetrieveByEmailAsync(string email)
+        => await this.unitOfWork.Users.SelectAsync(u => u.Email == email);
 }

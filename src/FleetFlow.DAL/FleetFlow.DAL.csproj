@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FleetFlow.Domain\FleetFlow.Domain.csproj" />
+    <ProjectReference Include="..\FleetFlow.Shared\FleetFlow.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
