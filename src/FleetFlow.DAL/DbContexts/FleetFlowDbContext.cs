@@ -10,7 +10,6 @@ namespace FleetFlow.DAL.DbContexts
         public FleetFlowDbContext(DbContextOptions<FleetFlowDbContext> options)
             : base(options)
         {
-            Database.Migrate();
         }
 
         public DbSet<Address> Addresses { get; set; }
