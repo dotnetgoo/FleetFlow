@@ -66,6 +66,9 @@ builder.Services.AddControllers(options =>
 
 var app = builder.Build();
 
+// Updates db in early startup based on latest migration
+app.ApplyMigrations();
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
