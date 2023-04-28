@@ -3,7 +3,7 @@ using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities;
 using FleetFlow.Domain.Enums;
-using FleetFlow.Service.DTOs;
+using FleetFlow.Service.DTOs.User;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces;
@@ -60,6 +60,9 @@ public class UserService : IUserService
         if (user is null)
             throw new FleetFlowException(404, "Couldn't find user for this given Id");
 
+        // init deleter id
+        user.DeletedBy = HttpContextHelper.UserId;
+
         await this.unitOfWork.Users.DeleteAsync(u => u.Id == id);
 
         await this.unitOfWork.SaveChangesAsync();
@@ -75,7 +78,8 @@ public class UserService : IUserService
     public async Task<IEnumerable<UserForResultDto>> RetrieveAllAsync(PaginationParams @params)
     {
         var users = await unitOfWork.Users.SelectAll()
-                                    .ToPagedList(@params).ToListAsync();
+            .ToPagedList(@params)
+            .ToListAsync();
 
         return this.mapper.Map<IEnumerable<UserForResultDto>>(users);
     }
@@ -130,7 +134,36 @@ public class UserService : IUserService
 
         return this.mapper.Map<UserForResultDto>(user);
     }
-
+    /// <summary>
+    /// Retrieve user by email
+    /// </summary>
+    /// <param name="email"></param>
+    /// <returns></returns>
     public async Task<User> RetrieveByEmailAsync(string email)
         => await this.unitOfWork.Users.SelectAsync(u => u.Email == email);
+
+    /// <summary>
+    /// Change user password
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
+    /// <exception cref="NotImplementedException"></exception>
+    public async Task<UserForResultDto> ChangePasswordAsync(UserForChangePasswordDto dto)
+    {
+        var user = await this.unitOfWork.Users.SelectAsync(u => u.Email == dto.Email);
+        if (user is null)
+            throw new FleetFlowException(404, "User not found!");
+
+        if (!PasswordHelper.Verify(dto.OldPassword, user.Password))
+            throw new FleetFlowException(400, "Password is incorrect");
+
+        if (dto.NewPassword != dto.ComfirmPassword)
+            throw new FleetFlowException(400, "New password and confirm password are not equal");
+
+        user.Password = PasswordHelper.Hash(dto.NewPassword);
+
+        await this.unitOfWork.SaveChangesAsync();
+
+        return this.mapper.Map<UserForResultDto>(user);
+    }
 }

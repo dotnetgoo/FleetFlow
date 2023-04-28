@@ -1,5 +1,5 @@
 ﻿using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.DTOs;
+using FleetFlow.Service.DTOs.Merchant;
 
 namespace FleetFlow.Service.Interfaces;
 

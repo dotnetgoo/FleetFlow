@@ -1,6 +1,10 @@
 ﻿using AutoMapper;
 using FleetFlow.Domain.Entities;
-using FleetFlow.Service.DTOs;
+using FleetFlow.Service.DTOs.Address;
+using FleetFlow.Service.DTOs.Location;
+using FleetFlow.Service.DTOs.Merchant;
+using FleetFlow.Service.DTOs.Product;
+using FleetFlow.Service.DTOs.User;
 
 namespace FleetFlow.Service.Mappers
 {

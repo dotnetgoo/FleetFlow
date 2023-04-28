@@ -1,7 +1,7 @@
 ﻿using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities;
 using FleetFlow.Domain.Enums;
-using FleetFlow.Service.DTOs;
+using FleetFlow.Service.DTOs.User;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +20,6 @@ namespace FleetFlow.Service.Interfaces
         Task<bool> RemoveAsync(long id);
         Task<UserForResultDto> RetrieveByIdAsync(long id);
         Task<UserForResultDto> ModifyAsync(long id, UserForUpdateDto dto);
+        Task<UserForResultDto> ChangePasswordAsync(UserForChangePasswordDto dto); 
     }
 }
