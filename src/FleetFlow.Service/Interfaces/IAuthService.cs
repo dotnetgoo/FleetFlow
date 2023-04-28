@@ -1,5 +1,5 @@
 ﻿using FleetFlow.Domain.Entities;
-using FleetFlow.Service.DTOs;
+using FleetFlow.Service.DTOs.Login;
 
 namespace FleetFlow.Service.Interfaces;
 

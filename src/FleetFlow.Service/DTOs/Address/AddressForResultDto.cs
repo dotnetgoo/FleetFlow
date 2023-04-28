@@ -1,7 +1,7 @@
 ﻿using FleetFlow.Domain.Commons;
 using System.ComponentModel;
 
-namespace FleetFlow.Service.DTOs;
+namespace FleetFlow.Service.DTOs.Address;
 
 public class AddressForResultDto : Auditable
 {

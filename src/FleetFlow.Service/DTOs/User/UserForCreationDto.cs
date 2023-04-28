@@ -1,7 +1,7 @@
 ﻿using FleetFlow.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace FleetFlow.Service.DTOs;
+namespace FleetFlow.Service.DTOs.User;
 public class UserForCreationDto
 {
     [Required(ErrorMessage = "FirstName is required")]

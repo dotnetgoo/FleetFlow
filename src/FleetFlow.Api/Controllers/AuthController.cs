@@ -1,4 +1,4 @@
-﻿using FleetFlow.Service.DTOs;
+﻿using FleetFlow.Service.DTOs.Login;
 using FleetFlow.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

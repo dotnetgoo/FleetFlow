@@ -1,5 +1,5 @@
 ﻿using FleetFlow.Domain.Entities;
-using FleetFlow.Service.DTOs;
+using FleetFlow.Service.DTOs.Login;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Interfaces;
 using FleetFlow.Shared.Helpers;

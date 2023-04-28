@@ -2,10 +2,10 @@
 using FleetFlow.Domain.Enums;
 using System.ComponentModel;
 
-namespace FleetFlow.Service.DTOs;
+namespace FleetFlow.Service.DTOs.User;
 public class UserForResultDto
 {
-    public long Id { get; set; }    
+    public long Id { get; set; }
 
     [DisplayName("First Name")]
     public string FirstName { get; set; }

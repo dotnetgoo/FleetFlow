@@ -1,6 +1,6 @@
 ﻿using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities;
-using FleetFlow.Service.DTOs;
+using FleetFlow.Service.DTOs.Location;
 using System.Linq.Expressions;
 
 namespace FleetFlow.Service.Interfaces

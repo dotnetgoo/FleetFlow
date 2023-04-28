@@ -1,6 +1,6 @@
 ﻿using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities;
-using FleetFlow.Service.DTOs;
+using FleetFlow.Service.DTOs.Product;
 using FleetFlow.Service.Interfaces;
 using FleetFlow.Service.Services;
 using Microsoft.AspNetCore.Mvc;

@@ -1,7 +1,7 @@
 ﻿using FleetFlow.Domain.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace FleetFlow.Service.DTOs
+namespace FleetFlow.Service.DTOs.Location
 {
     public class LocationForCreationDto
     {

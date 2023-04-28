@@ -1,10 +1,10 @@
 ﻿using FleetFlow.Domain.Entities;
 
-namespace FleetFlow.Service.DTOs;
+namespace FleetFlow.Service.DTOs.Product;
 
 public class ProductForResultDto
 {
-    public long Id { get; set; }    
+    public long Id { get; set; }
     public string Name { get; set; }
     public string Serial { get; set; }
     public decimal Price { get; set; }
