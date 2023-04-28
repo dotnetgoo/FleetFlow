@@ -3,10 +3,8 @@ using FleetFlow.Api.Middlewares;
 using FleetFlow.Api.Models;
 using FleetFlow.DAL.DbContexts;
 using FleetFlow.Service.Mappers;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Serilog;
 using System.Text;
 
@@ -22,7 +20,7 @@ builder.Services.AddSwaggerGen();
 
 // terminal's location should be in FleetFlow.Api
 // dotnet ef --project ..\FleetFlow.DAL\ migrations add [MigrationName]
-builder.Services.AddDbContext<FleetFlowDbContext>(options => 
+builder.Services.AddDbContext<FleetFlowDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Serilog
