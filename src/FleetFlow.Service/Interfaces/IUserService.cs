@@ -20,5 +20,6 @@ namespace FleetFlow.Service.Interfaces
         Task<bool> RemoveAsync(long id);
         Task<UserForResultDto> RetrieveByIdAsync(long id);
         Task<UserForResultDto> ModifyAsync(long id, UserForUpdateDto dto);
+        Task<UserForResultDto> ChangePasswordAsync(UserForChangePasswordDto dto); 
     }
 }
