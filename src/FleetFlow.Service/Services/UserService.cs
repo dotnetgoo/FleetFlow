@@ -60,6 +60,9 @@ public class UserService : IUserService
         if (user is null)
             throw new FleetFlowException(404, "Couldn't find user for this given Id");
 
+        // init deleter id
+        user.DeletedBy = HttpContextHelper.UserId;
+
         await this.unitOfWork.Users.DeleteAsync(u => u.Id == id);
 
         await this.unitOfWork.SaveChangesAsync();

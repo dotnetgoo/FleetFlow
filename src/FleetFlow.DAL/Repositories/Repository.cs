@@ -27,7 +27,7 @@ namespace FleetFlow.DAL.Repositories
 
             if (entity is not null)
             {
-                this.dbSet.Remove(entity);
+                entity.IsDeleted = true;
                 return true;
             }
 
@@ -44,7 +44,8 @@ namespace FleetFlow.DAL.Repositories
             var entities = dbSet.Where(expression);
             if (entities.Any())
             {
-                this.dbSet.RemoveRange(entities);
+                foreach (var entity in entities)
+                    entity.IsDeleted = true;
 
                 return true;
             }
