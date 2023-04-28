@@ -60,6 +60,9 @@ public class UserService : IUserService
         if (user is null)
             throw new FleetFlowException(404, "Couldn't find user for this given Id");
 
+        // init deleter id
+        user.DeletedBy = HttpContextHelper.UserId;
+
         await this.unitOfWork.Users.DeleteAsync(u => u.Id == id);
 
         await this.unitOfWork.SaveChangesAsync();
@@ -75,7 +78,8 @@ public class UserService : IUserService
     public async Task<IEnumerable<UserForResultDto>> RetrieveAllAsync(PaginationParams @params)
     {
         var users = await unitOfWork.Users.SelectAll()
-                                    .ToPagedList(@params).ToListAsync();
+            .ToPagedList(@params)
+            .ToListAsync();
 
         return this.mapper.Map<IEnumerable<UserForResultDto>>(users);
     }
