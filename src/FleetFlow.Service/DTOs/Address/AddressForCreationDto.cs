@@ -1,4 +1,4 @@
-﻿namespace FleetFlow.Service.DTOs;
+﻿namespace FleetFlow.Service.DTOs.Address;
 
 public class AddressForCreationDto
 {
