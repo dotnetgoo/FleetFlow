@@ -78,7 +78,8 @@ public class UserService : IUserService
     public async Task<IEnumerable<UserForResultDto>> RetrieveAllAsync(PaginationParams @params)
     {
         var users = await unitOfWork.Users.SelectAll()
-                                    .ToPagedList(@params).ToListAsync();
+            .ToPagedList(@params)
+            .ToListAsync();
 
         return this.mapper.Map<IEnumerable<UserForResultDto>>(users);
     }
