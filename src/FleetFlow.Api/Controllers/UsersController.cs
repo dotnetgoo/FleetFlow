@@ -34,7 +34,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("Id")]
+        [HttpGet("id")]
         public async ValueTask<IActionResult> GetByIdAsync(long id)
             => Ok(await userService.RetrieveByIdAsync(id));
 
@@ -53,7 +53,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPut("Id")]
+        [HttpPut("id")]
         public async ValueTask<ActionResult<MerchantForResultDto>> PutAsync(long id, UserForUpdateDto dto)
             => Ok(await userService.ModifyAsync(id, dto));
 
@@ -62,7 +62,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("Id")]
+        [HttpDelete("id")]
         public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
             => Ok(await userService.RemoveAsync(id));
     }
