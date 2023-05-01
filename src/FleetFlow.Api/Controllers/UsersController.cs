@@ -45,7 +45,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost, AllowAnonymous]
+        [HttpPost, AllowAnonymous]  
         public async ValueTask<ActionResult<UserForResultDto>> PostAsync(UserForCreationDto dto)
             => Ok(await userService.AddAsync(dto));
 
