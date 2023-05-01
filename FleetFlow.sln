@@ -17,7 +17,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0FAB4F36
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FleetFlow.Tests", "tests\FleetFlow.Tests\FleetFlow.Tests.csproj", "{1E8130F2-15A2-48C7-8697-A6F541BA7F79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.Shared", "src\FleetFlow.Shared\FleetFlow.Shared.csproj", "{9DA5054E-1042-41FB-B5FD-C7AB68BDD7E4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FleetFlow.Shared", "src\FleetFlow.Shared\FleetFlow.Shared.csproj", "{9DA5054E-1042-41FB-B5FD-C7AB68BDD7E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
