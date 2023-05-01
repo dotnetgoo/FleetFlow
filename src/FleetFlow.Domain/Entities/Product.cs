@@ -13,7 +13,6 @@ namespace FleetFlow.Domain.Entities
         public long CategoryId { get; set; }
         public ProductCategory Category { get; set; }
 
-        public ICollection<Inventory> Inventories { get; set; }
         public ICollection<OrderItem> OrderItems { get; set; }
     }
 }
