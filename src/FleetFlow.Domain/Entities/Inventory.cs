@@ -11,8 +11,5 @@ namespace FleetFlow.Domain.Entities
 
         public long LocationId { get; set; }
         public Location Location { get; set; }
-
-        public long MerchantId { get; set; }
-        public Merchant Merchant { get; set; }
     }
 }
