@@ -12,6 +12,7 @@ using MailKit.Net.Imap;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices;
 
 namespace FleetFlow.Service.Services;
 
@@ -65,8 +66,11 @@ public class UserService : IUserService
 
         // init deleter id
         user.DeletedBy = HttpContextHelper.UserId;
-
+        
         await this.unitOfWork.Users.DeleteAsync(u => u.Id == id);
+
+        var cart = await this.unitOfWork.Carts.SelectAsync(c => c.UserId.Equals(id));
+        await this.unitOfWork.Carts.DeleteAsync(c => c.Id.Equals(cart.Id));
 
         await this.unitOfWork.SaveChangesAsync();
 
