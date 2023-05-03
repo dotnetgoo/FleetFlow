@@ -45,7 +45,7 @@ public class UserService : IUserService
         var addedModel = await unitOfWork.Users.InsertAsync(mapped);
         var newCart = new Cart();
         newCart.UserId = addedModel.Id;
-        var cart = await this.unitOfWork.Carts.InsertAsync(newCart);
+        await this.unitOfWork.Carts.InsertAsync(newCart);
 
         await unitOfWork.SaveChangesAsync();
 
