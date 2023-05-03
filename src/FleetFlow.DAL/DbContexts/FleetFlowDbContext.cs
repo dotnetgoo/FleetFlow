@@ -29,11 +29,11 @@ namespace FleetFlow.DAL.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Fluent API relations
-            modelBuilder.Entity<Inventory>()
-                .HasOne(i => i.Product)
-                .WithMany(p => p.Inventories)
-                .HasForeignKey(i => i.ProductId)
-                .OnDelete(DeleteBehavior.NoAction);
+            //modelBuilder.Entity<Inventory>()
+            //    .HasOne(i => i.Product)
+            //    .WithMany(p => p.Inventories)
+            //    .HasForeignKey(i => i.ProductId)
+            //    .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Inventory>()
                 .HasOne(i => i.Location)
@@ -149,11 +149,11 @@ namespace FleetFlow.DAL.DbContexts
                 new Order() { Id = 1, UserId = 1, AddressId = 2, Status = OrderStatus.Pending, CreatedAt = DateTime.UtcNow, UpdatedAt = null}
                 );
 
-            modelBuilder.Entity<OrderItem>().HasData(
-                new OrderItem() { Id = 1, OrderId = 1, ProductId = 3, Amount = 1, InventoryId = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new OrderItem() { Id = 2, OrderId = 1, ProductId = 6, Amount = 4, InventoryId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new OrderItem() { Id = 3, OrderId = 1, ProductId = 2, Amount = 2, InventoryId = 5, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
-                );
+            //modelBuilder.Entity<OrderItem>().HasData(
+            //    new OrderItem() { Id = 1, OrderId = 1, ProductId = 3, Amount = 1, InventoryId = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+            //    new OrderItem() { Id = 2, OrderId = 1, ProductId = 6, Amount = 4, InventoryId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+            //    new OrderItem() { Id = 3, OrderId = 1, ProductId = 2, Amount = 2, InventoryId = 5, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
+            //    );
             #endregion
         }
     }
