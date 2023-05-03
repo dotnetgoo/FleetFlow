@@ -2,10 +2,11 @@
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities;
-using FleetFlow.Service.DTOs;
+using FleetFlow.Service.DTOs.Merchant;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces;
+using FleetFlow.Shared.Helpers;
 
 namespace FleetFlow.Service.Services
 {
@@ -29,7 +30,7 @@ namespace FleetFlow.Service.Services
         {
             // Check if merchant with the same email already exists
             var merchant = await this.unitOfWork.Merchants.SelectAsync(m => m.Email == dto.Email);
-            if (merchant != null)
+            if (merchant != null && !merchant.IsDeleted)
                 throw new FleetFlowException(400, "Merchant already exists");
 
             // Map DTO to Entity and set CreatedAt to current time in UTC
@@ -55,12 +56,12 @@ namespace FleetFlow.Service.Services
         {
             // Find merchant by id
             var merchant = await this.unitOfWork.Merchants.SelectAsync(m => m.Id == id);
-            if (merchant == null)
+            if (merchant == null || merchant.IsDeleted)
                 throw new FleetFlowException(404, "Not found");
 
             // Delete merchant from database
             await this.unitOfWork.Merchants.DeleteAsync(m => m.Id == id);
-
+            merchant.DeletedBy = HttpContextHelper.UserId;
             // Save changes to database
             await this.unitOfWork.SaveChangesAsync();
 
@@ -78,13 +79,13 @@ namespace FleetFlow.Service.Services
         {
             // Find merchant by id
             var merchant = await this.unitOfWork.Merchants.SelectAsync(m => m.Id == id);
-            if (merchant == null)
+            if (merchant == null || merchant.IsDeleted)
                 throw new FleetFlowException(404, "Not found");
 
             // Map DTO to Entity and set CreatedAt to current time in UTC
             var updatedMerchant = this.mapper.Map(dto, merchant);
             updatedMerchant.CreatedAt = DateTime.UtcNow;
-
+            updatedMerchant.UpdatedBy = HttpContextHelper.UserId;
             // Save changes to database
             await this.unitOfWork.SaveChangesAsync();
 
@@ -101,6 +102,7 @@ namespace FleetFlow.Service.Services
         {
             // Retrieve all merchants with pagination parameters
             var merchants = this.unitOfWork.Merchants.SelectAll(includes: new string[] {"Address"})
+                                .Where(m => m.IsDeleted == false)
                                 .ToPagedList(@params).ToList();
 
             // Map entities to DTOs and return as IEnumerable
@@ -117,7 +119,7 @@ namespace FleetFlow.Service.Services
         {
             // Find merchant by id
             var merchant = await this.unitOfWork.Merchants.SelectAsync(m => m.Id == id);
-            if (merchant == null)
+            if (merchant == null || merchant.IsDeleted)
                 throw new FleetFlowException(404, "Not found");
 
             // Map Entity to DTO and return

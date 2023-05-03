@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using FleetFlow.Service.DTOs.Address;
 
-namespace FleetFlow.Service.DTOs;
+namespace FleetFlow.Service.DTOs.Merchant;
 
 public class MerchantForCreationDto
 {

@@ -1,5 +1,5 @@
 ﻿using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.DTOs;
+using FleetFlow.Service.DTOs.Address;
 using FleetFlow.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;

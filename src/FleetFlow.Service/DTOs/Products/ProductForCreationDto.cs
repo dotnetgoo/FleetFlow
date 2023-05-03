@@ -3,12 +3,12 @@ using FleetFlow.Domain.Enums;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace FleetFlow.Service.DTOs
+namespace FleetFlow.Service.DTOs.Product
 {
     public class ProductForCreationDto
     {
         [Required(ErrorMessage = "Name is required")]
-        [StringLength(30 , MinimumLength = 2)]
+        [StringLength(30, MinimumLength = 2)]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "Enter the product serial code")]

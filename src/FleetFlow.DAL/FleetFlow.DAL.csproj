@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FleetFlow.Domain\FleetFlow.Domain.csproj" />
+    <ProjectReference Include="..\FleetFlow.Shared\FleetFlow.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -15,6 +16,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
   </ItemGroup>
 

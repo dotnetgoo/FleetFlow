@@ -11,12 +11,14 @@
     <PackageReference Include="MailKit" Version="3.6.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.30.0" />
 
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FleetFlow.DAL\FleetFlow.DAL.csproj" />
     <ProjectReference Include="..\FleetFlow.Domain\FleetFlow.Domain.csproj" />
+    <ProjectReference Include="..\FleetFlow.Shared\FleetFlow.Shared.csproj" />
   </ItemGroup>
 
 </Project>

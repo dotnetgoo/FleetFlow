@@ -1,5 +1,5 @@
 ﻿using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.DTOs;
+using FleetFlow.Service.DTOs.Merchant;
 using FleetFlow.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +29,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("Id")]
+        [HttpGet("id")]
         public async ValueTask<IActionResult> GetByIdAsync(long id)
             => Ok(await merchantService.RetrieveByIdAsync(id));
 
@@ -48,7 +48,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPut("Id")]
+        [HttpPut("id")]
         public async ValueTask<ActionResult<MerchantForResultDto>> PutAsync(long id, MerchantForCreationDto dto)
             => Ok(await merchantService.ModifyAsync(id, dto));
 
@@ -57,7 +57,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("Id")]
+        [HttpDelete("id")]
         public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
             => Ok(await merchantService.RemoveAsync(id));
 
