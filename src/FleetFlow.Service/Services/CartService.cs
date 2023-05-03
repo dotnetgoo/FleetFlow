@@ -5,11 +5,6 @@ using FleetFlow.Service.DTOs.Carts;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Interfaces;
 using FleetFlow.Shared.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FleetFlow.Service.Services
 {
@@ -20,8 +15,8 @@ namespace FleetFlow.Service.Services
         private readonly IRepository<Product> productRepository;
         private readonly IRepository<CartItem> cartItemRepository;
 
-        public CartService(IRepository<Product> productRepository, 
-            IRepository<Cart> cartRepository, 
+        public CartService(IRepository<Product> productRepository,
+            IRepository<Cart> cartRepository,
             IRepository<CartItem> cartItemRepository,
             IMapper mapper)
         {
@@ -31,7 +26,7 @@ namespace FleetFlow.Service.Services
             this.cartItemRepository = cartItemRepository;
         }
 
-        public async ValueTask<object> AddItemAsync(long productId, int amount)
+        public async ValueTask<CartItemResultDto> AddItemAsync(long productId, int amount)
         {
             var product = await this.productRepository.SelectAsync(u => u.Id == productId && !u.IsDeleted);
 
@@ -63,7 +58,7 @@ namespace FleetFlow.Service.Services
             // Checking of is exist the CartItem on this cartItemId 
             CartItem cartItem = await this.cartItemRepository.SelectAsync(cartItem => cartItem.Id == cartItemId);
             if (cartItem is null)
-                throw new FleetFlowException(404, "Cart item not found");
+                throw new FleetFlowException(404, "CartItem not found");
 
             // Removing existing cartItem 
             await this.cartItemRepository.DeleteAsync(cartItem => cartItem.Id == cartItemId);
@@ -76,11 +71,13 @@ namespace FleetFlow.Service.Services
         {
             // Checking of is exist the CartItem on this cartItemId 
             CartItem cartItem = await this.cartItemRepository.SelectAsync(cartItem => cartItem.Id == cartItemId);
-            if (cartItem is null) 
+            if (cartItem is null)
                 throw new FleetFlowException(404, "CartItem not found");
+            
+            if (cartItem.Amount == 0 && amount < 0)
+                return null;
 
             cartItem.Amount += amount;
-
             cartItem = this.cartItemRepository.Update(cartItem);
             await this.cartItemRepository.SaveAsync();
 
