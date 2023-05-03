@@ -12,6 +12,7 @@ namespace FleetFlow.DAL.IRepositories
         IRepository<Order> Orders { get; }
         IRepository<OrderItem> OrderItems { get; }
         IRepository<Product> Products { get; }
+        IRepository<Cart> Carts { get; }
         Task<bool> SaveChangesAsync();
     }
 }
