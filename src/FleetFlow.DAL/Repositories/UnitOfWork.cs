@@ -20,6 +20,7 @@ namespace FleetFlow.DAL.Repositories
             Orders = new Repository<Order>(dbContext);
             OrderItems = new Repository<OrderItem>(dbContext);
             Products = new Repository<Product>(dbContext);
+            Carts = new Repository<Cart>(dbContext);
         }
 
         public IRepository<User> Users { get; private set; }
@@ -30,6 +31,7 @@ namespace FleetFlow.DAL.Repositories
         public IRepository<Order> Orders { get; private set; }
         public IRepository<OrderItem> OrderItems { get; private set; }
         public IRepository<Product> Products { get; private set; }
+        public IRepository<Cart> Carts { get; private set; }
 
         public void Dispose()
         {

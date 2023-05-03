@@ -42,6 +42,9 @@ public class UserService : IUserService
         mapped.CreatedAt = DateTime.UtcNow;
         mapped.Password = PasswordHelper.Hash(dto.Password);
         var addedModel = await unitOfWork.Users.InsertAsync(mapped);
+        var newCart = new Cart();
+        newCart.UserId = addedModel.Id;
+        var cart = await this.unitOfWork.Carts.InsertAsync(newCart);
 
         await unitOfWork.SaveChangesAsync();
 
