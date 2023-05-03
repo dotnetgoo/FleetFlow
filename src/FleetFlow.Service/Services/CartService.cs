@@ -73,11 +73,13 @@ namespace FleetFlow.Service.Services
             CartItem cartItem = await this.cartItemRepository.SelectAsync(cartItem => cartItem.Id == cartItemId);
             if (cartItem is null)
                 throw new FleetFlowException(404, "CartItem not found");
-            
-            if (cartItem.Amount == 0 && amount < 0)
+
+            // checking for the amount is not must less than 0
+            if (cartItem.Amount == 0 && amount < 0 && (cartItem.Amount - amount) < 0)
                 return null;
 
             cartItem.Amount += amount;
+
             cartItem = this.cartItemRepository.Update(cartItem);
             await this.cartItemRepository.SaveAsync();
 

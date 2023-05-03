@@ -18,6 +18,13 @@ namespace FleetFlow.Service.Interfaces
         /// <returns></returns>
         /// <exception cref="FleetFlowException"></exception>
         ValueTask<object> RemoveItemAsync(long cartItemId);
+
+        /// <summary>
+        /// Change amount of cartItem.amount with input amount
+        /// </summary>
+        /// <param name="cartItemId"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
         ValueTask<object> UpdateItemAsync(long cartItemId, int amount);
     }
 }
