@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.DTOs.Merchant;
 using FleetFlow.Service.DTOs.User;
 using FleetFlow.Service.Interfaces;
 using FleetFlow.Service.Services;
