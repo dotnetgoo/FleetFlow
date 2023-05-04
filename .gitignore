@@ -365,3 +365,4 @@ FodyWeavers.xsd
 # EF Core Database migrations
 */Migrations
 /src/FleetFlow.Api/appsettings.json
+/src/FleetFlow.Api/appsettings.json
