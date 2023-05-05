@@ -56,7 +56,7 @@ namespace FleetFlow.Service.Services
         public async ValueTask<object> RemoveItemAsync(long cartItemId)
         {
             // Checking of is exist the CartItem on this cartItemId 
-            CartItem cartItem = await this.cartItemRepository.SelectAsync(cartItem => cartItem.Id == cartItemId);
+            var cartItem = await this.cartItemRepository.SelectAsync(cartItem => cartItem.Id == cartItemId);
             if (cartItem is null)
                 throw new FleetFlowException(404, "CartItem not found");
 
@@ -67,18 +67,25 @@ namespace FleetFlow.Service.Services
             return true;
         }
 
+        /// <summary>
+        /// Update item of Cart
+        /// </summary>
+        /// <param name="cartItemId"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        /// <exception cref="FleetFlowException"></exception>
         public async ValueTask<object> UpdateItemAsync(long cartItemId, int amount)
         {
-            // Checking of is exist the CartItem on this cartItemId 
-            CartItem cartItem = await this.cartItemRepository.SelectAsync(cartItem => cartItem.Id == cartItemId);
+            // checking of is exist the CartItem on this cartItemId 
+            var cartItem = await this.cartItemRepository.SelectAsync(cartItem => cartItem.Id == cartItemId);
             if (cartItem is null)
                 throw new FleetFlowException(404, "CartItem not found");
 
             // checking for the amount is not must less than 0
-            if (cartItem.Amount == 0 && amount < 0 && (cartItem.Amount - amount) < 0)
-                return null;
+            if (amount <= 0)
+                throw new FleetFlowException(400, "Amount is not valid");
 
-            cartItem.Amount += amount;
+            cartItem.Amount = amount;
 
             cartItem = this.cartItemRepository.Update(cartItem);
             await this.cartItemRepository.SaveAsync();
