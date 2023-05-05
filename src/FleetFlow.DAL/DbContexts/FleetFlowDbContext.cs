@@ -28,6 +28,7 @@ namespace FleetFlow.DAL.DbContexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Fluent API relations
+
             modelBuilder.Entity<Inventory>()
                 .HasOne(i => i.Location)
                 .WithMany()
@@ -129,6 +130,7 @@ namespace FleetFlow.DAL.DbContexts
                 new OrderItem() { Id = 2, OrderId = 1, ProductId = 6, Amount = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
                 new OrderItem() { Id = 3, OrderId = 1, ProductId = 2, Amount = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
+
             #endregion
         }
     }
