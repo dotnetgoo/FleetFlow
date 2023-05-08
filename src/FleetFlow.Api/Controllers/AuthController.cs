@@ -4,9 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class AuthController : Controller
+    public class AuthController : RestfulSense
     {
         private readonly IAuthService authService;
 
