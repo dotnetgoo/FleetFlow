@@ -6,9 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AdressesController : ControllerBase
+    public class AdressesController : RestfulSense
     {
         private readonly IAddressService addressService;
 
@@ -32,7 +30,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public async ValueTask<IActionResult> GetByIdAsync(long id)
+        public async ValueTask<IActionResult> GetAsync(long id)
             => Ok(await this.addressService.GetByIdAsync(id));
 
         /// <summary>
@@ -44,6 +42,12 @@ namespace FleetFlow.Api.Controllers
         public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
             => Ok(await this.addressService.GetAllAsync(@params));
 
+        /// <summary>
+        /// Update address
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPut("{id}")]
         public async ValueTask<IActionResult> PutAsync(long id, AddressForCreationDto dto)
             => Ok(await this.addressService.UpdateByIdAsync(id, dto));

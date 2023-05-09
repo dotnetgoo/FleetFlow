@@ -9,7 +9,7 @@ namespace FleetFlow.Service.Interfaces
 {
     public interface ICartService
     {
-        ValueTask<CartItemResultDto> AddItemAsync(long productId, int amount);
+        ValueTask<CartItemResultDto> AddItemAsync(CartItemCreationDto dto);
 
         /// <summary>
         /// Removes cartitem by entering cartItemId
@@ -25,6 +25,6 @@ namespace FleetFlow.Service.Interfaces
         /// <param name="cartItemId"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        ValueTask<object> UpdateItemAsync(long cartItemId, int amount);
+        ValueTask<object> UpdateItemAsync(long itemId, int amount);
     }
 }

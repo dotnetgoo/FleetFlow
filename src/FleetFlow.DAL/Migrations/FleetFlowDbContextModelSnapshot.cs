@@ -68,7 +68,7 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
 
                     b.HasData(
                         new
@@ -153,7 +153,7 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Carts");
+                    b.ToTable("Carts", (string)null);
                 });
 
             modelBuilder.Entity("FleetFlow.Domain.Entities.CartItem", b =>
@@ -194,7 +194,7 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItems");
+                    b.ToTable("CartItems", (string)null);
                 });
 
             modelBuilder.Entity("FleetFlow.Domain.Entities.Inventory", b =>
@@ -235,7 +235,7 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Inventories");
+                    b.ToTable("Inventories", (string)null);
 
                     b.HasData(
                         new
@@ -319,7 +319,7 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
 
                     b.HasData(
                         new
@@ -424,7 +424,7 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasIndex("UserId1");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
 
                     b.HasData(
                         new
@@ -477,7 +477,7 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems");
+                    b.ToTable("OrderItems", (string)null);
 
                     b.HasData(
                         new
@@ -552,7 +552,7 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
 
                     b.HasData(
                         new
@@ -652,7 +652,7 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategories");
+                    b.ToTable("ProductCategories", (string)null);
 
                     b.HasData(
                         new
@@ -744,7 +744,7 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new

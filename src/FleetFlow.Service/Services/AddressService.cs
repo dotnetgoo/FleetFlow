@@ -12,40 +12,40 @@ namespace FleetFlow.Service.Services;
 
 public class AddressService : IAddressService
 {
-    private readonly IUnitOfWork unitOfWork;
+    private readonly IRepository<Address> addressRepository;
     private readonly IMapper mapper;
-    public AddressService(IUnitOfWork unitOfWork, IMapper mapper)
+    public AddressService(IMapper mapper, IRepository<Address> addressRepository)
     {
-        this.unitOfWork = unitOfWork;
         this.mapper = mapper;
+        this.addressRepository = addressRepository;
     }
 
     public async Task<AddressForResultDto> AddAsync(AddressForCreationDto address)
     {
         var mapped = this.mapper.Map<Address>(address);
 
-        var insertResult = await this.unitOfWork.Addresses.InsertAsync(mapped);
-        await this.unitOfWork.SaveChangesAsync();
+        var insertResult = await this.addressRepository.InsertAsync(mapped);
+        await this.addressRepository.SaveAsync();
 
         return this.mapper.Map<AddressForResultDto>(insertResult);
     }
 
     public async Task<bool> DeleteByIdAsync(long id)
     {
-        var CheckAddress = await this.unitOfWork.Addresses.SelectAsync(a => a.Id == id);
+        var CheckAddress = await this.addressRepository.SelectAsync(a => a.Id == id);
 
-        bool IsDeleted = await this.unitOfWork.Addresses.DeleteAsync(a => a.Id == id);
+        bool IsDeleted = await this.addressRepository.DeleteAsync(a => a.Id == id);
 
         if (!IsDeleted) 
             throw new FleetFlowException(404, "Couldn't find product for this given Id");
 
-        await this.unitOfWork.SaveChangesAsync();
+        await this.addressRepository.SaveAsync();
         return IsDeleted;
     }
 
     public async Task<IEnumerable<AddressForResultDto>> GetAllAsync(PaginationParams @params)
     {
-        var addressQuery = this.unitOfWork.Addresses.SelectAll();
+        var addressQuery = this.addressRepository.SelectAll();
 
         if (addressQuery is null)
             throw new FleetFlowException(404, "Address not found");
@@ -56,7 +56,7 @@ public class AddressService : IAddressService
 
     public async Task<AddressForResultDto> GetByIdAsync(long id)
     {
-        var address = await this.unitOfWork.Addresses.SelectAsync(a => a.Id == id);
+        var address = await this.addressRepository.SelectAsync(a => a.Id == id);
 
         if (address is null)
             throw new FleetFlowException(404, "Address Not Found");
@@ -68,7 +68,7 @@ public class AddressService : IAddressService
 
     public async Task<AddressForResultDto> UpdateByIdAsync(long id, AddressForCreationDto dto)
     {
-        var address = await this.unitOfWork.Addresses.SelectAsync(a => a.Id == id);
+        var address = await this.addressRepository.SelectAsync(a => a.Id == id);
 
         if (address is null)
             throw new FleetFlowException(404, "Couldn't find Address");
@@ -76,7 +76,7 @@ public class AddressService : IAddressService
         var mapped = this.mapper.Map(dto, address);
         mapped.UpdatedAt = DateTime.UtcNow;
 
-        await this.unitOfWork.SaveChangesAsync();
+        await this.addressRepository.SaveAsync();
 
         return this.mapper.Map<AddressForResultDto>(mapped);
     }

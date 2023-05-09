@@ -11,9 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
 {
-    [ApiController, Authorize]
-    [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    [Authorize]
+    public class UsersController : RestfulSense
     {
         private readonly IUserService userService;
         public UsersController(IUserService userService)
@@ -36,7 +35,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("id")]
-        public async ValueTask<IActionResult> GetByIdAsync(long id)
+        public async ValueTask<IActionResult> GetAsync(long id)
             => Ok(await userService.RetrieveByIdAsync(id));
 
         /// <summary>
