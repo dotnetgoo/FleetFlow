@@ -52,6 +52,12 @@ builder.Services.AddAuthentication(options =>
         ClockSkew = TimeSpan.Zero
     };
 });
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("Administration", p => p.RequireRole("Admin", "SuperAdmin"));
+    options.AddPolicy("AdminMerchant", p => p.RequireRole("Admin", "Merchant"));
+    options.AddPolicy("Worker", p => p.RequireRole("Driver", "Picker", "Packer"));
+});
 
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 

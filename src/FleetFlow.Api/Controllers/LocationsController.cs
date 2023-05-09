@@ -5,9 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class LocationsController : ControllerBase
+    public class LocationsController : RestfulSense
     {
         private readonly ILocationService locationService;
         public LocationsController(ILocationService locationService)
@@ -29,8 +27,8 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("Id")]
-        public async ValueTask<IActionResult> GetByIdAsync(long id)
+        [HttpGet("id")]
+        public async ValueTask<IActionResult> GetAsync(long id)
             => Ok(await locationService.RetrieveByIdAsync(id));
 
         /// <summary>
@@ -48,7 +46,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="dto"></param>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPut("Id")]
+        [HttpPut("id")]
         public async ValueTask<ActionResult<LocationForResultDto>> PutAsync(LocationForCreationDto dto, long id)
             => Ok(await locationService.ModifyAsync(id, dto));
 
@@ -57,7 +55,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("Id")]
+        [HttpDelete("id")]
         public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
             => Ok(await locationService.RemoveAsync(id));
     }

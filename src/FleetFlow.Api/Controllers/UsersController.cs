@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.DTOs.Merchant;
 using FleetFlow.Service.DTOs.User;
 using FleetFlow.Service.Interfaces;
 using FleetFlow.Service.Services;
@@ -12,9 +11,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
 {
-    [ApiController, Authorize]
-    [Route("api/[controller]")]
-    public class UsersController : ControllerBase
+    [Authorize]
+    public class UsersController : RestfulSense
     {
         private readonly IUserService userService;
         public UsersController(IUserService userService)
@@ -27,7 +25,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="params"></param>
         /// <returns></returns>
-        [HttpGet, Authorize(Roles = "Admin")]
+        [HttpGet, Authorize("Administration")]
         public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
             => Ok(await userService.RetrieveAllAsync(@params));
 
@@ -36,8 +34,8 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("Id")]
-        public async ValueTask<IActionResult> GetByIdAsync(long id)
+        [HttpGet("id")]
+        public async ValueTask<IActionResult> GetAsync(long id)
             => Ok(await userService.RetrieveByIdAsync(id));
 
         /// <summary>
@@ -45,7 +43,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost, AllowAnonymous]
+        [HttpPost, AllowAnonymous]  
         public async ValueTask<ActionResult<UserForResultDto>> PostAsync(UserForCreationDto dto)
             => Ok(await userService.AddAsync(dto));
 
@@ -55,7 +53,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPut("Id")]
+        [HttpPut("id")]
         public async ValueTask<ActionResult<UserForResultDto>> PutAsync(long id, UserForUpdateDto dto)
             => Ok(await userService.ModifyAsync(id, dto));
 
@@ -64,7 +62,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete("Id")]
+        [HttpDelete("id")]
         public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
             => Ok(await userService.RemoveAsync(id));
 

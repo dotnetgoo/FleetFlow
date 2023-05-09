@@ -15,40 +15,25 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Location> Locations { get; set; }
-        public DbSet<Merchant> Merchants { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<ProductCategory> ProductCategories { get; set; }
+        public DbSet<Cart> Carts { get; set; }
+        public DbSet<CartItem> CartItems { get; set; }
+
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Fluent API relations
-            modelBuilder.Entity<Inventory>()
-                .HasOne(i => i.Product)
-                .WithMany(p => p.Inventories)
-                .HasForeignKey(i => i.ProductId)
-                .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Inventory>()
                 .HasOne(i => i.Location)
                 .WithMany()
                 .HasForeignKey(i => i.LocationId)
                 .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<Inventory>()
-                .HasOne(i => i.Merchant)
-                .WithMany(m => m.Inventories)
-                .HasForeignKey(i => i.MerchantId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            modelBuilder.Entity<Merchant>()
-                .HasOne(m => m.Address)
-                .WithMany(a => a.Merchants)
-                .HasForeignKey(m => m.AddressId)
-                .OnDelete(DeleteBehavior.NoAction); 
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.User)
@@ -120,12 +105,6 @@ namespace FleetFlow.DAL.DbContexts
                 new Address() { Id = 4, State = "Uzbekistan", City = "Kharezm", District = "Nurata", Street = "Policians", ZipCode = "100250", Latitude = 47.3412, Longitude = 27.324, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
 
-            modelBuilder.Entity<Merchant>().HasData(
-                new Merchant() { Id = 1, Name = "Rocket Logistics", AddressId = 1, Phone = "4444", Email = "RocketLogisticts@gmail.com", Website = "rLogistics.com", CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new Merchant() { Id = 2, Name = "Giant Delivery", AddressId = 2, Phone = "777 9 777", Email = "giant.delivery@gmail.com", Website = "giantdelivery.com", CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new Merchant() { Id = 3, Name = "Ameer Logistics", AddressId = 4, Phone = "2020", Email = "ameerLogistics@gmail.com", Website = "ameerlogistics.com", CreatedAt = DateTime.UtcNow, UpdatedAt = null}
-                );
-
             modelBuilder.Entity<Product>().HasData(
                 new Product() { Id = 1, Name = "HP-Victus", Serial = "a1B5", Price = 630, Weight = 2.2M, CategoryId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
                 new Product() { Id = 2, Name = "MacBook-Pro", Serial = "AKJ-12445", Price = 2000, Weight = 1.2M, CategoryId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
@@ -136,21 +115,22 @@ namespace FleetFlow.DAL.DbContexts
                 );
 
             modelBuilder.Entity<Inventory>().HasData(
-                new Inventory() { Id = 1, ProductId = 6, Amount = 1000, LocationId = 1, MerchantId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 2, ProductId = 1, Amount = 50, LocationId = 1, MerchantId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 3, ProductId = 3, Amount = 100, LocationId = 2, MerchantId = 2, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 4, ProductId = 5, Amount = 100000, LocationId = 3, MerchantId = 3, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 5, ProductId = 2, Amount = 100, LocationId = 3, MerchantId = 3, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null}
+                new Inventory() { Id = 1, ProductId = 6, Amount = 1000, LocationId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
+                new Inventory() { Id = 2, ProductId = 1, Amount = 50, LocationId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
+                new Inventory() { Id = 3, ProductId = 3, Amount = 100, LocationId = 2, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
+                new Inventory() { Id = 4, ProductId = 5, Amount = 100000, LocationId = 3, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
+                new Inventory() { Id = 5, ProductId = 2, Amount = 100, LocationId = 3, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null}
                 );
             modelBuilder.Entity<Order>().HasData(
                 new Order() { Id = 1, UserId = 1, AddressId = 2, Status = OrderStatus.Pending, CreatedAt = DateTime.UtcNow, UpdatedAt = null}
                 );
 
             modelBuilder.Entity<OrderItem>().HasData(
-                new OrderItem() { Id = 1, OrderId = 1, ProductId = 3, Amount = 1, InventoryId = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new OrderItem() { Id = 2, OrderId = 1, ProductId = 6, Amount = 4, InventoryId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new OrderItem() { Id = 3, OrderId = 1, ProductId = 2, Amount = 2, InventoryId = 5, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
+                new OrderItem() { Id = 1, OrderId = 1, ProductId = 3, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new OrderItem() { Id = 2, OrderId = 1, ProductId = 6, Amount = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new OrderItem() { Id = 3, OrderId = 1, ProductId = 2, Amount = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
+
             #endregion
         }
     }

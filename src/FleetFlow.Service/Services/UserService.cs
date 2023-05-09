@@ -12,17 +12,22 @@ using MailKit.Net.Imap;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq.Expressions;
+using System.Runtime.InteropServices;
 
 namespace FleetFlow.Service.Services;
 
 public class UserService : IUserService
 {
-    private readonly IUnitOfWork unitOfWork;
+    private readonly IRepository<User> userRepository;
+    private readonly IRepository<Cart> cartRepository;
     private readonly IMapper mapper;
-    public UserService(IUnitOfWork unitOfWork, IMapper mapper)
+    public UserService(IMapper mapper, 
+        IRepository<User> userRepository, 
+        IRepository<Cart> cartRepository)
     {
-        this.unitOfWork = unitOfWork;
         this.mapper = mapper;
+        this.userRepository = userRepository;
+        this.cartRepository = cartRepository;
     }
 
     /// <summary>
@@ -34,16 +39,22 @@ public class UserService : IUserService
     public async Task<UserForResultDto> AddAsync(UserForCreationDto dto)
     {
         // check for exist user
-        var existUser = await unitOfWork.Users.SelectAsync(p => p.Phone == dto.Phone);
-        if (existUser != null)
+        var existUser = await this.userRepository.SelectAsync(p => p.Phone == dto.Phone);
+        if (existUser != null && !existUser.IsDeleted)
             throw new FleetFlowException(409, "User already exist");
 
         var mapped = this.mapper.Map<User>(dto);
         mapped.CreatedAt = DateTime.UtcNow;
         mapped.Password = PasswordHelper.Hash(dto.Password);
-        var addedModel = await unitOfWork.Users.InsertAsync(mapped);
 
-        await unitOfWork.SaveChangesAsync();
+        var addedModel = await this.userRepository.InsertAsync(mapped);
+        await this.userRepository.SaveAsync();
+        
+        var newCart = new Cart();
+        newCart.UserId = addedModel.Id;
+        await this.cartRepository.InsertAsync(newCart);
+
+        await this.cartRepository.SaveAsync();
 
         return this.mapper.Map<UserForResultDto>(addedModel);
     }
@@ -56,16 +67,20 @@ public class UserService : IUserService
     /// <exception cref="FleetFlowException"></exception>
     public async Task<bool> RemoveAsync(long id)
     {
-        var user = await this.unitOfWork.Users.SelectAsync(u => u.Id == id);
-        if (user is null)
+        var user = await this.userRepository.SelectAsync(u => u.Id == id);
+        if (user is null || user.IsDeleted)
             throw new FleetFlowException(404, "Couldn't find user for this given Id");
 
         // init deleter id
         user.DeletedBy = HttpContextHelper.UserId;
+        
+        await this.userRepository.DeleteAsync(u => u.Id == id);
 
-        await this.unitOfWork.Users.DeleteAsync(u => u.Id == id);
+        var cart = await this.cartRepository.SelectAsync(c => c.UserId.Equals(id));
+        await this.cartRepository.DeleteAsync(c => c.Id.Equals(cart.Id));
 
-        await this.unitOfWork.SaveChangesAsync();
+        await this.cartRepository.SaveAsync();
+        await this.userRepository.SaveAsync();
 
         return true;
     }
@@ -77,7 +92,8 @@ public class UserService : IUserService
     /// <returns></returns>
     public async Task<IEnumerable<UserForResultDto>> RetrieveAllAsync(PaginationParams @params)
     {
-        var users = await unitOfWork.Users.SelectAll()
+        var users = await userRepository.SelectAll()
+            .Where(u => u.IsDeleted == false)
             .ToPagedList(@params)
             .ToListAsync();
 
@@ -92,8 +108,10 @@ public class UserService : IUserService
     /// <returns></returns>
     public async Task<IEnumerable<UserForResultDto>> RetrieveAllByRoleAsync(PaginationParams @params, UserRole role = UserRole.Admin)
     {
-        var users = await unitOfWork.Users.SelectAll()
-                        .Where(u => u.Role == role).ToPagedList(@params).ToListAsync();
+        var users = await userRepository.SelectAll()
+            .Where(u => u.Role == role && !u.IsDeleted)
+            .ToPagedList(@params)
+            .ToListAsync();
 
         return this.mapper.Map<IEnumerable<UserForResultDto>>(users);
 
@@ -107,8 +125,8 @@ public class UserService : IUserService
     /// <exception cref="FleetFlowException"></exception>
     public async Task<UserForResultDto> RetrieveByIdAsync(long id)
     {
-        var user = await this.unitOfWork.Users.SelectAsync(u => u.Id == id);
-        if (user is null)
+        var user = await this.userRepository.SelectAsync(u => u.Id == id);
+        if (user is null || user.IsDeleted)
             throw new FleetFlowException(404, "User Not Found");
 
         return this.mapper.Map<UserForResultDto>(user);
@@ -123,14 +141,15 @@ public class UserService : IUserService
     /// <exception cref="FleetFlowException"></exception>
     public async Task<UserForResultDto> ModifyAsync(long id, UserForUpdateDto dto)
     {
-        var user = await this.unitOfWork.Users.SelectAsync(u => u.Id == id);
-        if (user is null)
+        var user = await this.userRepository.SelectAsync(u => u.Id == id);
+        if (user is null || user.IsDeleted)
             throw new FleetFlowException(404, "Couldn't found user for given Id");
 
         var modifiedUser = this.mapper.Map(dto, user);
         modifiedUser.UpdatedAt = DateTime.UtcNow;
+        modifiedUser.UpdatedBy = HttpContextHelper.UserId;
 
-        await this.unitOfWork.SaveChangesAsync();
+        await this.userRepository.SaveAsync();
 
         return this.mapper.Map<UserForResultDto>(user);
     }
@@ -140,7 +159,7 @@ public class UserService : IUserService
     /// <param name="email"></param>
     /// <returns></returns>
     public async Task<User> RetrieveByEmailAsync(string email)
-        => await this.unitOfWork.Users.SelectAsync(u => u.Email == email);
+        => await this.userRepository.SelectAsync(u => u.Email == email);
 
     /// <summary>
     /// Change user password
@@ -150,8 +169,8 @@ public class UserService : IUserService
     /// <exception cref="NotImplementedException"></exception>
     public async Task<UserForResultDto> ChangePasswordAsync(UserForChangePasswordDto dto)
     {
-        var user = await this.unitOfWork.Users.SelectAsync(u => u.Email == dto.Email);
-        if (user is null)
+        var user = await this.userRepository.SelectAsync(u => u.Email == dto.Email);
+        if (user is null || user.IsDeleted)
             throw new FleetFlowException(404, "User not found!");
 
         if (!PasswordHelper.Verify(dto.OldPassword, user.Password))
@@ -161,8 +180,9 @@ public class UserService : IUserService
             throw new FleetFlowException(400, "New password and confirm password are not equal");
 
         user.Password = PasswordHelper.Hash(dto.NewPassword);
+        user.UpdatedBy = HttpContextHelper.UserId;
 
-        await this.unitOfWork.SaveChangesAsync();
+        await this.userRepository.SaveAsync();
 
         return this.mapper.Map<UserForResultDto>(user);
     }

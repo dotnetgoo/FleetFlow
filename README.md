@@ -5,7 +5,7 @@ https://dbdiagram.io/d/643506da8615191cfa8ce420
 
 # FleetFlow
 
-FleetFlow is a .NET-based project that aims to be the best delivering system with APIs, mobile, and web applications. Currently, FleetFlow is built using C#, HTML, CSS, and JavaScript programming languages in .NET Core. The project is designed to simplify and streamline the delivery process for businesses and individuals.
+FleetFlow is a .NET-based project that aims to be the best delivering system with APIs, mobile, and web applications. Currently, FleetFlow is built using C# programming languages in .NET Core. The project is designed to simplify and streamline the delivery process for businesses and individuals.
 
 ## Getting Started
 
@@ -28,19 +28,10 @@ FleetFlow includes the following features:
 - Customer and driver mobile applications for managing deliveries on-the-go.
 - Admin panel for managing customers, drivers, and deliveries.
 
-## Technologies Used
+## Architecture
 
-FleetFlow is built using the following technologies:
+The project is built on the basis of N-Tier architecture
 
-- .NET Core
-- C#
-- ASP.NET MVC
-- Entity Framework
-- HTML/CSS
-- Bootstrap
-- jQuery
-- Angular
-- SQL Server
 
 ## Contributing
 
