@@ -5,11 +5,6 @@ using FleetFlow.Service.DTOs.Carts;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Interfaces;
 using FleetFlow.Shared.Helpers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FleetFlow.Service.Services
 {
@@ -20,8 +15,8 @@ namespace FleetFlow.Service.Services
         private readonly IRepository<Product> productRepository;
         private readonly IRepository<CartItem> cartItemRepository;
 
-        public CartService(IRepository<Product> productRepository, 
-            IRepository<Cart> cartRepository, 
+        public CartService(IRepository<Product> productRepository,
+            IRepository<Cart> cartRepository,
             IRepository<CartItem> cartItemRepository,
             IMapper mapper)
         {
@@ -31,10 +26,9 @@ namespace FleetFlow.Service.Services
             this.cartItemRepository = cartItemRepository;
         }
 
-        public async ValueTask<object> AddItemAsync(long productId, int amount)
+        public async ValueTask<CartItemResultDto> AddItemAsync(CartItemCreationDto dto)
         {
-
-            var product = await this.productRepository.SelectAsync(u => u.Id == productId && !u.IsDeleted);
+            var product = await this.productRepository.SelectAsync(u => u.Id == dto.ProductId && !u.IsDeleted);
 
             if (product is null)
                 throw new FleetFlowException(404, "Product not found");
@@ -49,9 +43,9 @@ namespace FleetFlow.Service.Services
 
             var cartItem = new CartItem
             {
-                Amount = amount,
+                Amount = dto.Amount,
                 CartId = cart.Id,
-                ProductId = productId
+                ProductId = dto.ProductId
             };
             var insertedCartItem = this.cartItemRepository.InsertAsync(cartItem);
             await this.cartItemRepository.SaveAsync();
@@ -59,14 +53,44 @@ namespace FleetFlow.Service.Services
             return this.mapper.Map<CartItemResultDto>(insertedCartItem);
         }
 
-        public ValueTask<object> RemoveItemAsync(long cartItemId)
+        public async ValueTask<object> RemoveItemAsync(long cartItemId)
         {
-            throw new NotImplementedException();
+            // Checking of is exist the CartItem on this cartItemId 
+            var cartItem = await this.cartItemRepository.SelectAsync(cartItem => cartItem.Id == cartItemId);
+            if (cartItem is null)
+                throw new FleetFlowException(404, "CartItem not found");
+
+            // Removing existing cartItem 
+            await this.cartItemRepository.DeleteAsync(cartItem => cartItem.Id == cartItemId);
+            await this.cartItemRepository.SaveAsync();
+
+            return true;
         }
 
-        public ValueTask<object> UpdateItemAsync(long cartItemId, int amount)
+        /// <summary>
+        /// Update item of Cart
+        /// </summary>
+        /// <param name="cartItemId"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        /// <exception cref="FleetFlowException"></exception>
+        public async ValueTask<object> UpdateItemAsync(long itemId, int amount)
         {
-            throw new NotImplementedException();
+            // checking of is exist the CartItem on this cartItemId 
+            var cartItem = await this.cartItemRepository.SelectAsync(cartItem => cartItem.Id == itemId);
+            if (cartItem is null)
+                throw new FleetFlowException(404, "CartItem not found");
+
+            // checking for the amount is not must less than 0
+            if (amount <= 0)
+                throw new FleetFlowException(400, "Amount is not valid");
+
+            cartItem.Amount = amount;
+
+            cartItem = this.cartItemRepository.Update(cartItem);
+            await this.cartItemRepository.SaveAsync();
+
+            return cartItem;
         }
     }
 }

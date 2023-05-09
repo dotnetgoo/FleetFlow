@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FleetFlow.Service.DTOs.Carts;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,22 @@ namespace FleetFlow.Service.Interfaces
 {
     public interface ICartService
     {
-        ValueTask<object> AddItemAsync(long productId, int amount);
+        ValueTask<CartItemResultDto> AddItemAsync(CartItemCreationDto dto);
+
+        /// <summary>
+        /// Removes cartitem by entering cartItemId
+        /// </summary>
+        /// <param name="cartItemId"></param>
+        /// <returns></returns>
+        /// <exception cref="FleetFlowException"></exception>
         ValueTask<object> RemoveItemAsync(long cartItemId);
-        ValueTask<object> UpdateItemAsync(long cartItemId, int amount);
+
+        /// <summary>
+        /// Change amount of cartItem.amount with input amount
+        /// </summary>
+        /// <param name="cartItemId"></param>
+        /// <param name="amount"></param>
+        /// <returns></returns>
+        ValueTask<object> UpdateItemAsync(long itemId, int amount);
     }
 }

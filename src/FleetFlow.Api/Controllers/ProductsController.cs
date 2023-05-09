@@ -8,13 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
 {
-    [ApiController, Authorize]
-    [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
+    [Authorize]
+    public class ProductsController : RestfulSense
     {
         private readonly IProductService productService;
-
-        public int FromQuery { get; private set; }
 
         public ProductsController(IProductService productService)
         {
@@ -36,7 +33,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("id"), AllowAnonymous]
-        public async ValueTask<IActionResult> GetByIdAsync(long id)
+        public async ValueTask<IActionResult> GetAsync(long id)
         {
             return Ok(await productService.RetrieveByIdAsync(id));
         }

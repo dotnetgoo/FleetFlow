@@ -16,7 +16,6 @@ namespace FleetFlow.DAL.Repositories
             Addresses = new Repository<Address>(dbContext);
             Inventories = new Repository<Inventory>(dbContext);
             Locations = new Repository<Location>(dbContext);
-            Merchants = new Repository<Merchant>(dbContext);
             Orders = new Repository<Order>(dbContext);
             OrderItems = new Repository<OrderItem>(dbContext);
             Products = new Repository<Product>(dbContext);
@@ -27,7 +26,6 @@ namespace FleetFlow.DAL.Repositories
         public IRepository<Address> Addresses { get; private set; }
         public IRepository<Inventory> Inventories { get; private set; }
         public IRepository<Location> Locations { get; private set; }
-        public IRepository<Merchant> Merchants { get; private set; }
         public IRepository<Order> Orders { get; private set; }
         public IRepository<OrderItem> OrderItems { get; private set; }
         public IRepository<Product> Products { get; private set; }
