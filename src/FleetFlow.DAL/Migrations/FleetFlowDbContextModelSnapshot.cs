@@ -17,7 +17,7 @@ namespace FleetFlow.DAL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.4")
+                .HasAnnotation("ProductVersion", "7.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -68,14 +68,14 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
                             City = "Navoi",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(660),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 829, DateTimeKind.Utc).AddTicks(6388),
                             District = "Nurata",
                             IsDeleted = false,
                             Latitude = 45.341200000000001,
@@ -88,7 +88,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 2L,
                             City = "Andijan",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(664),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 829, DateTimeKind.Utc).AddTicks(6392),
                             District = "Paxtachi",
                             IsDeleted = false,
                             Latitude = 42.341200000000001,
@@ -101,7 +101,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 3L,
                             City = "Bukhara",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(666),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 829, DateTimeKind.Utc).AddTicks(6395),
                             District = "Nurata",
                             IsDeleted = false,
                             Latitude = 44.341200000000001,
@@ -114,7 +114,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 4L,
                             City = "Kharezm",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(668),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 829, DateTimeKind.Utc).AddTicks(6397),
                             District = "Nurata",
                             IsDeleted = false,
                             Latitude = 47.341200000000001,
@@ -153,7 +153,7 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("FleetFlow.Domain.Entities.CartItem", b =>
@@ -194,7 +194,7 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItems", (string)null);
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("FleetFlow.Domain.Entities.Inventory", b =>
@@ -235,14 +235,14 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Inventories", (string)null);
+                    b.ToTable("Inventories");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
                             Amount = 1000,
-                            CreatedAt = new DateTime(2023, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
                             LocationId = 1L,
                             ProductId = 6L
@@ -251,7 +251,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 2L,
                             Amount = 50,
-                            CreatedAt = new DateTime(2023, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
                             LocationId = 1L,
                             ProductId = 1L
@@ -260,7 +260,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 3L,
                             Amount = 100,
-                            CreatedAt = new DateTime(2023, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
                             LocationId = 2L,
                             ProductId = 3L
@@ -269,7 +269,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 4L,
                             Amount = 100000,
-                            CreatedAt = new DateTime(2023, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
                             LocationId = 3L,
                             ProductId = 5L
@@ -278,7 +278,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 5L,
                             Amount = 100,
-                            CreatedAt = new DateTime(2023, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc),
+                            CreatedAt = new DateTime(2023, 5, 11, 0, 0, 0, 0, DateTimeKind.Utc),
                             IsDeleted = false,
                             LocationId = 3L,
                             ProductId = 2L
@@ -319,14 +319,14 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Locations", (string)null);
+                    b.ToTable("Locations");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
                             Code = "a1",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1392),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 18, 520, DateTimeKind.Utc).AddTicks(2574),
                             Description = "In the middle",
                             IsDeleted = false,
                             Type = 0
@@ -335,7 +335,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 2L,
                             Code = "a2",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1395),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 18, 520, DateTimeKind.Utc).AddTicks(2576),
                             Description = "In the beginning of entry",
                             IsDeleted = false,
                             Type = 0
@@ -344,7 +344,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 3L,
                             Code = "i7",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1397),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 18, 520, DateTimeKind.Utc).AddTicks(2577),
                             Description = "In the middle",
                             IsDeleted = false,
                             Type = 1
@@ -353,7 +353,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 4L,
                             Code = "i9",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1399),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 18, 520, DateTimeKind.Utc).AddTicks(2579),
                             Description = "In the middle",
                             IsDeleted = false,
                             Type = 0
@@ -362,7 +362,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 5L,
                             Code = "m1",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1401),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 18, 520, DateTimeKind.Utc).AddTicks(2580),
                             Description = "In the middle",
                             IsDeleted = false,
                             Type = 1
@@ -371,7 +371,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 6L,
                             Code = "m2",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1404),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 18, 520, DateTimeKind.Utc).AddTicks(2582),
                             Description = "In the middle",
                             IsDeleted = false,
                             Type = 0
@@ -413,28 +413,23 @@ namespace FleetFlow.DAL.Migrations
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UserId1")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
                             AddressId = 2L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(850),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 829, DateTimeKind.Utc).AddTicks(7035),
                             IsDeleted = false,
                             PaymentStatus = 0,
-                            Status = 0,
+                            Status = 1,
                             UserId = 1L
                         });
                 });
@@ -477,14 +472,14 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("OrderItems");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
                             Amount = 1,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(994),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 829, DateTimeKind.Utc).AddTicks(7062),
                             IsDeleted = false,
                             OrderId = 1L,
                             ProductId = 3L
@@ -493,7 +488,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 2L,
                             Amount = 4,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(996),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 829, DateTimeKind.Utc).AddTicks(7065),
                             IsDeleted = false,
                             OrderId = 1L,
                             ProductId = 6L
@@ -502,7 +497,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 3L,
                             Amount = 2,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(1001),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 829, DateTimeKind.Utc).AddTicks(7066),
                             IsDeleted = false,
                             OrderId = 1L,
                             ProductId = 2L
@@ -552,14 +547,14 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
                             CategoryId = 1L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(713),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 829, DateTimeKind.Utc).AddTicks(6448),
                             IsDeleted = false,
                             Name = "HP-Victus",
                             Price = 630m,
@@ -570,7 +565,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 2L,
                             CategoryId = 1L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(716),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 829, DateTimeKind.Utc).AddTicks(6451),
                             IsDeleted = false,
                             Name = "MacBook-Pro",
                             Price = 2000m,
@@ -581,7 +576,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 3L,
                             CategoryId = 5L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(719),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 829, DateTimeKind.Utc).AddTicks(6453),
                             IsDeleted = false,
                             Name = "Iphone-14",
                             Price = 1500m,
@@ -592,7 +587,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 4L,
                             CategoryId = 6L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(721),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 829, DateTimeKind.Utc).AddTicks(6456),
                             IsDeleted = false,
                             Name = "Spintronics",
                             Price = 100m,
@@ -603,7 +598,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 5L,
                             CategoryId = 4L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(725),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 829, DateTimeKind.Utc).AddTicks(6460),
                             IsDeleted = false,
                             Name = "Trimol",
                             Price = 1m,
@@ -614,7 +609,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 6L,
                             CategoryId = 2L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(728),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 829, DateTimeKind.Utc).AddTicks(6462),
                             IsDeleted = false,
                             Name = "SmartWatch",
                             Price = 50m,
@@ -652,48 +647,48 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategories", (string)null);
+                    b.ToTable("ProductCategories");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1015),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 18, 520, DateTimeKind.Utc).AddTicks(2307),
                             IsDeleted = false,
                             Name = "Laptops"
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1017),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 18, 520, DateTimeKind.Utc).AddTicks(2309),
                             IsDeleted = false,
                             Name = "Accesories"
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1020),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 18, 520, DateTimeKind.Utc).AddTicks(2311),
                             IsDeleted = false,
                             Name = "Jewellery"
                         },
                         new
                         {
                             Id = 4L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1022),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 18, 520, DateTimeKind.Utc).AddTicks(2312),
                             IsDeleted = false,
                             Name = "Medicines"
                         },
                         new
                         {
                             Id = 5L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1024),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 18, 520, DateTimeKind.Utc).AddTicks(2314),
                             IsDeleted = false,
                             Name = "Telephones"
                         },
                         new
                         {
                             Id = 6L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1026),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 18, 520, DateTimeKind.Utc).AddTicks(2315),
                             IsDeleted = false,
                             Name = "Toys"
                         });
@@ -744,126 +739,126 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 548, DateTimeKind.Utc).AddTicks(6164),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 18, 656, DateTimeKind.Utc).AddTicks(4612),
                             Email = "dotnetgo@icloud.com",
                             FirstName = "Mukhammadkarim",
                             IsDeleted = false,
                             LastName = "Tukhtaboyev",
-                            Password = "$2a$11$lYk00t.e2v4aOPb8hrEYE.E5Z7XDuXuIn904d6rVf4Xq8WZjaVWu6",
+                            Password = "$2a$11$VSHkoRKmMAeoZt3b1DlY6O7mfojHHVpy5grgGc9FLaGzQnWyHbJju",
                             Phone = "+998 991239999",
                             Role = 0
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 812, DateTimeKind.Utc).AddTicks(2910),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 18, 793, DateTimeKind.Utc).AddTicks(5389),
                             Email = "wonderboy1w3@gmail.com",
                             FirstName = "Jamshid",
                             IsDeleted = false,
                             LastName = "Ma'ruf",
-                            Password = "$2a$11$ZV2belDMq4Ws2OB8zCDXb.gXmuYScLhcHHAzzaVmsUrUqPTn4NN02",
+                            Password = "$2a$11$SB1U2Ha5dkXvLG8lUmTJYusRueaVhV9v4P9vMnfY5r2CTeqr1vKE6",
                             Phone = "+998 991231999",
                             Role = 1
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 58, 63, DateTimeKind.Utc).AddTicks(235),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 18, 922, DateTimeKind.Utc).AddTicks(7667),
                             Email = "kabeersolutions@gmail.com",
                             FirstName = "Kabeer",
                             IsDeleted = false,
                             LastName = "Solutions",
-                            Password = "$2a$11$sucjWdxZMKShnXsgxBWnGuuRS1a0yxOpbQoWcQSicnbSQaqAIphh.",
+                            Password = "$2a$11$cRUQjZ4kPgiAQDRsrpxQ6O4v1x1AR2wm2PunalwlXm0kiEqtLwctC",
                             Phone = "+998 991232999",
                             Role = 5
                         },
                         new
                         {
                             Id = 4L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 58, 352, DateTimeKind.Utc).AddTicks(7460),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 51, DateTimeKind.Utc).AddTicks(8134),
                             Email = "nurillaewmuzaffar@gmail.com",
                             FirstName = "Muzaffar",
                             IsDeleted = false,
                             LastName = "Nurillayev",
-                            Password = "$2a$11$gMWCfyJ/gQbBfw/mAlOVAeHTNSeIUdj/bllMetY8.3qqF14Cr3G3G",
+                            Password = "$2a$11$2wN1Iz2pBZ5C5h9dGc2CmeBJBkJci0yahzeUlxMoOl3VHgfbx62de",
                             Phone = "+998 995030110",
                             Role = 0
                         },
                         new
                         {
                             Id = 5L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 58, 604, DateTimeKind.Utc).AddTicks(2870),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 180, DateTimeKind.Utc).AddTicks(5105),
                             Email = "azimochilov@icloud.com",
                             FirstName = "Azim",
                             IsDeleted = false,
                             LastName = "Ochilov",
-                            Password = "$2a$11$g.8TsGVpSPlAZ7l1Nhg9MeJ1IUKnH5nuV9eOVOu9Mt5HJyA5RjAsu",
+                            Password = "$2a$11$0pvhTEwtyKC3J/yz10eE/ODfdBe6WAKIKyRKXl0hKo.JAFt3GVmmO",
                             Phone = "+998 991233999",
                             Role = 2
                         },
                         new
                         {
                             Id = 6L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 58, 976, DateTimeKind.Utc).AddTicks(3051),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 310, DateTimeKind.Utc).AddTicks(1297),
                             Email = "abdulloh@icloud.com",
                             FirstName = "Abdulloh",
                             IsDeleted = false,
                             LastName = "Ahmadjonov",
-                            Password = "$2a$11$B/ZVn8ZFeMSNzPUbNIRxaeU/RUU5Jmd4agnG4dg29G8OK7TA8L5hO",
+                            Password = "$2a$11$lVEtqlQ7xNaFDqXvyvKd1OIXlVPD8A5qEsQ.PbqED9bOSwtiNuZra",
                             Phone = "+998 991236999",
                             Role = 1
                         },
                         new
                         {
                             Id = 7L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 59, 260, DateTimeKind.Utc).AddTicks(2202),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 438, DateTimeKind.Utc).AddTicks(3466),
                             Email = "komron2052@gmail.com",
                             FirstName = "Komron",
                             IsDeleted = false,
                             LastName = "Rahmonov",
-                            Password = "$2a$11$1qFAqZTjgZ2boyRocrdS8ebUDTY6OsyIJdq1v0NUQKz2Y0/uM6NuS",
+                            Password = "$2a$11$q.6CeOechahjgxsvGnWwwOY5hAtNafqkpacOQHF/Ccs6gtkvQPkOW",
                             Phone = "+998 991234999",
                             Role = 4
                         },
                         new
                         {
                             Id = 8L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 59, 502, DateTimeKind.Utc).AddTicks(3867),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 568, DateTimeKind.Utc).AddTicks(3882),
                             Email = "nozimjon@gmail.com",
                             FirstName = "Nozimjon",
                             IsDeleted = false,
                             LastName = "Usmonaliyev",
-                            Password = "$2a$11$4xrd/ptUJTfWsfiGAGEiheQO1fPIcbUKAbkEaiGhytIS4P0Erlcwq",
+                            Password = "$2a$11$DkZPWtckjMlzZF9w6hRHHejPU4lyW9VyE0Tcjdfps1TrPM1.uVtqi",
                             Phone = "+998 991235999",
                             Role = 3
                         },
                         new
                         {
                             Id = 9L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 59, 799, DateTimeKind.Utc).AddTicks(7281),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 700, DateTimeKind.Utc).AddTicks(1829),
                             Email = "aljavhar@gmail.com",
                             FirstName = "AlJavhar",
                             IsDeleted = false,
                             LastName = "Boyaliyev",
-                            Password = "$2a$11$DMrMExEp6X/r.kRL99zgSuUp5tmcUyLy/cXHVEZ9jOo704w1GJdSa",
+                            Password = "$2a$11$0.k/1APdi3WlDwn.TmhGmeLD2jXHJRsCFF.dJMI7.lMR2KEUChh3W",
                             Phone = "+998 902344545",
                             Role = 0
                         },
                         new
                         {
                             Id = 10L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(153),
+                            CreatedAt = new DateTime(2023, 5, 11, 4, 50, 19, 829, DateTimeKind.Utc).AddTicks(5511),
                             Email = "muhammad@gmail.com",
                             FirstName = "Muhammad",
                             IsDeleted = false,
                             LastName = "Rahimboyev",
-                            Password = "$2a$11$qT.R9pfv4xYDFZOym..GROmElS1Z.lQB0rsEpTF97CWgRQRuWjM6i",
+                            Password = "$2a$11$YYbuNlap2VsmvWkuiSFdl.AueGKs.34mcrLvawL15fhpAnFMExIcq",
                             Phone = "+998 937770202",
                             Role = 0
                         });
@@ -916,14 +911,10 @@ namespace FleetFlow.DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("FleetFlow.Domain.Entities.User", "User")
-                        .WithMany()
+                        .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("FleetFlow.Domain.Entities.User", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId1");
 
                     b.Navigation("Address");
 
