@@ -37,7 +37,7 @@ namespace FleetFlow.DAL.DbContexts
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.User)
-                .WithMany()
+                .WithMany(u => u.Orders)
                 .HasForeignKey(o => o.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
