@@ -16,10 +16,13 @@ namespace FleetFlow.Service.Extentions
 
             var json = JsonConvert.SerializeObject(metaData);
 
-            if (HttpContextHelper.ResponseHeaders.ContainsKey("X-Pagination"))
-                HttpContextHelper.ResponseHeaders.Remove("X-Pagination");
+            if (HttpContextHelper.ResponseHeaders != null)
+            {
+                if (HttpContextHelper.ResponseHeaders.ContainsKey("X-Pagination"))
+                    HttpContextHelper.ResponseHeaders.Remove("X-Pagination");
 
-            HttpContextHelper.ResponseHeaders.Add("X-Pagination", json);
+                HttpContextHelper.ResponseHeaders.Add("X-Pagination", json);
+            }
 
             return @params.PageIndex > 0 && @params.PageSize > 0 ?
                 entities.OrderBy(e => e.Id)
