@@ -5,25 +5,24 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{30C8E5DC-125E-4F5D-8F79-32CD0528CBBD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.Api", "src\FleetFlow.Api\FleetFlow.Api.csproj", "{B60317BE-D017-4048-96CB-FD1D217489AC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FleetFlow.Api", "src\FleetFlow.Api\FleetFlow.Api.csproj", "{B60317BE-D017-4048-96CB-FD1D217489AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.DAL", "src\FleetFlow.DAL\FleetFlow.DAL.csproj", "{8CD7924A-3F4F-40A7-B5B1-5F97523EA709}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FleetFlow.DAL", "src\FleetFlow.DAL\FleetFlow.DAL.csproj", "{8CD7924A-3F4F-40A7-B5B1-5F97523EA709}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.Domain", "src\FleetFlow.Domain\FleetFlow.Domain.csproj", "{51339825-51B7-41FA-9E49-44D0999BD036}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FleetFlow.Domain", "src\FleetFlow.Domain\FleetFlow.Domain.csproj", "{51339825-51B7-41FA-9E49-44D0999BD036}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.Service", "src\FleetFlow.Service\FleetFlow.Service.csproj", "{99D0B8DA-F350-4466-832C-1D4F197FCD84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FleetFlow.Service", "src\FleetFlow.Service\FleetFlow.Service.csproj", "{99D0B8DA-F350-4466-832C-1D4F197FCD84}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0FAB4F36-1596-48EF-B015-F3907D3E2F58}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.Tests", "tests\FleetFlow.Tests\FleetFlow.Tests.csproj", "{1E8130F2-15A2-48C7-8697-A6F541BA7F79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FleetFlow.Tests", "tests\FleetFlow.Tests\FleetFlow.Tests.csproj", "{1E8130F2-15A2-48C7-8697-A6F541BA7F79}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FleetFlow.Shared", "src\FleetFlow.Shared\FleetFlow.Shared.csproj", "{9DA5054E-1042-41FB-B5FD-C7AB68BDD7E4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{B60317BE-D017-4048-96CB-FD1D217489AC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -46,6 +45,13 @@ Global
 		{1E8130F2-15A2-48C7-8697-A6F541BA7F79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E8130F2-15A2-48C7-8697-A6F541BA7F79}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E8130F2-15A2-48C7-8697-A6F541BA7F79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DA5054E-1042-41FB-B5FD-C7AB68BDD7E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DA5054E-1042-41FB-B5FD-C7AB68BDD7E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DA5054E-1042-41FB-B5FD-C7AB68BDD7E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DA5054E-1042-41FB-B5FD-C7AB68BDD7E4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B60317BE-D017-4048-96CB-FD1D217489AC} = {30C8E5DC-125E-4F5D-8F79-32CD0528CBBD}
@@ -53,5 +59,6 @@ Global
 		{51339825-51B7-41FA-9E49-44D0999BD036} = {30C8E5DC-125E-4F5D-8F79-32CD0528CBBD}
 		{99D0B8DA-F350-4466-832C-1D4F197FCD84} = {30C8E5DC-125E-4F5D-8F79-32CD0528CBBD}
 		{1E8130F2-15A2-48C7-8697-A6F541BA7F79} = {0FAB4F36-1596-48EF-B015-F3907D3E2F58}
+		{9DA5054E-1042-41FB-B5FD-C7AB68BDD7E4} = {30C8E5DC-125E-4F5D-8F79-32CD0528CBBD}
 	EndGlobalSection
 EndGlobal

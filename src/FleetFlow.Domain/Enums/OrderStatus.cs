@@ -2,6 +2,7 @@
 {
     public enum OrderStatus
     {
+        Checkout,
         Pending,
         Picking,
         Packing,

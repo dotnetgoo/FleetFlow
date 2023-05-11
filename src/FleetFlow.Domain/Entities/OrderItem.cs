@@ -1,4 +1,5 @@
 ﻿using FleetFlow.Domain.Commons;
+using FleetFlow.Domain.Enums;
 
 namespace FleetFlow.Domain.Entities
 {
@@ -11,8 +12,5 @@ namespace FleetFlow.Domain.Entities
         public Product Product { get; set; }
 
         public int Amount { get; set; }
-
-        public long InventoryId { get; set; }
-        public Inventory Inventory { get; set; }
     }
 }

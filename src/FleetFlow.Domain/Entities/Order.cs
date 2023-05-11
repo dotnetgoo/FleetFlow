@@ -9,7 +9,8 @@ namespace FleetFlow.Domain.Entities
         public User User { get; set; }
         public long AddressId { get; set; }
         public Address Address { get; set; }
-        public OrderStatus Status { get; set; } = OrderStatus.Pending;
+        public OrderStatus Status { get; set; }
+        public PaymentStatus PaymentStatus { get; set; }
         
         public ICollection<OrderItem> OrderItems { get; set; }
     }

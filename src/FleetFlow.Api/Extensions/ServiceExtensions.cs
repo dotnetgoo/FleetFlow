@@ -17,12 +17,17 @@ namespace FleetFlow.Api.Extensions
         /// <param name="services"></param>
         public static void AddCustomServices(this IServiceCollection services)
         {
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IAddressService, AddressService>();
-            services.AddScoped<IMerchantService, MerchantService>();
             services.AddScoped<IProductService, ProductService>();
             services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<ICheckoutService, CheckoutService>();
+            services.AddScoped<IEmailService, EmailService>();
         }
     }
 }
