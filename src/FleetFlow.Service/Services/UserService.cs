@@ -72,13 +72,18 @@ public class UserService : IUserService
             throw new FleetFlowException(404, "Couldn't find user for this given Id");
 
         // init deleter id
+        var accessor = HttpContextHelper.Accessor;
+
         user.DeletedBy = HttpContextHelper.UserId;
         
         await this.userRepository.DeleteAsync(u => u.Id == id);
 
         var cart = await this.cartRepository.SelectAsync(c => c.UserId.Equals(id));
-        await this.cartRepository.DeleteAsync(c => c.Id.Equals(cart.Id));
-
+        if(cart is not null)
+        {
+            await this.cartRepository.DeleteAsync(c => c.Id == cart.Id);
+        }
+        
         await this.cartRepository.SaveAsync();
         await this.userRepository.SaveAsync();
 
