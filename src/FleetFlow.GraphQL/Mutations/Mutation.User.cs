@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FleetFlow.Service.DTOs.User;
 using FleetFlow.Service.Interfaces;
+using HotChocolate;
 
 namespace FleetFlow.GraphQL.Mutations
 {
