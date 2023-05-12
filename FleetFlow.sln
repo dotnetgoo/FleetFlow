@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FleetFlow.Tests", "tests\Fl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FleetFlow.Shared", "src\FleetFlow.Shared\FleetFlow.Shared.csproj", "{9DA5054E-1042-41FB-B5FD-C7AB68BDD7E4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FleetFlow.GraphQL", "src\FleetFlow.GraphQL\FleetFlow.GraphQL.csproj", "{41FB5EF7-F5B7-4FD5-8F38-1504B8C61931}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FleetFlow.GraphQL", "src\FleetFlow.GraphQL\FleetFlow.GraphQL.csproj", "{41FB5EF7-F5B7-4FD5-8F38-1504B8C61931}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

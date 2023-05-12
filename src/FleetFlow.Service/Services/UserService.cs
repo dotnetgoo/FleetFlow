@@ -8,11 +8,7 @@ using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces;
 using FleetFlow.Shared.Helpers;
-using MailKit.Net.Imap;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq.Expressions;
-using System.Runtime.InteropServices;
 
 namespace FleetFlow.Service.Services;
 
@@ -21,8 +17,8 @@ public class UserService : IUserService
     private readonly IRepository<User> userRepository;
     private readonly IRepository<Cart> cartRepository;
     private readonly IMapper mapper;
-    public UserService(IMapper mapper, 
-        IRepository<User> userRepository, 
+    public UserService(IMapper mapper,
+        IRepository<User> userRepository,
         IRepository<Cart> cartRepository)
     {
         this.mapper = mapper;
@@ -49,7 +45,7 @@ public class UserService : IUserService
 
         var addedModel = await this.userRepository.InsertAsync(mapped);
         await this.userRepository.SaveAsync();
-        
+
         var newCart = new Cart();
         newCart.UserId = addedModel.Id;
         await this.cartRepository.InsertAsync(newCart);
@@ -75,7 +71,7 @@ public class UserService : IUserService
         var accessor = HttpContextHelper.Accessor;
 
         user.DeletedBy = HttpContextHelper.UserId;
-        
+
         await this.userRepository.DeleteAsync(u => u.Id == id);
 
         var cart = await this.cartRepository.SelectAsync(c => c.UserId.Equals(id));

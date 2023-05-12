@@ -3,6 +3,7 @@ using FleetFlow.Api.Middlewares;
 using FleetFlow.Api.Models;
 using FleetFlow.DAL.DbContexts;
 using FleetFlow.Service.Mappers;
+using FleetFlow.Shared.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
@@ -76,6 +77,9 @@ var app = builder.Build();
 // Updates db in early startup based on latest migration
 app.ApplyMigrations();
 app.InitAccessor();
+
+// Getting wwwroot path
+EnvironmentHelper.WebRootPath = app.Services.GetRequiredService<IWebHostEnvironment>().WebRootPath;
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

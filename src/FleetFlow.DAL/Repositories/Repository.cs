@@ -99,7 +99,7 @@ namespace FleetFlow.DAL.Repositories
         /// <param name="expression"></param>
         /// <returns></returns>
         public async ValueTask<TEntity> SelectAsync(Expression<Func<TEntity, bool>> expression, string[] includes = null)
-            => await this.SelectAll(expression, includes).FirstOrDefaultAsync();
+            => await this.SelectAll(expression, includes).FirstOrDefaultAsync(t => !t.IsDeleted);
 
         /// <summary>
         /// Updates entity and keep track of it until change saved
