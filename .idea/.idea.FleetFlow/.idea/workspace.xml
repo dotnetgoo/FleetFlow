@@ -9,13 +9,7 @@
     <projectFile profileName="IIS Express">FleetFlow.Web/FleetFlow.Web.csproj</projectFile>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="10735bdf-1b12-4fc0-bb14-b85a9455f730" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.vscode/launch.json" beforeDir="false" afterPath="$PROJECT_DIR$/.vscode/launch.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FleetFlow.Api/FleetFlow.Api.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/FleetFlow.Api/FleetFlow.Api.csproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FleetFlow.Api/Program.cs" beforeDir="false" afterPath="$PROJECT_DIR$/FleetFlow.Api/Program.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FleetFlow.Api/appsettings.json" beforeDir="false" afterPath="$PROJECT_DIR$/FleetFlow.Api/appsettings.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/FleetFlow.DAL/FleetFlow.DAL.csproj" beforeDir="false" afterPath="$PROJECT_DIR$/FleetFlow.DAL/FleetFlow.DAL.csproj" afterDir="false" />
-    </list>
+    <list default="true" id="10735bdf-1b12-4fc0-bb14-b85a9455f730" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -142,6 +136,7 @@
       <option name="presentableId" value="Default" />
       <updated>1680786032570</updated>
       <workItem from="1680786041114" duration="336000" />
+      <workItem from="1682510643229" duration="5000" />
     </task>
     <servers />
   </component>
@@ -149,7 +144,7 @@
     <option name="version" value="3" />
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
-  <component name="UnityProjectConfiguration" hasMinimizedUI="null" />
+  <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="UnityUnitTestConfiguration" currentTestLauncher="NUnit" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />

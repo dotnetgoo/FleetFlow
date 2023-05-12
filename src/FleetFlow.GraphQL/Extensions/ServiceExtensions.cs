@@ -1,7 +1,11 @@
 ﻿using FleetFlow.DAL.IRepositories;
 using FleetFlow.DAL.Repositories;
+using FleetFlow.GraphQL.Mutations;
+using FleetFlow.GraphQL.Queries;
 using FleetFlow.Service.Interfaces;
 using FleetFlow.Service.Services;
+using HotChocolate.Execution.Options;
+using HotChocolate.Types.Pagination;
 
 namespace FleetFlow.GraphQL.Extensions
 {
@@ -24,6 +28,23 @@ namespace FleetFlow.GraphQL.Extensions
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICheckoutService, CheckoutService>();
             services.AddScoped<IEmailService, EmailService>();
+        }
+
+        public static void AddGraphQLService(this IServiceCollection services)
+        {
+            services.AddGraphQLServer()
+                .AddFiltering()
+                .AddSorting()
+                .AddErrorFilter(error => error.WithMessage(error?.Exception?.Message ?? error.Message))
+                .SetPagingOptions(new PagingOptions
+                {
+                    MaxPageSize = 100,
+                    DefaultPageSize = 20
+                })
+                .SetRequestOptions(_ => new RequestExecutorOptions { ExecutionTimeout = TimeSpan.FromMinutes(1) })
+
+                .AddQueryType<Query>()
+                .AddMutationType<Mutation>();
         }
     }
 }
