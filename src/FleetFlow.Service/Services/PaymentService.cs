@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
+using FleetFlow.Domain.Enums;
 using FleetFlow.Domain.Entities;
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Service.DTOs.User;
 using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Exceptions;
+using FleetFlow.Service.Extentions;
+using Microsoft.EntityFrameworkCore;
 using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.DTOs.Payments;
 using FleetFlow.Service.DTOs.Orders;
-using FleetFlow.Domain.Enums;
+using FleetFlow.Service.DTOs.Payments;
 
 namespace FleetFlow.Service.Services;
 
@@ -22,20 +25,19 @@ public class PaymentService : IPaymentService
         IUserService userService,
         IRepository<Order> orderRepository,
         IAttachmantService attachmantService,
-        IRepository<Payment> paymentRepositor)
+        IRepository<Payment> paymentRepository)
     {
         this.mapper = mapper;
         this.userService = userService;
         this.orderRepository = orderRepository;
-        this.paymentRepository = paymentRepository;
         this.attachmantService = attachmantService;
+        this.paymentRepository = paymentRepository;
     }
 
     public async Task<PaymentResultDto> AddAsync(PaymentCreationDto dto)
     {
         UserForResultDto user = await this.userService.RetrieveByIdAsync(dto.UserId);
         Order order = await this.orderRepository.SelectAsync(t => t.Id == dto.OrderId);
-
         Attachment file = await this.attachmantService.UploadAsync(dto.File);
 
         PaymentResultDto result = new PaymentResultDto
@@ -46,32 +48,62 @@ public class PaymentService : IPaymentService
             FilePath = file.FilePath, 
             Order = this.mapper.Map<OrderResultDto>(order),
             User = user,
-            Status = Domain.Enums.PaymentStatus.Pending
+            Status = PaymentStatus.Pending
         };
+        return result;
     }
 
-    public Task<PaymentResultDto> ChangeStatusAsync(long id, PaymentStatus status)
+    public async Task<PaymentResultDto> ChangeStatusAsync(long id, PaymentStatus status)
     {
-        throw new NotImplementedException();
+        Payment payment = await this.paymentRepository.SelectAsync(t => t.Id == id);
+        if (payment is null)
+            throw new FleetFlowException(404, "Payment is not found");
+
+        payment.Status = status;
+        payment = this.paymentRepository.Update(payment);
+        await this.paymentRepository.SaveAsync();
+
+        return this.mapper.Map<PaymentResultDto>(payment);
     }
 
-    public Task<PaymentResultDto> ModifyAsync(long id, PaymentCreationDto dto)
+    public async Task<PaymentResultDto> ModifyAsync(long id, PaymentCreationDto dto)
     {
-        throw new NotImplementedException();
+        Payment payment = await this.paymentRepository.SelectAsync(t => t.Id == id);
+        if (payment is null)
+            throw new FleetFlowException(404, "Payment is not found");
+
+        Payment mappedPayment = this.mapper.Map<Payment>(dto);
+        mappedPayment.Id = id;
+        mappedPayment.UpdatedAt = DateTime.UtcNow;
+        mappedPayment.CreatedAt = payment.CreatedAt;
+        payment = this.paymentRepository.Update(payment);
+        await this.paymentRepository.SaveAsync();
+
+        return this.mapper.Map<PaymentResultDto>(payment);
     }
 
-    public Task<bool> RemoveAsync(long id)
+    public async Task<bool> RemoveAsync(long id)
     {
-        throw new NotImplementedException();
+        Payment payment = await this.paymentRepository.SelectAsync(t => t.Id == id);
+        if (payment is null)
+            throw new FleetFlowException(404, "Payment is not found");
+
+        await this.paymentRepository.DeleteAsync(t => t.Id == id);
+        await this.paymentRepository.SaveAsync();
+        return true;
     }
 
-    public Task<IEnumerable<PaymentResultDto>> RetrieveAllAsync(PaginationParams @params)
+    public async Task<IEnumerable<PaymentResultDto>> RetrieveAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        var payments = await this.paymentRepository.SelectAll().ToPagedList(@params).ToListAsync();
+        return this.mapper.Map<IEnumerable<PaymentResultDto>>(payments);
     }
 
-    public Task<PaymentResultDto> RetrieveByIdAsync(long id)
+    public async Task<PaymentResultDto> RetrieveByIdAsync(long id)
     {
-        throw new NotImplementedException();
+        Payment payment = await this.paymentRepository.SelectAsync(t => t.Id == id);
+        if (payment is null)
+            throw new FleetFlowException(404, "Payment is not found");
+        return this.mapper.Map<PaymentResultDto>(payment);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace FleetFlow.Domain.Congirations
 {
-    public class PeginationMetaData
+    public class PaginationMetaData
     {
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
@@ -10,7 +10,7 @@ namespace FleetFlow.Domain.Congirations
         public bool HasPrevious => CurrentPage > 1;
         public bool HasNext => CurrentPage < TotalPages;
 
-        public PeginationMetaData(int totalCount,PaginationParams @params)
+        public PaginationMetaData(int totalCount,PaginationParams @params)
         {
             TotalCount = totalCount;
             TotalPages = (int)Math.Ceiling(totalCount / (double)@params.PageSize);
