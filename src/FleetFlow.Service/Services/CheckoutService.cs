@@ -7,11 +7,6 @@ using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Interfaces;
 using FleetFlow.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FleetFlow.Service.Services
 {
@@ -20,8 +15,8 @@ namespace FleetFlow.Service.Services
         private readonly IAddressService addressService;
         private readonly IRepository<Order> orderRepository;
         private readonly IMapper mapper;
-        public CheckoutService(IRepository<Order> orderRepository, 
-            IAddressService addressService, 
+        public CheckoutService(IRepository<Order> orderRepository,
+            IAddressService addressService,
             IMapper mapper)
         {
             this.orderRepository = orderRepository;
@@ -47,7 +42,7 @@ namespace FleetFlow.Service.Services
         {
             var order = await this.orderRepository.SelectAll(o => o.UserId == HttpContextHelper.UserId)
                 .LastOrDefaultAsync();
-            
+
             return await this.addressService.GetByIdAsync(order?.AddressId ?? 0);
         }
     }

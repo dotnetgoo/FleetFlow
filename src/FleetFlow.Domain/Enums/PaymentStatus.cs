@@ -9,7 +9,8 @@ namespace FleetFlow.Domain.Enums
     public enum PaymentStatus
     {
         Pending,
-        Declined,
+        Unpaid,
+        Paid,
         Canceled,
         Success,
     }
