@@ -16,7 +16,8 @@ namespace FleetFlow.GraphQL.Mutations
             return await productService.AddAsync(product);          
         }
 
-        public async ValueTask<bool> DeleteProductAsync([Service] IProductService productService, long id)
+        public async ValueTask<bool> DeleteProductAsync([Service] IProductService productService,
+            long id)
         {
             return await productService.RemoveAsync(id);          
         }
