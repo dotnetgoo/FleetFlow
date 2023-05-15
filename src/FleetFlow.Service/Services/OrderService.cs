@@ -25,6 +25,7 @@ namespace FleetFlow.Service.Services
 
         public async ValueTask<OrderResultDto> AddAsync()
         {
+            var httpContext = HttpContextHelper.HttpContext;
             var cart = await this.cartRepository.SelectAsync(c => c.UserId == HttpContextHelper.UserId, new string[] { "Items" });
             if (cart == null)
                 throw new FleetFlowException(404, "Cart not found");

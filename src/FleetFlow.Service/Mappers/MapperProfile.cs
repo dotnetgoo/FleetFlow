@@ -6,6 +6,7 @@ using FleetFlow.Service.DTOs.Location;
 using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Service.DTOs.Product;
 using FleetFlow.Service.DTOs.User;
+using Location = FleetFlow.Domain.Entities.Location;
 
 namespace FleetFlow.Service.Mappers
 {

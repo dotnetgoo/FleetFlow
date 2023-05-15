@@ -8,8 +8,7 @@ using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces;
 using FleetFlow.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Math.EC.Rfc7748;
-using System.Linq.Expressions;
+using Location = FleetFlow.Domain.Entities.Location;
 
 namespace FleetFlow.Service.Services
 {

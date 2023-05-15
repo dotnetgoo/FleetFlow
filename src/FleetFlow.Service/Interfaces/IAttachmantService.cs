@@ -6,6 +6,6 @@ namespace FleetFlow.Service.Interfaces;
 
 public interface IAttachmantService
 {
-    ValueTask<Attachment> UploadAsync(IFormFile file);
+    ValueTask<Attachment> UploadAsync(IFile file);
     ValueTask<bool> DeleteAsync(long id);
 }

@@ -8,6 +8,8 @@
 
   <ItemGroup>
 
+    <PackageReference Include="HotChocolate.AspNetCore" Version="13.0.5" />
+
     <PackageReference Include="MailKit" Version="3.6.0" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="AutoMapper" Version="12.0.1" />

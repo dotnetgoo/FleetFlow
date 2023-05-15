@@ -2,6 +2,7 @@
 using FleetFlow.Domain.Entities;
 using FleetFlow.Shared.Helpers;
 using Microsoft.AspNetCore.Http;
+using Path = System.IO.Path;
 
 namespace FleetFlow.Service.Services;
 

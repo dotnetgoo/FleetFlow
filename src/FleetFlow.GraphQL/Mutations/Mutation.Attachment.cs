@@ -6,7 +6,7 @@ namespace FleetFlow.GraphQL.Mutations
     public partial class Mutation
     {
         public async ValueTask<Attachment> UploadImageAsync([Service] IAttachmantService attachmantService,
-            IFormFile file)
+            IFile file)
         {
             return await attachmantService.UploadAsync(file);
         }

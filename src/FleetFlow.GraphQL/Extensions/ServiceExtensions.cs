@@ -35,6 +35,7 @@ namespace FleetFlow.GraphQL.Extensions
         public static void AddGraphQLService(this IServiceCollection services)
         {
             services.AddGraphQLServer()
+                .AddAuthorization()
                 .AddFiltering()
                 .AddSorting()
                 .AddErrorFilter(error => error.WithMessage(error?.Exception?.Message ?? error.Message))
@@ -48,7 +49,8 @@ namespace FleetFlow.GraphQL.Extensions
                 .AddQueryType<Query>()
                 .AddMutationType<Mutation>()
 
-                .AddTypes(typeof(UserType), typeof(UserRoleEnumType));
+                .AddTypes(typeof(UserType), typeof(UserRoleEnumType))
+                .AddType<UploadType>();
         }
     }
 }
