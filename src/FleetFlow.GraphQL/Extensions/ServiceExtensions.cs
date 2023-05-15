@@ -2,6 +2,8 @@
 using FleetFlow.DAL.Repositories;
 using FleetFlow.GraphQL.Mutations;
 using FleetFlow.GraphQL.Queries;
+using FleetFlow.GraphQL.Types;
+using FleetFlow.GraphQL.Types.EnumTypes;
 using FleetFlow.Service.Interfaces;
 using FleetFlow.Service.Services;
 using HotChocolate.Execution.Options;
@@ -44,7 +46,9 @@ namespace FleetFlow.GraphQL.Extensions
                 .SetRequestOptions(_ => new RequestExecutorOptions { ExecutionTimeout = TimeSpan.FromMinutes(1) })
 
                 .AddQueryType<Query>()
-                .AddMutationType<Mutation>();
+                .AddMutationType<Mutation>()
+
+                .AddTypes(typeof(UserType), typeof(UserRoleEnumType));
         }
     }
 }
