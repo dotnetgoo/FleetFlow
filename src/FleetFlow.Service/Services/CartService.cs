@@ -47,7 +47,7 @@ namespace FleetFlow.Service.Services
                 CartId = cart.Id,
                 ProductId = dto.ProductId
             };
-            var insertedCartItem = this.cartItemRepository.InsertAsync(cartItem);
+            var insertedCartItem = await this.cartItemRepository.InsertAsync(cartItem);
             await this.cartItemRepository.SaveAsync();
 
             return this.mapper.Map<CartItemResultDto>(insertedCartItem);

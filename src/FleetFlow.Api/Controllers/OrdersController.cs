@@ -1,4 +1,5 @@
 ﻿using FleetFlow.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
@@ -12,7 +13,7 @@ namespace FleetFlow.Api.Controllers
             this.orderService = orderService;
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public async ValueTask<IActionResult> PostAsync()
             => Ok(await this.orderService.AddAsync());
 
