@@ -1,5 +1,6 @@
 ﻿using FleetFlow.Service.DTOs.Carts;
 using FleetFlow.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
@@ -13,7 +14,7 @@ namespace FleetFlow.Api.Controllers
             this.cartService = cartService;
         }
 
-        [HttpPost("items/add")]
+        [HttpPost("items/add"), Authorize]
         public async ValueTask<IActionResult> AddItemAsync([FromBody] CartItemCreationDto itemDto)
             => Ok(await this.cartService.AddItemAsync(itemDto));
 

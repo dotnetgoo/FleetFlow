@@ -27,7 +27,9 @@ namespace FleetFlow.Service.Services
         public async ValueTask<AddressForResultDto> AssignAddressAsync(AddressForCreationDto addressDto)
         {
             var order = await this.orderRepository.SelectAll(o => o.UserId == HttpContextHelper.UserId
-                && o.Status == OrderStatus.Checkout).LastOrDefaultAsync();
+                && o.Status == OrderStatus.Checkout)
+                .OrderBy(o => o.Id)
+                .LastOrDefaultAsync();
             if (order == null)
                 throw new FleetFlowException(404, "Order not found in 'checkout' status");
 
@@ -41,6 +43,7 @@ namespace FleetFlow.Service.Services
         public async ValueTask<AddressForResultDto> RetrieveLastAddressAsync()
         {
             var order = await this.orderRepository.SelectAll(o => o.UserId == HttpContextHelper.UserId)
+                .OrderBy(o => o.Id)
                 .LastOrDefaultAsync();
 
             return await this.addressService.GetByIdAsync(order?.AddressId ?? 0);

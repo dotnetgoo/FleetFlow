@@ -29,6 +29,7 @@ namespace FleetFlow.Service.Mappers
 
             CreateMap<CartItem, CartItemResultDto>().ReverseMap();
             CreateMap<Order, OrderResultDto>().ReverseMap();
+            CreateMap<OrderItem, OrderItemForResultDto>().ReverseMap();
         }
     }
 }

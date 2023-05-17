@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
 {
-    [Authorize]
     public class OrdersController : RestfulSense
     {
         private readonly IOrderService orderService;
@@ -14,7 +13,7 @@ namespace FleetFlow.Api.Controllers
             this.orderService = orderService;
         }
 
-        [HttpPost]
+        [HttpPost, Authorize]
         public async ValueTask<IActionResult> PostAsync()
             => Ok(await this.orderService.AddAsync());
 
