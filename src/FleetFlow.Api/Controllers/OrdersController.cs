@@ -1,4 +1,5 @@
-﻿using FleetFlow.Service.Interfaces;
+﻿using FleetFlow.Domain.Congirations;
+using FleetFlow.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,8 @@ namespace FleetFlow.Api.Controllers
         public async ValueTask<IActionResult> PostAsync()
             => Ok(await this.orderService.AddAsync());
 
-
+        [HttpGet]
+        public async ValueTask<IActionResult> GetAllAsync([FromQuery]PaginationParams @params)
+            => Ok(await this.orderService.);
     }
 }

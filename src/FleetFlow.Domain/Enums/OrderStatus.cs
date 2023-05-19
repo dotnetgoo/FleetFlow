@@ -4,8 +4,7 @@
     {
         Checkout,
         Pending,
-        Picking,
-        Packing,
+        Process,
         Shipping,
         Shipped,
         Cancelled
