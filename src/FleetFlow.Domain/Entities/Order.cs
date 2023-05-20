@@ -13,5 +13,6 @@ namespace FleetFlow.Domain.Entities
         public PaymentStatus PaymentStatus { get; set; }
         
         public ICollection<OrderItem> OrderItems { get; set; }
+        public ICollection<OrderAction> Actions { get; set; }
     }
 }

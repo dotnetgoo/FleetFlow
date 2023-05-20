@@ -22,7 +22,7 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<ProductCategory> ProductCategories { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
-
+        public DbSet<OrderAction> OrderActions { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -63,6 +63,12 @@ namespace FleetFlow.DAL.DbContexts
                 .HasOne(p => p.Category)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CategoryId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<OrderAction>()
+                .HasOne(action => action.Order)
+                .WithMany(order => order.Actions)
+                .HasForeignKey(action => action.OrderId)
                 .OnDelete(DeleteBehavior.NoAction);
             #endregion
 

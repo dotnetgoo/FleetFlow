@@ -27,7 +27,7 @@ namespace FleetFlow.Api.Middlewares
                 await context.Response.WriteAsJsonAsync(new Response
                 {
                     Code = exception.Code,
-                    Error = exception.Message
+                    Message = exception.Message
                 });
             }
             catch(Exception exception)
@@ -37,7 +37,7 @@ namespace FleetFlow.Api.Middlewares
                 await context.Response.WriteAsJsonAsync(new Response
                 {
                    Code = 500,
-                   Error = exception.Message 
+                   Message = exception.Message 
                 });
             }
         }
