@@ -1,7 +1,7 @@
-﻿using FleetFlow.Domain.Congirations;
+﻿using FleetFlow.Api.Models;
+using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.Address;
 using FleetFlow.Service.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
@@ -22,7 +22,12 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpPost]
         public async ValueTask<IActionResult> PostAsync([FromBody] AddressForCreationDto address)
-            => Ok(await this.addressService.AddAsync(address));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await this.addressService.AddAsync(address)
+            });
 
         /// <summary>
         /// gets address by its id
@@ -31,7 +36,12 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpGet("{id}")]
         public async ValueTask<IActionResult> GetAsync(long id)
-            => Ok(await this.addressService.GetByIdAsync(id));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await this.addressService.GetByIdAsync(id)
+            });
 
         /// <summary>
         /// gets all addresses in db in paginated form
@@ -40,7 +50,12 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
-            => Ok(await this.addressService.GetAllAsync(@params));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await this.addressService.GetAllAsync(@params)
+            });
 
         /// <summary>
         /// Update address
@@ -50,6 +65,11 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpPut("{id}")]
         public async ValueTask<IActionResult> PutAsync(long id, AddressForCreationDto dto)
-            => Ok(await this.addressService.UpdateByIdAsync(id, dto));
+            => Ok(new Response
+            { 
+                Code = 200, 
+                Message = "OK", 
+                Data = await this.addressService.UpdateByIdAsync(id, dto) 
+            });
     }
 }
