@@ -13,6 +13,6 @@ public interface IAnswerService
     Task<Answer> UpdateByIdAsync(long id, AnswerForCreationDto dto);
     Task<Answer> GetByIdAsync(long id);
     Task<IEnumerable<Answer>> GetAllAsync(PaginationParams @params);
-    Task<IEnumerable<Answer>> GetAllByUserIdAsync(long userId);
-    Task<IEnumerable<Answer>> GetAllByAdminIdAsync(long adminId);
+    Task<IEnumerable<Answer>> GetAllByUserIdAsync(PaginationParams @params, long userId);
+    Task<IEnumerable<Answer>> GetAllByAdminIdAsync(PaginationParams @params, long adminId);
 }
