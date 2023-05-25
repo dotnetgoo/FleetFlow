@@ -4,8 +4,16 @@ using FleetFlow.GraphQL.Mutations;
 using FleetFlow.GraphQL.Queries;
 using FleetFlow.GraphQL.Types;
 using FleetFlow.GraphQL.Types.EnumTypes;
-using FleetFlow.Service.Interfaces;
-using FleetFlow.Service.Services;
+using FleetFlow.Service.Interfaces.Addresses;
+using FleetFlow.Service.Interfaces.Orders;
+using FleetFlow.Service.Interfaces.Products;
+using FleetFlow.Service.Interfaces.Users;
+using FleetFlow.Service.Interfaces.Warehouses;
+using FleetFlow.Service.Services.Addresses;
+using FleetFlow.Service.Services.Orders;
+using FleetFlow.Service.Services.Products;
+using FleetFlow.Service.Services.Users;
+using FleetFlow.Service.Services.Warehouses;
 using HotChocolate.Execution.Options;
 using HotChocolate.Types.Pagination;
 
@@ -49,7 +57,7 @@ namespace FleetFlow.GraphQL.Extensions
                 .AddQueryType<Query>()
                 .AddMutationType<Mutation>()
 
-                .AddTypes(typeof(UserType), typeof(UserRoleEnumType))
+                //.AddTypes(typeof(UserType), typeof(UserRoleEnumType))
                 .AddType<UploadType>();
         }
     }

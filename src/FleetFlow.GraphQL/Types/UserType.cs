@@ -17,7 +17,7 @@ namespace FleetFlow.GraphQL.Types
             descriptor.Field(u => u.Id).Type<IdType>();
             descriptor.Field(u => u.FirstName).Type<StringType>();
             descriptor.Field(u => u.LastName).Type<StringType>();
-            descriptor.Field(u => u.Role).Type<UserRoleEnumType>();
+            //descriptor.Field(u => u.Role).Type<UserRoleEnumType>();
         }
     }
 }

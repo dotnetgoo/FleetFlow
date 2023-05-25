@@ -5,8 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.DAL.Repositories;
-using FleetFlow.Service.Interfaces;
-using FleetFlow.Service.Services;
+using FleetFlow.Service.Interfaces.Addresses;
+using FleetFlow.Service.Interfaces.Attachments;
+using FleetFlow.Service.Interfaces.Orders;
+using FleetFlow.Service.Interfaces.Products;
+using FleetFlow.Service.Interfaces.Users;
+using FleetFlow.Service.Interfaces.Warehouses;
+using FleetFlow.Service.Services.Addresses;
+using FleetFlow.Service.Services.Attachments;
+using FleetFlow.Service.Services.Orders;
+using FleetFlow.Service.Services.Products;
+using FleetFlow.Service.Services.Users;
+using FleetFlow.Service.Services.Warehouses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -32,6 +42,9 @@ namespace FleetFlow.Api.Extensions
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICheckoutService, CheckoutService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IAttachmentService, AttachmentService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
         }
         
         /// <summary>

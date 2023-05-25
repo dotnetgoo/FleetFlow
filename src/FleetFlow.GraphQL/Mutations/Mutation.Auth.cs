@@ -1,6 +1,6 @@
 ﻿using FleetFlow.Domain.Entities;
 using FleetFlow.Service.DTOs.Login;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Users;
 
 namespace FleetFlow.GraphQL.Mutations
 {

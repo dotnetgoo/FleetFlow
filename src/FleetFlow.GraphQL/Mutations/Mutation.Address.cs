@@ -1,5 +1,5 @@
 ﻿using FleetFlow.Service.DTOs.Address;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Addresses;
 using HotChocolate;
 
 namespace FleetFlow.GraphQL.Mutations
