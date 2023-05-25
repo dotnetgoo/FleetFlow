@@ -16,7 +16,7 @@ namespace FleetFlow.Api.Controllers
             this.orderService = orderService;
         }
 
-        [HttpPost("order"), Authorize]
+        [HttpPost("order")]
         public async ValueTask<IActionResult> PostAsync()
             => Ok(new Response()
             {
@@ -25,7 +25,6 @@ namespace FleetFlow.Api.Controllers
                 Data = await this.orderService.AddAsync()
             });
 
-        [Authorize]
         [HttpPost("cancel/{id:long}")]
         public async ValueTask<IActionResult> CancelAsync(long id)
             => Ok(new Response()
