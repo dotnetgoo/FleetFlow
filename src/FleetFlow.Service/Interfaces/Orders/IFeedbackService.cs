@@ -14,5 +14,5 @@ public interface IFeedbackService
     Task<IEnumerable<FeedbackResultDto>> RetriveAllByClientIdAsync(long clientId);
     Task<IEnumerable<FeedbackResultDto>> RetriveAllByStatusAsync(PaginationParams @params,
         FeedbackStatus? status = null);
-    Task MarkAsReadAsync(long id);
+    Task<bool> MarkAsReadAsync(long id);
 }
