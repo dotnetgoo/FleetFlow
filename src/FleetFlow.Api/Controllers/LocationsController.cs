@@ -1,6 +1,7 @@
-﻿using FleetFlow.Domain.Congirations;
+﻿using FleetFlow.Api.Models;
+using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.Location;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Warehouses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
@@ -19,7 +20,12 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         public async ValueTask<IActionResult> GetAllAsync([FromQuery]PaginationParams @params)
-            =>Ok(await locationService.RetrieveAllAsync(@params));
+            =>Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await locationService.RetrieveAllAsync(@params)
+            });
 
 
         /// <summary>
@@ -29,7 +35,12 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpGet("id")]
         public async ValueTask<IActionResult> GetAsync(long id)
-            => Ok(await locationService.RetrieveByIdAsync(id));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await locationService.RetrieveByIdAsync(id)
+            });
 
         /// <summary>
         /// Create location
@@ -38,7 +49,12 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpPost]
         public async ValueTask<IActionResult> PostAsync([FromBody]LocationForCreationDto dto)
-            => Ok(await locationService.AddAsync(dto));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await locationService.AddAsync(dto)
+            });
 
         /// <summary>
         /// Update location info
@@ -48,7 +64,12 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpPut("id")]
         public async ValueTask<ActionResult<LocationForResultDto>> PutAsync(LocationForCreationDto dto, long id)
-            => Ok(await locationService.ModifyAsync(id, dto));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await locationService.ModifyAsync(id, dto)
+            });
 
         /// <summary>
         /// Delete by id
@@ -57,6 +78,11 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpDelete("id")]
         public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
-            => Ok(await locationService.RemoveAsync(id));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await locationService.RemoveAsync(id)
+            });
     }
 }

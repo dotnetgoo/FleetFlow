@@ -17,12 +17,12 @@ namespace FleetFlow.DAL.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.4")
+                .HasAnnotation("ProductVersion", "7.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("FleetFlow.Domain.Entities.Address", b =>
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Addresses.Address", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,14 +68,14 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses", (string)null);
+                    b.ToTable("Addresses");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
                             City = "Navoi",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(660),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 841, DateTimeKind.Utc).AddTicks(5076),
                             District = "Nurata",
                             IsDeleted = false,
                             Latitude = 45.341200000000001,
@@ -88,7 +88,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 2L,
                             City = "Andijan",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(664),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 841, DateTimeKind.Utc).AddTicks(5081),
                             District = "Paxtachi",
                             IsDeleted = false,
                             Latitude = 42.341200000000001,
@@ -101,7 +101,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 3L,
                             City = "Bukhara",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(666),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 841, DateTimeKind.Utc).AddTicks(5084),
                             District = "Nurata",
                             IsDeleted = false,
                             Latitude = 44.341200000000001,
@@ -114,7 +114,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 4L,
                             City = "Kharezm",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(668),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 841, DateTimeKind.Utc).AddTicks(5087),
                             District = "Nurata",
                             IsDeleted = false,
                             Latitude = 47.341200000000001,
@@ -123,6 +123,40 @@ namespace FleetFlow.DAL.Migrations
                             Street = "Policians",
                             ZipCode = "100250"
                         });
+                });
+
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Attachments.Attachment", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("DeletedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("FileName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Attachments");
                 });
 
             modelBuilder.Entity("FleetFlow.Domain.Entities.Cart", b =>
@@ -153,7 +187,7 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Carts", (string)null);
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("FleetFlow.Domain.Entities.CartItem", b =>
@@ -194,19 +228,16 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartItems", (string)null);
+                    b.ToTable("CartItems");
                 });
 
-            modelBuilder.Entity("FleetFlow.Domain.Entities.Inventory", b =>
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Orders.Feedbacks.Feedback", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -217,10 +248,10 @@ namespace FleetFlow.DAL.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<long>("LocationId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Message")
+                        .HasColumnType("text");
 
-                    b.Property<long>("ProductId")
+                    b.Property<long>("OrderId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime?>("UpdatedAt")
@@ -231,61 +262,12 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationId");
+                    b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Inventories", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Amount = 1000,
-                            CreatedAt = new DateTime(2023, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc),
-                            IsDeleted = false,
-                            LocationId = 1L,
-                            ProductId = 6L
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Amount = 50,
-                            CreatedAt = new DateTime(2023, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc),
-                            IsDeleted = false,
-                            LocationId = 1L,
-                            ProductId = 1L
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            Amount = 100,
-                            CreatedAt = new DateTime(2023, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc),
-                            IsDeleted = false,
-                            LocationId = 2L,
-                            ProductId = 3L
-                        },
-                        new
-                        {
-                            Id = 4L,
-                            Amount = 100000,
-                            CreatedAt = new DateTime(2023, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc),
-                            IsDeleted = false,
-                            LocationId = 3L,
-                            ProductId = 5L
-                        },
-                        new
-                        {
-                            Id = 5L,
-                            Amount = 100,
-                            CreatedAt = new DateTime(2023, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc),
-                            IsDeleted = false,
-                            LocationId = 3L,
-                            ProductId = 2L
-                        });
+                    b.ToTable("Feedbacks");
                 });
 
-            modelBuilder.Entity("FleetFlow.Domain.Entities.Location", b =>
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Orders.Feedbacks.FeedbackAttachment", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -293,8 +275,8 @@ namespace FleetFlow.DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<string>("Code")
-                        .HasColumnType("text");
+                    b.Property<long>("AttachmentId")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -302,14 +284,11 @@ namespace FleetFlow.DAL.Migrations
                     b.Property<long?>("DeletedBy")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
+                    b.Property<long>("FeedbackId")
+                        .HasColumnType("bigint");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
 
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -319,66 +298,14 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Locations", (string)null);
+                    b.HasIndex("AttachmentId");
 
-                    b.HasData(
-                        new
-                        {
-                            Id = 1L,
-                            Code = "a1",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1392),
-                            Description = "In the middle",
-                            IsDeleted = false,
-                            Type = 0
-                        },
-                        new
-                        {
-                            Id = 2L,
-                            Code = "a2",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1395),
-                            Description = "In the beginning of entry",
-                            IsDeleted = false,
-                            Type = 0
-                        },
-                        new
-                        {
-                            Id = 3L,
-                            Code = "i7",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1397),
-                            Description = "In the middle",
-                            IsDeleted = false,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 4L,
-                            Code = "i9",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1399),
-                            Description = "In the middle",
-                            IsDeleted = false,
-                            Type = 0
-                        },
-                        new
-                        {
-                            Id = 5L,
-                            Code = "m1",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1401),
-                            Description = "In the middle",
-                            IsDeleted = false,
-                            Type = 1
-                        },
-                        new
-                        {
-                            Id = 6L,
-                            Code = "m2",
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1404),
-                            Description = "In the middle",
-                            IsDeleted = false,
-                            Type = 0
-                        });
+                    b.HasIndex("FeedbackId");
+
+                    b.ToTable("FeedbackAttachments");
                 });
 
-            modelBuilder.Entity("FleetFlow.Domain.Entities.Order", b =>
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Orders.Order", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -386,7 +313,7 @@ namespace FleetFlow.DAL.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("AddressId")
+                    b.Property<long?>("AddressId")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
@@ -413,33 +340,64 @@ namespace FleetFlow.DAL.Migrations
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UserId1")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
 
                     b.HasIndex("UserId");
 
-                    b.HasIndex("UserId1");
-
-                    b.ToTable("Orders", (string)null);
+                    b.ToTable("Orders");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
                             AddressId = 2L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(850),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 841, DateTimeKind.Utc).AddTicks(5529),
                             IsDeleted = false,
                             PaymentStatus = 0,
-                            Status = 0,
+                            Status = 1,
                             UserId = 1L
                         });
                 });
 
-            modelBuilder.Entity("FleetFlow.Domain.Entities.OrderItem", b =>
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Orders.OrderAction", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("DeletedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<long>("OrderId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderActions");
+                });
+
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Orders.OrderItem", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -477,14 +435,14 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItems", (string)null);
+                    b.ToTable("OrderItems");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
                             Amount = 1,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(994),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 841, DateTimeKind.Utc).AddTicks(5597),
                             IsDeleted = false,
                             OrderId = 1L,
                             ProductId = 3L
@@ -493,7 +451,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 2L,
                             Amount = 4,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(996),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 841, DateTimeKind.Utc).AddTicks(5601),
                             IsDeleted = false,
                             OrderId = 1L,
                             ProductId = 6L
@@ -502,14 +460,14 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 3L,
                             Amount = 2,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(1001),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 841, DateTimeKind.Utc).AddTicks(5604),
                             IsDeleted = false,
                             OrderId = 1L,
                             ProductId = 2L
                         });
                 });
 
-            modelBuilder.Entity("FleetFlow.Domain.Entities.Product", b =>
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Products.Product", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -552,14 +510,14 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Products", (string)null);
+                    b.ToTable("Products");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
                             CategoryId = 1L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(713),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 841, DateTimeKind.Utc).AddTicks(5231),
                             IsDeleted = false,
                             Name = "HP-Victus",
                             Price = 630m,
@@ -570,7 +528,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 2L,
                             CategoryId = 1L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(716),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 841, DateTimeKind.Utc).AddTicks(5237),
                             IsDeleted = false,
                             Name = "MacBook-Pro",
                             Price = 2000m,
@@ -581,7 +539,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 3L,
                             CategoryId = 5L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(719),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 841, DateTimeKind.Utc).AddTicks(5240),
                             IsDeleted = false,
                             Name = "Iphone-14",
                             Price = 1500m,
@@ -592,7 +550,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 4L,
                             CategoryId = 6L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(721),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 841, DateTimeKind.Utc).AddTicks(5243),
                             IsDeleted = false,
                             Name = "Spintronics",
                             Price = 100m,
@@ -603,7 +561,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 5L,
                             CategoryId = 4L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(725),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 841, DateTimeKind.Utc).AddTicks(5354),
                             IsDeleted = false,
                             Name = "Trimol",
                             Price = 1m,
@@ -614,7 +572,7 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 6L,
                             CategoryId = 2L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(728),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 841, DateTimeKind.Utc).AddTicks(5357),
                             IsDeleted = false,
                             Name = "SmartWatch",
                             Price = 50m,
@@ -623,7 +581,7 @@ namespace FleetFlow.DAL.Migrations
                         });
                 });
 
-            modelBuilder.Entity("FleetFlow.Domain.Entities.ProductCategory", b =>
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Products.ProductCategory", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -652,54 +610,54 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ProductCategories", (string)null);
+                    b.ToTable("ProductCategories");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1015),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 24, 601, DateTimeKind.Utc).AddTicks(2328),
                             IsDeleted = false,
                             Name = "Laptops"
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1017),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 24, 601, DateTimeKind.Utc).AddTicks(2331),
                             IsDeleted = false,
                             Name = "Accesories"
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1020),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 24, 601, DateTimeKind.Utc).AddTicks(2334),
                             IsDeleted = false,
                             Name = "Jewellery"
                         },
                         new
                         {
                             Id = 4L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1022),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 24, 601, DateTimeKind.Utc).AddTicks(2336),
                             IsDeleted = false,
                             Name = "Medicines"
                         },
                         new
                         {
                             Id = 5L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1024),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 24, 601, DateTimeKind.Utc).AddTicks(2338),
                             IsDeleted = false,
                             Name = "Telephones"
                         },
                         new
                         {
                             Id = 6L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 313, DateTimeKind.Utc).AddTicks(1026),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 24, 601, DateTimeKind.Utc).AddTicks(2340),
                             IsDeleted = false,
                             Name = "Toys"
                         });
                 });
 
-            modelBuilder.Entity("FleetFlow.Domain.Entities.User", b =>
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Users.User", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -744,128 +702,309 @@ namespace FleetFlow.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 548, DateTimeKind.Utc).AddTicks(6164),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 24, 818, DateTimeKind.Utc).AddTicks(754),
                             Email = "dotnetgo@icloud.com",
                             FirstName = "Mukhammadkarim",
                             IsDeleted = false,
                             LastName = "Tukhtaboyev",
-                            Password = "$2a$11$lYk00t.e2v4aOPb8hrEYE.E5Z7XDuXuIn904d6rVf4Xq8WZjaVWu6",
+                            Password = "$2a$11$5kLLPOZTp3U3Drg/Gtx40OAUzj3Cjn3WvVQS8n0eEh7/VwpnwKLiW",
                             Phone = "+998 991239999",
                             Role = 0
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 57, 812, DateTimeKind.Utc).AddTicks(2910),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 25, 37, DateTimeKind.Utc).AddTicks(651),
                             Email = "wonderboy1w3@gmail.com",
                             FirstName = "Jamshid",
                             IsDeleted = false,
                             LastName = "Ma'ruf",
-                            Password = "$2a$11$ZV2belDMq4Ws2OB8zCDXb.gXmuYScLhcHHAzzaVmsUrUqPTn4NN02",
+                            Password = "$2a$11$ppyKTkwJcjA4Ph5rxt48F.7iRw/EmlLl56/YEDC0I2TjBIrLYjIGy",
                             Phone = "+998 991231999",
                             Role = 1
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 58, 63, DateTimeKind.Utc).AddTicks(235),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 25, 250, DateTimeKind.Utc).AddTicks(5039),
                             Email = "kabeersolutions@gmail.com",
                             FirstName = "Kabeer",
                             IsDeleted = false,
                             LastName = "Solutions",
-                            Password = "$2a$11$sucjWdxZMKShnXsgxBWnGuuRS1a0yxOpbQoWcQSicnbSQaqAIphh.",
+                            Password = "$2a$11$7/Z2vR4/HBzQXKBVVZTUf.ga.B8p5bp5fvcOVtQ9rR6Np36yAHapO",
                             Phone = "+998 991232999",
                             Role = 5
                         },
                         new
                         {
                             Id = 4L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 58, 352, DateTimeKind.Utc).AddTicks(7460),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 25, 480, DateTimeKind.Utc).AddTicks(5551),
                             Email = "nurillaewmuzaffar@gmail.com",
                             FirstName = "Muzaffar",
                             IsDeleted = false,
                             LastName = "Nurillayev",
-                            Password = "$2a$11$gMWCfyJ/gQbBfw/mAlOVAeHTNSeIUdj/bllMetY8.3qqF14Cr3G3G",
+                            Password = "$2a$11$n.WwXujl8NzGyVbmmjT8C.jw1QGC/XDIfGUuwTzCL06OUZgDX8Eny",
                             Phone = "+998 995030110",
                             Role = 0
                         },
                         new
                         {
                             Id = 5L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 58, 604, DateTimeKind.Utc).AddTicks(2870),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 25, 696, DateTimeKind.Utc).AddTicks(3557),
                             Email = "azimochilov@icloud.com",
                             FirstName = "Azim",
                             IsDeleted = false,
                             LastName = "Ochilov",
-                            Password = "$2a$11$g.8TsGVpSPlAZ7l1Nhg9MeJ1IUKnH5nuV9eOVOu9Mt5HJyA5RjAsu",
+                            Password = "$2a$11$dPi42HI6FgIVLamWFLbAv.xtcqXawYvXfM07T97qFi3UjU.DgC9M6",
                             Phone = "+998 991233999",
                             Role = 2
                         },
                         new
                         {
                             Id = 6L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 58, 976, DateTimeKind.Utc).AddTicks(3051),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 25, 932, DateTimeKind.Utc).AddTicks(4815),
                             Email = "abdulloh@icloud.com",
                             FirstName = "Abdulloh",
                             IsDeleted = false,
                             LastName = "Ahmadjonov",
-                            Password = "$2a$11$B/ZVn8ZFeMSNzPUbNIRxaeU/RUU5Jmd4agnG4dg29G8OK7TA8L5hO",
+                            Password = "$2a$11$GExVxNZYmEHFviqJnLVGRuzR4q3WGb0j0XviEIxEbQuKX9Tq9Yj8C",
                             Phone = "+998 991236999",
                             Role = 1
                         },
                         new
                         {
                             Id = 7L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 59, 260, DateTimeKind.Utc).AddTicks(2202),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 150, DateTimeKind.Utc).AddTicks(3447),
                             Email = "komron2052@gmail.com",
                             FirstName = "Komron",
                             IsDeleted = false,
                             LastName = "Rahmonov",
-                            Password = "$2a$11$1qFAqZTjgZ2boyRocrdS8ebUDTY6OsyIJdq1v0NUQKz2Y0/uM6NuS",
+                            Password = "$2a$11$GamzvpkO3TYpvYnEgqscP.KtqqB0OWzCSEp2.r.3/tozfAqBTXfui",
                             Phone = "+998 991234999",
                             Role = 4
                         },
                         new
                         {
                             Id = 8L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 59, 502, DateTimeKind.Utc).AddTicks(3867),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 381, DateTimeKind.Utc).AddTicks(5029),
                             Email = "nozimjon@gmail.com",
                             FirstName = "Nozimjon",
                             IsDeleted = false,
                             LastName = "Usmonaliyev",
-                            Password = "$2a$11$4xrd/ptUJTfWsfiGAGEiheQO1fPIcbUKAbkEaiGhytIS4P0Erlcwq",
+                            Password = "$2a$11$s6G7rCkOnvp8pdUt/8dug.0fahrMlFfptZb6j.6KJCGT755EX3keS",
                             Phone = "+998 991235999",
                             Role = 3
                         },
                         new
                         {
                             Id = 9L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 12, 59, 799, DateTimeKind.Utc).AddTicks(7281),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 602, DateTimeKind.Utc).AddTicks(1663),
                             Email = "aljavhar@gmail.com",
                             FirstName = "AlJavhar",
                             IsDeleted = false,
                             LastName = "Boyaliyev",
-                            Password = "$2a$11$DMrMExEp6X/r.kRL99zgSuUp5tmcUyLy/cXHVEZ9jOo704w1GJdSa",
+                            Password = "$2a$11$SRKobWWfa.oAylpnRNc7SufYXIvJARCM5yLf3nH9G93sypBx.J1tK",
                             Phone = "+998 902344545",
                             Role = 0
                         },
                         new
                         {
                             Id = 10L,
-                            CreatedAt = new DateTime(2023, 5, 4, 9, 13, 0, 104, DateTimeKind.Utc).AddTicks(153),
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 26, 841, DateTimeKind.Utc).AddTicks(4449),
                             Email = "muhammad@gmail.com",
                             FirstName = "Muhammad",
                             IsDeleted = false,
                             LastName = "Rahimboyev",
-                            Password = "$2a$11$qT.R9pfv4xYDFZOym..GROmElS1Z.lQB0rsEpTF97CWgRQRuWjM6i",
+                            Password = "$2a$11$fPQb58uN/quk2eYqpeTSIuylP97xQGjtB4Zcn52i57zCcKeZBzev6",
                             Phone = "+998 937770202",
                             Role = 0
+                        });
+                });
+
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Warehouses.Inventory", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<int>("Amount")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("DeletedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<long>("LocationId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("LocationId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Inventories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Amount = 1000,
+                            CreatedAt = new DateTime(2023, 5, 25, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            LocationId = 1L,
+                            ProductId = 6L
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Amount = 50,
+                            CreatedAt = new DateTime(2023, 5, 25, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            LocationId = 1L,
+                            ProductId = 1L
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Amount = 100,
+                            CreatedAt = new DateTime(2023, 5, 25, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            LocationId = 2L,
+                            ProductId = 3L
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            Amount = 100000,
+                            CreatedAt = new DateTime(2023, 5, 25, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            LocationId = 3L,
+                            ProductId = 5L
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            Amount = 100,
+                            CreatedAt = new DateTime(2023, 5, 25, 0, 0, 0, 0, DateTimeKind.Utc),
+                            IsDeleted = false,
+                            LocationId = 3L,
+                            ProductId = 2L
+                        });
+                });
+
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Warehouses.Location", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Code")
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("DeletedBy")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("text");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<long?>("UpdatedBy")
+                        .HasColumnType("bigint");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Locations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1L,
+                            Code = "a1",
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 24, 601, DateTimeKind.Utc).AddTicks(2641),
+                            Description = "In the middle",
+                            IsDeleted = false,
+                            Type = 0
+                        },
+                        new
+                        {
+                            Id = 2L,
+                            Code = "a2",
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 24, 601, DateTimeKind.Utc).AddTicks(2644),
+                            Description = "In the beginning of entry",
+                            IsDeleted = false,
+                            Type = 0
+                        },
+                        new
+                        {
+                            Id = 3L,
+                            Code = "i7",
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 24, 601, DateTimeKind.Utc).AddTicks(2646),
+                            Description = "In the middle",
+                            IsDeleted = false,
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = 4L,
+                            Code = "i9",
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 24, 601, DateTimeKind.Utc).AddTicks(2648),
+                            Description = "In the middle",
+                            IsDeleted = false,
+                            Type = 0
+                        },
+                        new
+                        {
+                            Id = 5L,
+                            Code = "m1",
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 24, 601, DateTimeKind.Utc).AddTicks(2651),
+                            Description = "In the middle",
+                            IsDeleted = false,
+                            Type = 1
+                        },
+                        new
+                        {
+                            Id = 6L,
+                            Code = "m2",
+                            CreatedAt = new DateTime(2023, 5, 25, 6, 0, 24, 601, DateTimeKind.Utc).AddTicks(2653),
+                            Description = "In the middle",
+                            IsDeleted = false,
+                            Type = 0
                         });
                 });
 
@@ -877,7 +1016,7 @@ namespace FleetFlow.DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("FleetFlow.Domain.Entities.Product", "Product")
+                    b.HasOne("FleetFlow.Domain.Entities.Products.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -888,57 +1027,74 @@ namespace FleetFlow.DAL.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("FleetFlow.Domain.Entities.Inventory", b =>
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Orders.Feedbacks.Feedback", b =>
                 {
-                    b.HasOne("FleetFlow.Domain.Entities.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
+                    b.HasOne("FleetFlow.Domain.Entities.Orders.Order", "Order")
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("FleetFlow.Domain.Entities.Product", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Location");
-
-                    b.Navigation("Product");
+                    b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("FleetFlow.Domain.Entities.Order", b =>
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Orders.Feedbacks.FeedbackAttachment", b =>
                 {
-                    b.HasOne("FleetFlow.Domain.Entities.Address", "Address")
-                        .WithMany("Orders")
-                        .HasForeignKey("AddressId")
+                    b.HasOne("FleetFlow.Domain.Entities.Attachments.Attachment", "Attachment")
+                        .WithMany()
+                        .HasForeignKey("AttachmentId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("FleetFlow.Domain.Entities.User", "User")
-                        .WithMany()
+                    b.HasOne("FleetFlow.Domain.Entities.Orders.Feedbacks.Feedback", "Feedback")
+                        .WithMany("Attachments")
+                        .HasForeignKey("FeedbackId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Attachment");
+
+                    b.Navigation("Feedback");
+                });
+
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Orders.Order", b =>
+                {
+                    b.HasOne("FleetFlow.Domain.Entities.Addresses.Address", "Address")
+                        .WithMany("Orders")
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("FleetFlow.Domain.Entities.Users.User", "User")
+                        .WithMany("Orders")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("FleetFlow.Domain.Entities.User", null)
-                        .WithMany("Orders")
-                        .HasForeignKey("UserId1");
 
                     b.Navigation("Address");
 
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("FleetFlow.Domain.Entities.OrderItem", b =>
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Orders.OrderAction", b =>
                 {
-                    b.HasOne("FleetFlow.Domain.Entities.Order", "Order")
+                    b.HasOne("FleetFlow.Domain.Entities.Orders.Order", "Order")
+                        .WithMany("Actions")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Orders.OrderItem", b =>
+                {
+                    b.HasOne("FleetFlow.Domain.Entities.Orders.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("FleetFlow.Domain.Entities.Product", "Product")
+                    b.HasOne("FleetFlow.Domain.Entities.Products.Product", "Product")
                         .WithMany("OrderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -949,9 +1105,9 @@ namespace FleetFlow.DAL.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("FleetFlow.Domain.Entities.Product", b =>
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Products.Product", b =>
                 {
-                    b.HasOne("FleetFlow.Domain.Entities.ProductCategory", "Category")
+                    b.HasOne("FleetFlow.Domain.Entities.Products.ProductCategory", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.NoAction)
@@ -960,7 +1116,26 @@ namespace FleetFlow.DAL.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("FleetFlow.Domain.Entities.Address", b =>
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Warehouses.Inventory", b =>
+                {
+                    b.HasOne("FleetFlow.Domain.Entities.Warehouses.Location", "Location")
+                        .WithMany()
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("FleetFlow.Domain.Entities.Products.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Location");
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Addresses.Address", b =>
                 {
                     b.Navigation("Orders");
                 });
@@ -970,22 +1145,31 @@ namespace FleetFlow.DAL.Migrations
                     b.Navigation("Items");
                 });
 
-            modelBuilder.Entity("FleetFlow.Domain.Entities.Order", b =>
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Orders.Feedbacks.Feedback", b =>
+                {
+                    b.Navigation("Attachments");
+                });
+
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Orders.Order", b =>
+                {
+                    b.Navigation("Actions");
+
+                    b.Navigation("Feedbacks");
+
+                    b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Products.Product", b =>
                 {
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("FleetFlow.Domain.Entities.Product", b =>
-                {
-                    b.Navigation("OrderItems");
-                });
-
-            modelBuilder.Entity("FleetFlow.Domain.Entities.ProductCategory", b =>
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Products.ProductCategory", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("FleetFlow.Domain.Entities.User", b =>
+            modelBuilder.Entity("FleetFlow.Domain.Entities.Users.User", b =>
                 {
                     b.Navigation("Orders");
                 });

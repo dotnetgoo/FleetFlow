@@ -1,6 +1,7 @@
-﻿using FleetFlow.Domain.Entities;
+﻿using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Enums;
 using System.ComponentModel;
+using System.Text.Json.Serialization;
 
 namespace FleetFlow.Service.DTOs.User;
 public class UserForResultDto
@@ -15,5 +16,7 @@ public class UserForResultDto
     public string Phone { get; set; }
     public string Email { get; set; }
     public UserRole Role { get; set; } = UserRole.User;
+
+    [JsonIgnore]
     public ICollection<Order> Orders { get; set; }
 }

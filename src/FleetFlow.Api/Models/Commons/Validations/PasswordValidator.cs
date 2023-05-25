@@ -2,7 +2,7 @@
 {
     public static class PasswordValidator
     {
-        public static (bool IsValid,string Message) IsStrong(string password)
+        public static (bool IsValid, string Message) IsStrong(string password)
         {
             bool isDigit = password.Any(x => char.IsDigit(x));
             if (!isDigit)

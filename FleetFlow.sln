@@ -19,6 +19,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FleetFlow.Tests", "tests\Fl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FleetFlow.Shared", "src\FleetFlow.Shared\FleetFlow.Shared.csproj", "{9DA5054E-1042-41FB-B5FD-C7AB68BDD7E4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FleetFlow.GraphQL", "src\FleetFlow.GraphQL\FleetFlow.GraphQL.csproj", "{41FB5EF7-F5B7-4FD5-8F38-1504B8C61931}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{9DA5054E-1042-41FB-B5FD-C7AB68BDD7E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9DA5054E-1042-41FB-B5FD-C7AB68BDD7E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9DA5054E-1042-41FB-B5FD-C7AB68BDD7E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41FB5EF7-F5B7-4FD5-8F38-1504B8C61931}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41FB5EF7-F5B7-4FD5-8F38-1504B8C61931}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41FB5EF7-F5B7-4FD5-8F38-1504B8C61931}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41FB5EF7-F5B7-4FD5-8F38-1504B8C61931}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -60,5 +66,9 @@ Global
 		{99D0B8DA-F350-4466-832C-1D4F197FCD84} = {30C8E5DC-125E-4F5D-8F79-32CD0528CBBD}
 		{1E8130F2-15A2-48C7-8697-A6F541BA7F79} = {0FAB4F36-1596-48EF-B015-F3907D3E2F58}
 		{9DA5054E-1042-41FB-B5FD-C7AB68BDD7E4} = {30C8E5DC-125E-4F5D-8F79-32CD0528CBBD}
+		{41FB5EF7-F5B7-4FD5-8F38-1504B8C61931} = {30C8E5DC-125E-4F5D-8F79-32CD0528CBBD}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {00FCE380-942B-426E-93A8-A2C895DFC934}
 	EndGlobalSection
 EndGlobal

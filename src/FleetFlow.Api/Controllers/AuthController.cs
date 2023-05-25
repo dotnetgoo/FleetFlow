@@ -1,5 +1,5 @@
 ﻿using FleetFlow.Service.DTOs.Login;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Users;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
