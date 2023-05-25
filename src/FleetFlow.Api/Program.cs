@@ -51,8 +51,8 @@ app.ApplyMigrations();
 app.InitAccessor();
 
 // Getting wwwroot path
-EnvironmentHelper.WebRootPath = app.Services.GetRequiredService<IWebHostEnvironment>().WebRootPath;
-
+//EnvironmentHelper.WebRootPath = app.Services.GetRequiredService<IWebHostEnvironment>().WebRootPath;
+EnvironmentHelper.WebRootPath = Path.GetFullPath("wwwroot");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

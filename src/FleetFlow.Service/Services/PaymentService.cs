@@ -45,8 +45,7 @@ public class PaymentService : IPaymentService
         {
             Amount = dto.Amount,
             Description = dto.Description,
-            FileName = file.FileName,
-            FilePath = file.FilePath, 
+            FilePath = file.FilePath,
             Order = this.mapper.Map<OrderResultDto>(order),
             User = user,
             Status = PaymentStatus.Pending

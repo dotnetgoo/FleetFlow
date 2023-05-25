@@ -32,6 +32,8 @@ namespace FleetFlow.Api.Extensions
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICheckoutService, CheckoutService>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IAttachmentService, AttachmentService>();
         }
         
         /// <summary>

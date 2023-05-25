@@ -23,7 +23,7 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<OrderAction> OrderActions { get; set; }
-
+        public DbSet<Attachment> Attachments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

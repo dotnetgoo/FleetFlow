@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using FleetFlow.Service.Interfaces;
-using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.DTOs.Payments;
+﻿using FleetFlow.Api.Extensions;
 using FleetFlow.Api.Models;
+using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.Attachments;
-using FleetFlow.Api.Extensions;
+using FleetFlow.Service.DTOs.Payments;
+using FleetFlow.Service.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using System.Xml;
 
 namespace FleetFlow.Api.Controllers;
 
@@ -17,13 +18,15 @@ public class PaymentsController : RestfulSense
     }
 
     [HttpPost]
-    public async ValueTask<IActionResult> PostAsync(PaymentCreationDto dto, [FromForm] IFormFile file)
-        => Ok(new Response
-           {
-               Code = 200,
-               Message = "OK",
-               Data = await this.payementService.AddAsync(dto, await file.ToAttachmentAsync())
-           });
+    public async ValueTask<IActionResult> PostAsync([FromForm] SingleFile file, [FromForm] PaymentCreationDto dto)
+    {
+        return Ok(new Response
+        {
+            Code = 200,
+            Message = "OK",
+            Data = await this.payementService.AddAsync(dto, await file.File.ToAttachmentAsync())
+        });
+    }
 
     [HttpPut("id:long")]
     public async ValueTask<IActionResult> PutAsync(long id, PaymentCreationDto dto)

@@ -22,14 +22,21 @@ public class AttachmentService : IAttachmentService
 
     public async ValueTask<Attachment> UploadAsync(AttachmentCreationDto dto)
     {
-        string path = EnvironmentHelper.WebRootPath;
-        string fullPath = Path.Combine(path, "files", $"{dto.FileName}{dto.FIleExtension}");
+        // combining paths and create if not exists
+        string path = Path.Combine(EnvironmentHelper.WebRootPath, "Files", "Payments");
+        if (!Directory.Exists(path))
+            Directory.CreateDirectory(path);
+
+        string fileName = $"{Guid.NewGuid()}{dto.FileExtension}";
+        string fullPath = Path.Combine(path, fileName);
+
+        // creating file in created or existed folder and write all content
         FileStream targetFile = new FileStream(fullPath, FileMode.OpenOrCreate);
         await targetFile.WriteAsync(dto.File);
 
         Attachment attachment = new Attachment
         {
-            FileName = dto.FileName + dto.FIleExtension,
+            FileName = fileName,
             FilePath = fullPath,
             CreatedAt = DateTime.UtcNow,
         };
