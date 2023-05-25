@@ -1,5 +1,6 @@
 ﻿using FleetFlow.Domain.Commons;
 using FleetFlow.Domain.Entities.Addresses;
+using FleetFlow.Domain.Entities.Orders.Feedbacks;
 using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Domain.Enums;
 
@@ -16,5 +17,6 @@ namespace FleetFlow.Domain.Entities.Orders
 
         public ICollection<OrderItem> OrderItems { get; set; }
         public ICollection<OrderAction> Actions { get; set; }
+        public ICollection<Feedback> Feedbacks { get; set; }
     }
 }
