@@ -20,15 +20,18 @@ namespace FleetFlow.Service.Services.Orders
         private readonly IRepository<Cart> cartRepository;
         private readonly IRepository<Order> orderRepository;
         private readonly IRepository<User> userRepository;
+        private readonly IOrderActionService orderActionService;
         public OrderService(IRepository<Order> orderRepository,
             IRepository<Cart> cartRepository,
             IRepository<User> userRepository,
-            IMapper mapper)
+            IMapper mapper,
+            IOrderActionService orderActionService)
         {
             this.orderRepository = orderRepository;
             this.cartRepository = cartRepository;
             this.mapper = mapper;
             this.userRepository = userRepository;
+            this.orderActionService = orderActionService;
         }
 
         public async ValueTask<OrderResultDto> AddAsync()
@@ -74,19 +77,33 @@ namespace FleetFlow.Service.Services.Orders
             // TODO: Add business logic for canceled order.
             // Returning products to warehouse, assignments to workers 
 
-            order.Status = OrderStatus.Cancelled;
+            /* order.Status = OrderStatus.Cancelled;
 
-            // Creating new order action
-            order.Actions.Add(new OrderAction() { Status = OrderStatus.Cancelled });
+             // Creating new order action
+             order.Actions.Add(new OrderAction() { Status = OrderStatus.Cancelled });
 
-            await orderRepository.SaveAsync();
+             await orderRepository.SaveAsync();*/
 
-            var result = mapper.Map<OrderResultDto>(order);
+            var result = mapper.Map<OrderResultDto>(await this.orderActionService.CancelledAsync((int)order.Id));
             // is this best practice to avoid object cycle?
             result.User.Orders = null;
 
             return result;
+
         }
+
+    /*    public async Task ChangeStatus(long orderId, OrderStatus status)
+        {
+            var order = await this.orderRepository.SelectAsync(t => t.Id == orderId);
+            if (order is null)
+                throw new FleetFlowException(404, "");
+
+            order.Id = orderId;
+            order.Status = status;
+            await orderRepository.SaveAsync();
+
+        }*/
+
 
         public async ValueTask<bool> RemoveAsync(long id)
         {
@@ -151,11 +168,6 @@ namespace FleetFlow.Service.Services.Orders
                 throw new FleetFlowException(404, "Order is not found");
 
             return mapper.Map<OrderResultDto>(order);
-        }
-
-        public ValueTask<OrderResultDto> StartPreparingAsync(long id)
-        {
-            throw new NotImplementedException();
         }
     }
 }
