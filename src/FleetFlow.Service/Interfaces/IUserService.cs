@@ -1,5 +1,5 @@
 ﻿using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities;
+using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Domain.Enums;
 using FleetFlow.Service.DTOs.User;
 using System;

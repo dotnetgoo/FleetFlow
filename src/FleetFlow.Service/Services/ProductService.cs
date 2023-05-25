@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities;
+using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Service.DTOs.Product;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;

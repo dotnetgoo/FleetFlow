@@ -1,9 +1,10 @@
 ﻿using FleetFlow.Domain.Commons;
+using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Enums;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
 
-namespace FleetFlow.Domain.Entities
+namespace FleetFlow.Domain.Entities.Users
 {
     public class User : Auditable
     {

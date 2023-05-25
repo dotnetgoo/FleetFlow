@@ -1,4 +1,4 @@
-﻿using FleetFlow.Domain.Entities;
+﻿using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Service.DTOs.Login;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Interfaces;

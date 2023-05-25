@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities;
 using FleetFlow.Service.DTOs.Location;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces;
 using FleetFlow.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;
-using Location = FleetFlow.Domain.Entities.Location;
+using Location = FleetFlow.Domain.Entities.Warehouses.Location;
 
 namespace FleetFlow.Service.Services
 {

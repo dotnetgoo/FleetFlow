@@ -1,4 +1,10 @@
 using FleetFlow.Domain.Entities;
+using FleetFlow.Domain.Entities.Addresses;
+using FleetFlow.Domain.Entities.Attachments;
+using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Domain.Entities.Products;
+using FleetFlow.Domain.Entities.Users;
+using FleetFlow.Domain.Entities.Warehouses;
 using FleetFlow.Domain.Enums;
 using FleetFlow.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;

@@ -1,6 +1,6 @@
 ﻿using FleetFlow.Domain.Commons;
 
-namespace FleetFlow.Domain.Entities;
+namespace FleetFlow.Domain.Entities.Attachments;
 
 public class Attachment : Auditable
 {

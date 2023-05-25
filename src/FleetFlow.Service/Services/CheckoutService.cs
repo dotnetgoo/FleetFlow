@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FleetFlow.DAL.IRepositories;
-using FleetFlow.Domain.Entities;
+using FleetFlow.Domain.Entities.Addresses;
+using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Enums;
 using FleetFlow.Service.DTOs.Address;
 using FleetFlow.Service.Exceptions;

@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FleetFlow.Domain.Enums;
-using FleetFlow.Domain.Entities;
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Service.DTOs.User;
 using FleetFlow.Service.Interfaces;
@@ -11,6 +10,8 @@ using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Service.DTOs.Payments;
 using FleetFlow.Service.DTOs.Attachments;
+using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Domain.Entities.Attachments;
 
 namespace FleetFlow.Service.Services;
 

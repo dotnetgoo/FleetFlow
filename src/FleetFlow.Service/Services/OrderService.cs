@@ -9,6 +9,8 @@ using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Service.Extentions;
 using Microsoft.EntityFrameworkCore;
+using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Domain.Entities.Users;
 
 namespace FleetFlow.Service.Services
 {

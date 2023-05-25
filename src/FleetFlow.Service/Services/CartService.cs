@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Entities;
+using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Service.DTOs.Carts;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Interfaces;

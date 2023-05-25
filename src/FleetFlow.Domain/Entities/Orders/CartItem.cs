@@ -1,4 +1,5 @@
 ﻿using FleetFlow.Domain.Commons;
+using FleetFlow.Domain.Entities.Products;
 
 namespace FleetFlow.Domain.Entities;
 

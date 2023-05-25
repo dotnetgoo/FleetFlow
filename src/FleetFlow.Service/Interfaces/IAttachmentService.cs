@@ -1,4 +1,4 @@
-﻿using FleetFlow.Domain.Entities;
+﻿using FleetFlow.Domain.Entities.Attachments;
 using FleetFlow.Service.DTOs.Attachments;
 
 namespace FleetFlow.Service.Interfaces;

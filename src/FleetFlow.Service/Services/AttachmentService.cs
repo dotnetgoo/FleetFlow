@@ -1,5 +1,5 @@
 ﻿using FleetFlow.DAL.IRepositories;
-using FleetFlow.Domain.Entities;
+using FleetFlow.Domain.Entities.Attachments;
 using FleetFlow.Service.DTOs.Attachments;
 using FleetFlow.Service.Interfaces;
 using FleetFlow.Shared.Helpers;
