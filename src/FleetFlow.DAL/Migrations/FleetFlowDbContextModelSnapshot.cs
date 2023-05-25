@@ -833,7 +833,6 @@ namespace FleetFlow.DAL.Migrations
                         {
                             Id = 1L,
                             CreatedAt = new DateTime(2023, 5, 25, 11, 1, 5, 513, DateTimeKind.Utc).AddTicks(8010),
-                            CreatedAt = new DateTime(2023, 5, 25, 9, 52, 42, 728, DateTimeKind.Utc).AddTicks(9000),
                             Email = "dotnetgo@icloud.com",
                             FirstName = "Mukhammadkarim",
                             IsDeleted = false,
