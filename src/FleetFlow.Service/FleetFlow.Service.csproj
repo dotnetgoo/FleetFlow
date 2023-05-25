@@ -21,4 +21,8 @@
     <ProjectReference Include="..\FleetFlow.Shared\FleetFlow.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\Users\" />
+  </ItemGroup>
+
 </Project>
