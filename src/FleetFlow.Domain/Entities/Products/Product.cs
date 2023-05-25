@@ -15,7 +15,7 @@ namespace FleetFlow.Domain.Entities.Products
         public long CategoryId { get; set; }
         public ProductCategory Category { get; set; }
         
-        public Discount Discount { get; set; }
+        public ICollection<Discount> Discounts { get; set; }
 
         public ICollection<OrderItem> OrderItems { get; set; }
     }
