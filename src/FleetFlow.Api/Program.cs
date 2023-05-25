@@ -6,7 +6,6 @@ using FleetFlow.Service.Mappers;
 using FleetFlow.Shared.Helpers;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
