@@ -63,7 +63,7 @@ public class FeedbackController : RestfulSense
         });
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("{id}-clientId")]
     public async ValueTask<IActionResult> GetAllByClientIdAsync([FromQuery] long id)
     {
         return Ok(new Response()
