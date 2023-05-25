@@ -73,9 +73,9 @@ namespace FleetFlow.Service.Services.Orders
                 throw new FleetFlowException(404, "Order is not found");
 
 
-            var role = await this.roleRepository.SelectAsync(r => r.Name == "Admin");
-            if (order.User.Role != role && order.UserId != HttpContextHelper.UserId)
-                throw new FleetFlowException(400, "Invalid operation.");
+            //var role = await this.roleRepository.SelectAsync(r => r.Name == "Admin");
+            //if (order.User.Role != role && order.UserId != HttpContextHelper.UserId)
+            //    throw new FleetFlowException(400, "Invalid operation.");
 
             // TODO: Add business logic for canceled order.
             // Returning products to warehouse, assignments to workers 
