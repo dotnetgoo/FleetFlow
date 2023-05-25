@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
 {
-    [Authorize]
     public class UsersController : RestfulSense
     {
         private readonly IUserService userService;
@@ -21,7 +20,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="params"></param>
         /// <returns></returns>
-        [HttpGet, Authorize("Administration")]
+        [HttpGet] 
         public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
             => Ok(new Response
             {
@@ -49,7 +48,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost, AllowAnonymous]
+        [HttpPost]
         public async ValueTask<ActionResult<UserForResultDto>> PostAsync(UserForCreationDto dto)
             => Ok(new Response
             {

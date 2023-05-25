@@ -2,11 +2,11 @@ using FleetFlow.Domain.Enums;
 
 namespace FleetFlow.GraphQL.Types.EnumTypes
 {
-    public class UserRoleEnumType : EnumType<UserRole>
-    {
-        protected override void Configure(IEnumTypeDescriptor<UserRole> descriptor)
-        {
-            descriptor.BindValuesImplicitly();
-        }
-    }
+    //public class UserRoleEnumType : EnumType<UserRole>
+    //{
+    //    protected override void Configure(IEnumTypeDescriptor<UserRole> descriptor)
+    //    {
+    //        descriptor.BindValuesImplicitly();
+    //    }
+    //}
 }

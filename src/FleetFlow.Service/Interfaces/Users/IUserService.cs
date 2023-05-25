@@ -1,4 +1,5 @@
 ﻿using FleetFlow.Domain.Congirations;
+using FleetFlow.Domain.Entities.Authorizations;
 using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Domain.Enums;
 using FleetFlow.Service.DTOs.User;
@@ -15,7 +16,7 @@ namespace FleetFlow.Service.Interfaces.Users
     {
         Task<UserForResultDto> AddAsync(UserForCreationDto dto);
         Task<IEnumerable<UserForResultDto>> RetrieveAllAsync(PaginationParams @params);
-        Task<IEnumerable<UserForResultDto>> RetrieveAllByRoleAsync(PaginationParams @params, UserRole role = UserRole.Admin);
+        Task<IEnumerable<UserForResultDto>> RetrieveAllByRoleAsync(PaginationParams @params, long roleId);
         Task<User> RetrieveByEmailAsync(string email);
         Task<bool> RemoveAsync(long id);
         Task<UserForResultDto> RetrieveByIdAsync(long id);

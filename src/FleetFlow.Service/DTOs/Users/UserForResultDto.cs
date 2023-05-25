@@ -15,7 +15,6 @@ public class UserForResultDto
     public string LastName { get; set; }
     public string Phone { get; set; }
     public string Email { get; set; }
-    public UserRole Role { get; set; } = UserRole.User;
 
     [JsonIgnore]
     public ICollection<Order> Orders { get; set; }
