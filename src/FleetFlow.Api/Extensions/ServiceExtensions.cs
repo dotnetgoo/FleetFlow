@@ -43,10 +43,10 @@ namespace FleetFlow.Api.Extensions
             services.AddScoped<IPaymentService, PaymentService>();
             services.AddScoped<IAttachmentService, AttachmentService>();
             services.AddScoped<IFeedbackService, FeedbackService>();
+            services.AddScoped<IPermissionService, PermissionService>();
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IOrderActionService, OrderActionService>();
             services.AddScoped<IDiscountService, DiscountService>();
-
         }
 
         /// <summary>

@@ -7,8 +7,7 @@ using FleetFlow.Shared.Helpers;
 using FleetFlow.Service.Mappers;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
-using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
