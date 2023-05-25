@@ -1,4 +1,6 @@
 ﻿using FleetFlow.Domain.Enums;
+using FleetFlow.GraphQL.Extensions;
+using FleetFlow.Service.DTOs.Attachments;
 using FleetFlow.Service.DTOs.Payments;
 using FleetFlow.Service.Interfaces;
 
@@ -7,9 +9,10 @@ namespace FleetFlow.GraphQL.Mutations
     public partial class Mutation
     {
         public async ValueTask<PaymentResultDto> CreatePaymentAsync([Service] IPaymentService paymentService,
-            PaymentCreationDto payment)
+            PaymentCreationDto payment, IFile file)
         {
-            return await paymentService.AddAsync(payment);
+            
+            return await paymentService.AddAsync(payment, await file.ToAttachmentAsync());
         }
 
         public async ValueTask<PaymentResultDto> ChangePaymentStatusAsync([Service] IPaymentService paymentService, 

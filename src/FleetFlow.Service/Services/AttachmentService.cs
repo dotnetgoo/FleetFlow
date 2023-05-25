@@ -1,12 +1,13 @@
 ﻿using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Entities;
+using FleetFlow.Service.DTOs.Attachments;
+using FleetFlow.Service.Interfaces;
 using FleetFlow.Shared.Helpers;
-using Microsoft.AspNetCore.Http;
 using Path = System.IO.Path;
 
 namespace FleetFlow.Service.Services;
 
-public class AttachmentService
+public class AttachmentService : IAttachmentService
 {
     private readonly IRepository<Attachment> attachmentRepository;
     public AttachmentService(IRepository<Attachment> attachmentRepository)
@@ -19,19 +20,16 @@ public class AttachmentService
         throw new NotImplementedException();
     }
 
-    public async ValueTask<Attachment> UploadAsync(IFormFile file)
+    public async ValueTask<Attachment> UploadAsync(AttachmentCreationDto dto)
     {
         string path = EnvironmentHelper.WebRootPath;
-        string fileExtension = Path.GetExtension(file.FileName);
-        string fileName = Guid.NewGuid().ToString("N");
-        string fullPath = Path.Combine(path, "files", $"{fileName}{fileExtension}");
-
+        string fullPath = Path.Combine(path, "files", $"{dto.FileName}{dto.FIleExtension}");
         FileStream targetFile = new FileStream(fullPath, FileMode.OpenOrCreate);
-        await file.CopyToAsync(targetFile);
+        await targetFile.WriteAsync(dto.File);
 
         Attachment attachment = new Attachment
         {
-            FileName = fileName + fileExtension,
+            FileName = dto.FileName + dto.FIleExtension,
             FilePath = fullPath,
             CreatedAt = DateTime.UtcNow,
         };

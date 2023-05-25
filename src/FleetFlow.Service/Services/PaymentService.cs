@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Service.DTOs.Payments;
+using FleetFlow.Service.DTOs.Attachments;
 
 namespace FleetFlow.Service.Services;
 
@@ -18,13 +19,13 @@ public class PaymentService : IPaymentService
     private readonly IMapper mapper;
     private readonly IUserService userService;
     private readonly IRepository<Order> orderRepository;
-    private readonly IAttachmantService attachmantService;
+    private readonly IAttachmentService attachmantService;
     private readonly IRepository<Payment> paymentRepository;
     public PaymentService(
         IMapper mapper,
         IUserService userService,
         IRepository<Order> orderRepository,
-        IAttachmantService attachmantService,
+        IAttachmentService attachmantService,
         IRepository<Payment> paymentRepository)
     {
         this.mapper = mapper;
@@ -34,11 +35,11 @@ public class PaymentService : IPaymentService
         this.paymentRepository = paymentRepository;
     }
 
-    public async Task<PaymentResultDto> AddAsync(PaymentCreationDto dto)
+    public async Task<PaymentResultDto> AddAsync(PaymentCreationDto dto, AttachmentCreationDto attachment)
     {
         UserForResultDto user = await this.userService.RetrieveByIdAsync(dto.UserId);
         Order order = await this.orderRepository.SelectAsync(t => t.Id == dto.OrderId);
-        Attachment file = await this.attachmantService.UploadAsync(dto.File);
+        Attachment file = await this.attachmantService.UploadAsync(attachment);
 
         PaymentResultDto result = new PaymentResultDto
         {

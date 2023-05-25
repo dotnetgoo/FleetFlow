@@ -3,6 +3,8 @@ using FleetFlow.Service.Interfaces;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.Payments;
 using FleetFlow.Api.Models;
+using FleetFlow.Service.DTOs.Attachments;
+using FleetFlow.Api.Extensions;
 
 namespace FleetFlow.Api.Controllers;
 
@@ -15,14 +17,13 @@ public class PaymentsController : RestfulSense
     }
 
     [HttpPost]
-    public async ValueTask<IActionResult> PostAsync([FromForm] PaymentCreationDto dto)
+    public async ValueTask<IActionResult> PostAsync(PaymentCreationDto dto, [FromForm] IFormFile file)
         => Ok(new Response
-        {
-            Code = 200,
-            Message = "OK",
-            Data = await this.payementService.AddAsync(dto)
-        });
-
+           {
+               Code = 200,
+               Message = "OK",
+               Data = await this.payementService.AddAsync(dto, await file.ToAttachmentAsync())
+           });
 
     [HttpPut("id:long")]
     public async ValueTask<IActionResult> PutAsync(long id, PaymentCreationDto dto)
