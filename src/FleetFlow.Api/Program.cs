@@ -3,12 +3,10 @@ using FleetFlow.Api.Middlewares;
 using FleetFlow.Api.Models;
 using FleetFlow.DAL.DbContexts;
 using FleetFlow.Service.Mappers;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using FleetFlow.Shared.Helpers;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using Serilog;
-using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,43 +15,19 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddHttpContextAccessor();
+builder.Services.ConfigureSwagger();
 
+builder.Services.AddHttpContextAccessor();
 
 // terminal's location should be in FleetFlow.Api
 // dotnet ef --project ..\FleetFlow.DAL\ migrations add [MigrationName]
-builder.Services.AddDbContext<FleetFlowDbContext>(options => 
+builder.Services.AddDbContext<FleetFlowDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Serilog
-//var logger = new LoggerConfiguration()
-//    .ReadFrom.Configuration(builder.Configuration)
-//    .Enrich.FromLogContext()
-//    .CreateLogger();
-//builder.Logging.ClearProviders();
-//builder.Logging.AddSerilog(logger);
-
 builder.Services.AddCustomServices();
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-}).AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = false,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["JWT:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-        ClockSkew = TimeSpan.Zero
-    };
-});
+builder.Services.AddAutoMapper(typeof(MapperProfile));
+
+builder.Services.AddJwtService(builder.Configuration);
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("Administration", p => p.RequireRole("Admin", "SuperAdmin"));
@@ -61,22 +35,23 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("Worker", p => p.RequireRole("Driver", "Picker", "Packer"));
 });
 
-builder.Services.AddAutoMapper(typeof(MapperProfile));
-
 // Convert Api Url name to dashcase
 builder.Services.AddControllers(options =>
 {
     options.Conventions.Add(new RouteTokenTransformerConvention(
                                         new ConfigureApiUrlName()));
 });
-
-
+builder.Services.AddControllersWithViews()
+    .AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 var app = builder.Build();
 
 // Updates db in early startup based on latest migration
 app.ApplyMigrations();
 app.InitAccessor();
 
+// Getting wwwroot path
+//EnvironmentHelper.WebRootPath = app.Services.GetRequiredService<IWebHostEnvironment>().WebRootPath;
+EnvironmentHelper.WebRootPath = Path.GetFullPath("wwwroot");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

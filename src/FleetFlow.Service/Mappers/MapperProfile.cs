@@ -1,11 +1,16 @@
 ﻿using AutoMapper;
 using FleetFlow.Domain.Entities;
+using FleetFlow.Domain.Entities.Addresses;
+using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Domain.Entities.Products;
+using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Service.DTOs.Address;
 using FleetFlow.Service.DTOs.Carts;
 using FleetFlow.Service.DTOs.Location;
 using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Service.DTOs.Product;
 using FleetFlow.Service.DTOs.User;
+using Location = FleetFlow.Domain.Entities.Warehouses.Location;
 
 namespace FleetFlow.Service.Mappers
 {
@@ -28,6 +33,7 @@ namespace FleetFlow.Service.Mappers
 
             CreateMap<CartItem, CartItemResultDto>().ReverseMap();
             CreateMap<Order, OrderResultDto>().ReverseMap();
+            CreateMap<OrderItem, OrderItemForResultDto>().ReverseMap();
         }
     }
 }

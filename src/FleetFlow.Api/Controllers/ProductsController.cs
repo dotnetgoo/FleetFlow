@@ -1,7 +1,8 @@
-﻿using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities;
+﻿using FleetFlow.Api.Models;
+using FleetFlow.Domain.Congirations;
+using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Service.DTOs.Product;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Products;
 using FleetFlow.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,7 +25,12 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpGet, AllowAnonymous]
         public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
-            => Ok(await productService.RetrieveAllAsync(@params));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await productService.RetrieveAllAsync(@params)
+            });
 
 
         /// <summary>
@@ -35,7 +41,12 @@ namespace FleetFlow.Api.Controllers
         [HttpGet("id"), AllowAnonymous]
         public async ValueTask<IActionResult> GetAsync(long id)
         {
-            return Ok(await productService.RetrieveByIdAsync(id));
+            return Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await productService.RetrieveByIdAsync(id)
+            });
         }
 
         /// <summary>
@@ -45,7 +56,12 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpPost, Authorize(Roles = "Admin,Merchant")]
         public async ValueTask<IActionResult> PostAsync([FromBody] ProductForCreationDto dto)
-            => Ok(await this.productService.AddAsync(dto));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await this.productService.AddAsync(dto)
+            });
 
         /// <summary>
         /// Update product
@@ -55,10 +71,12 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpPut("id")]
         public async ValueTask<ActionResult<Product>> PutAsync(long id, [FromBody] ProductForCreationDto dto)
-        {
-            var product = await productService.ModifyAsync(id, dto);
-            return Ok(product);
-        }
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await productService.ModifyAsync(id, dto)
+            });
 
         /// <summary>
         /// Delete user by id
@@ -67,6 +85,11 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpDelete("id")]
         public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
-            => Ok(await productService.RemoveAsync(id));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await productService.RemoveAsync(id)
+            });
     }
 }

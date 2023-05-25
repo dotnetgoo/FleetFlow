@@ -1,11 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using FleetFlow.Api.Models;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.User;
-using FleetFlow.Service.Interfaces;
-using FleetFlow.Service.Services;
+using FleetFlow.Service.Interfaces.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,9 +21,14 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="params"></param>
         /// <returns></returns>
-        [HttpGet, Authorize("Administration")]
+        [HttpGet, Authorize("Administration")] 
         public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
-            => Ok(await userService.RetrieveAllAsync(@params));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await userService.RetrieveAllAsync(@params)
+            });
 
         /// <summary>
         /// Get by id
@@ -36,16 +37,26 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpGet("id")]
         public async ValueTask<IActionResult> GetAsync(long id)
-            => Ok(await userService.RetrieveByIdAsync(id));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await userService.RetrieveByIdAsync(id)
+            });
 
         /// <summary>
         /// Create new users
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost, AllowAnonymous]  
+        [HttpPost, AllowAnonymous]
         public async ValueTask<ActionResult<UserForResultDto>> PostAsync(UserForCreationDto dto)
-            => Ok(await userService.AddAsync(dto));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await userService.AddAsync(dto)
+            });
 
         /// <summary>
         /// Update users info
@@ -55,7 +66,12 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpPut("id")]
         public async ValueTask<ActionResult<UserForResultDto>> PutAsync(long id, UserForUpdateDto dto)
-            => Ok(await userService.ModifyAsync(id, dto));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await userService.ModifyAsync(id, dto)
+            });
 
         /// <summary>
         /// Delete by id
@@ -64,7 +80,12 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpDelete("id")]
         public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
-            => Ok(await userService.RemoveAsync(id));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await userService.RemoveAsync(id)
+            });
 
         /// <summary>
         /// Change user password
@@ -73,6 +94,11 @@ namespace FleetFlow.Api.Controllers
         /// <returns></returns>
         [HttpPut("change-password")]
         public async ValueTask<ActionResult<UserForResultDto>> ChangePasswordAsync(UserForChangePasswordDto dto)
-            => Ok(await userService.ChangePasswordAsync(dto));  
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await userService.ChangePasswordAsync(dto)
+            });
     }
 }

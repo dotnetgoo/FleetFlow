@@ -1,5 +1,7 @@
-﻿using FleetFlow.Service.DTOs.Carts;
-using FleetFlow.Service.Interfaces;
+﻿using FleetFlow.Api.Models;
+using FleetFlow.Service.DTOs.Carts;
+using FleetFlow.Service.Interfaces.Orders;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
@@ -13,16 +15,31 @@ namespace FleetFlow.Api.Controllers
             this.cartService = cartService;
         }
 
-        [HttpPost("items/add")]
+        [HttpPost("items/add"), Authorize]
         public async ValueTask<IActionResult> AddItemAsync([FromBody] CartItemCreationDto itemDto)
-            => Ok(await this.cartService.AddItemAsync(itemDto));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await this.cartService.AddItemAsync(itemDto)
+            });
 
         [HttpDelete("items/{id}")]
         public async ValueTask<IActionResult> DeleteItemAsync([FromRoute(Name = "id")] long itemId)
-            => Ok(await this.cartService.RemoveItemAsync(itemId));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await this.cartService.RemoveItemAsync(itemId)
+            });
 
         [HttpPut("items/{id}")]
         public async ValueTask<IActionResult> PutItemAsync([FromRoute(Name = "Id")] long itemId, int amount)
-            => Ok(await this.cartService.UpdateItemAsync(itemId, amount));
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await this.cartService.UpdateItemAsync(itemId, amount)
+            });
     }
 }
