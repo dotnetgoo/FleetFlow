@@ -5,10 +5,13 @@ using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Orders.Feedbacks;
 using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Domain.Entities.Users;
+using FleetFlow.Domain.Entities.Warehouses;
 using FleetFlow.Service.DTOs.Address;
 using FleetFlow.Service.DTOs.Carts;
 using FleetFlow.Service.DTOs.Discounts;
 using FleetFlow.Service.DTOs.Feedbacks;
+using FleetFlow.Service.DTOs.Inventories;
+using FleetFlow.Service.DTOs.InventoryLogs;
 using FleetFlow.Service.DTOs.Location;
 using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Service.DTOs.Product;
@@ -45,7 +48,12 @@ namespace FleetFlow.Service.Mappers
             CreateMap<Discount, DiscountCreationDto>().ReverseMap();
             CreateMap<Discount, DiscountUpdateDto>().ReverseMap();
 
+            CreateMap<Inventory, InventoryCreationDto>().ReverseMap();
+            CreateMap<Inventory, InventoryForResultDto>().ReverseMap();
+            CreateMap<Inventory, InventoryForUpdateDto>().ReverseMap();
 
+            CreateMap<InventoryLog, InventoryLogForCreationDto>().ReverseMap();
+            CreateMap<InventoryLog, InventoryLogForResultDto>().ReverseMap();
         }
     }
 }
