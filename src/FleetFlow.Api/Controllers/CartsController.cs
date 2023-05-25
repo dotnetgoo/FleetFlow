@@ -15,7 +15,7 @@ namespace FleetFlow.Api.Controllers
             this.cartService = cartService;
         }
 
-        [HttpPost("items/add"), Authorize]
+        [HttpPost("items/add")]
         public async ValueTask<IActionResult> AddItemAsync([FromBody] CartItemCreationDto itemDto)
             => Ok(new Response
             {
