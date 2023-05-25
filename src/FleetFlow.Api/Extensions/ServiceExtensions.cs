@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.DAL.Repositories;
 using FleetFlow.Service.Interfaces.Addresses;
@@ -22,6 +17,7 @@ using FleetFlow.Service.Services.Warehouses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 
 namespace FleetFlow.Api.Extensions
 {
@@ -49,7 +45,7 @@ namespace FleetFlow.Api.Extensions
             services.AddScoped<IFeedbackService, FeedbackService>();
             services.AddScoped<IRoleService, RoleService>();
         }
-        
+
         /// <summary>
         /// Add JWT credentials from appsettings.json and configure it
         /// </summary>
