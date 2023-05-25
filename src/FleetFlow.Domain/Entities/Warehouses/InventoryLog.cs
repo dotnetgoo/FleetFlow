@@ -8,6 +8,7 @@ namespace FleetFlow.Domain.Entities.Warehouses
         public long ProductId { get; set; }
         public Product Product { get; set; }
         public int Amount { get; set; }
-
+        public string Description { get; set; }
+        public bool RemovedOrNot { get; set; }
     }
 }
