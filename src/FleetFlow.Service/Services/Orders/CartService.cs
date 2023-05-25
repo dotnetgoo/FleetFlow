@@ -4,10 +4,10 @@ using FleetFlow.Domain.Entities;
 using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Service.DTOs.Carts;
 using FleetFlow.Service.Exceptions;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Shared.Helpers;
 
-namespace FleetFlow.Service.Services
+namespace FleetFlow.Service.Services.Orders
 {
     public class CartService : ICartService
     {
@@ -29,7 +29,7 @@ namespace FleetFlow.Service.Services
 
         public async ValueTask<CartItemResultDto> AddItemAsync(CartItemCreationDto dto)
         {
-            var product = await this.productRepository.SelectAsync(u => u.Id == dto.ProductId && !u.IsDeleted);
+            var product = await productRepository.SelectAsync(u => u.Id == dto.ProductId && !u.IsDeleted);
 
             if (product is null)
                 throw new FleetFlowException(404, "Product not found");
@@ -38,7 +38,7 @@ namespace FleetFlow.Service.Services
             // TODO:
 
             // create new cart item
-            var cart = await this.cartRepository.SelectAsync(cart => cart.UserId == HttpContextHelper.UserId);
+            var cart = await cartRepository.SelectAsync(cart => cart.UserId == HttpContextHelper.UserId);
             if (cart is null)
                 throw new FleetFlowException(404, "Cart not found");
 
@@ -48,22 +48,22 @@ namespace FleetFlow.Service.Services
                 CartId = cart.Id,
                 ProductId = dto.ProductId
             };
-            var insertedCartItem = await this.cartItemRepository.InsertAsync(cartItem);
-            await this.cartItemRepository.SaveAsync();
+            var insertedCartItem = await cartItemRepository.InsertAsync(cartItem);
+            await cartItemRepository.SaveAsync();
 
-            return this.mapper.Map<CartItemResultDto>(insertedCartItem);
+            return mapper.Map<CartItemResultDto>(insertedCartItem);
         }
 
         public async ValueTask<object> RemoveItemAsync(long cartItemId)
         {
             // Checking of is exist the CartItem on this cartItemId 
-            var cartItem = await this.cartItemRepository.SelectAsync(cartItem => cartItem.Id == cartItemId);
+            var cartItem = await cartItemRepository.SelectAsync(cartItem => cartItem.Id == cartItemId);
             if (cartItem is null)
                 throw new FleetFlowException(404, "CartItem not found");
 
             // Removing existing cartItem 
-            await this.cartItemRepository.DeleteAsync(cartItem => cartItem.Id == cartItemId);
-            await this.cartItemRepository.SaveAsync();
+            await cartItemRepository.DeleteAsync(cartItem => cartItem.Id == cartItemId);
+            await cartItemRepository.SaveAsync();
 
             return true;
         }
@@ -78,7 +78,7 @@ namespace FleetFlow.Service.Services
         public async ValueTask<object> UpdateItemAsync(long itemId, int amount)
         {
             // checking of is exist the CartItem on this cartItemId 
-            var cartItem = await this.cartItemRepository.SelectAsync(cartItem => cartItem.Id == itemId);
+            var cartItem = await cartItemRepository.SelectAsync(cartItem => cartItem.Id == itemId);
             if (cartItem is null)
                 throw new FleetFlowException(404, "CartItem not found");
 
@@ -88,8 +88,8 @@ namespace FleetFlow.Service.Services
 
             cartItem.Amount = amount;
 
-            cartItem = this.cartItemRepository.Update(cartItem);
-            await this.cartItemRepository.SaveAsync();
+            cartItem = cartItemRepository.Update(cartItem);
+            await cartItemRepository.SaveAsync();
 
             return cartItem;
         }

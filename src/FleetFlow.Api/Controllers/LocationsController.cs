@@ -1,7 +1,7 @@
 ﻿using FleetFlow.Api.Models;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.Location;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Warehouses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers

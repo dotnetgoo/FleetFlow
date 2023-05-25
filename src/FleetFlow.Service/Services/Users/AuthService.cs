@@ -1,7 +1,7 @@
 ﻿using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Service.DTOs.Login;
 using FleetFlow.Service.Exceptions;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Users;
 using FleetFlow.Shared.Helpers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -9,7 +9,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace FleetFlow.Service.Services;
+namespace FleetFlow.Service.Services.Users;
 
 public class AuthService : IAuthService
 {
@@ -24,7 +24,7 @@ public class AuthService : IAuthService
 
     public async Task<LoginResultDto> AuthenticateAsync(string email, string password)
     {
-        var user = await this.userService.RetrieveByEmailAsync(email);
+        var user = await userService.RetrieveByEmailAsync(email);
         if (user == null || !PasswordHelper.Verify(password, user.Password))
             throw new FleetFlowException(400, "Email or password is incorrect");
 
@@ -53,7 +53,7 @@ public class AuthService : IAuthService
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256Signature)
         };
-        
+
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
     }

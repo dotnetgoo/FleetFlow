@@ -1,4 +1,4 @@
-﻿using FleetFlow.Service.Interfaces;
+﻿using FleetFlow.Service.Interfaces.Users;
 
 namespace FleetFlow.GraphQL.Mutations
 {

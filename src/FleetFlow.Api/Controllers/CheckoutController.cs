@@ -1,6 +1,6 @@
 ﻿using FleetFlow.Api.Models;
 using FleetFlow.Service.DTOs.Address;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Orders;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers

@@ -1,5 +1,5 @@
 ﻿using FleetFlow.Service.DTOs.Carts;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Orders;
 
 namespace FleetFlow.GraphQL.Mutations
 {

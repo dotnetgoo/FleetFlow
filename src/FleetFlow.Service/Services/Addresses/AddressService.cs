@@ -5,10 +5,10 @@ using FleetFlow.Domain.Entities.Addresses;
 using FleetFlow.Service.DTOs.Address;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Addresses;
 using Microsoft.EntityFrameworkCore;
 
-namespace FleetFlow.Service.Services;
+namespace FleetFlow.Service.Services.Addresses;
 
 public class AddressService : IAddressService
 {
@@ -22,62 +22,62 @@ public class AddressService : IAddressService
 
     public async Task<AddressForResultDto> AddAsync(AddressForCreationDto address)
     {
-        var mapped = this.mapper.Map<Address>(address);
+        var mapped = mapper.Map<Address>(address);
 
-        var insertResult = await this.addressRepository.InsertAsync(mapped);
-        await this.addressRepository.SaveAsync();
+        var insertResult = await addressRepository.InsertAsync(mapped);
+        await addressRepository.SaveAsync();
 
-        return this.mapper.Map<AddressForResultDto>(insertResult);
+        return mapper.Map<AddressForResultDto>(insertResult);
     }
 
     public async Task<bool> DeleteByIdAsync(long id)
     {
-        var CheckAddress = await this.addressRepository.SelectAsync(a => a.Id == id);
+        var CheckAddress = await addressRepository.SelectAsync(a => a.Id == id);
 
-        bool IsDeleted = await this.addressRepository.DeleteAsync(a => a.Id == id);
+        bool IsDeleted = await addressRepository.DeleteAsync(a => a.Id == id);
 
-        if (!IsDeleted) 
+        if (!IsDeleted)
             throw new FleetFlowException(404, "Couldn't find product for this given Id");
 
-        await this.addressRepository.SaveAsync();
+        await addressRepository.SaveAsync();
         return IsDeleted;
     }
 
     public async Task<IEnumerable<AddressForResultDto>> GetAllAsync(PaginationParams @params)
     {
-        var addressQuery = this.addressRepository.SelectAll();
+        var addressQuery = addressRepository.SelectAll();
 
         if (addressQuery is null)
             throw new FleetFlowException(404, "Address not found");
 
         var addresses = await addressQuery.ToPagedList(@params).ToListAsync();
-        return this.mapper.Map<IEnumerable<AddressForResultDto>>(addresses);
+        return mapper.Map<IEnumerable<AddressForResultDto>>(addresses);
     }
 
     public async Task<AddressForResultDto> GetByIdAsync(long id)
     {
-        var address = await this.addressRepository.SelectAsync(a => a.Id == id);
+        var address = await addressRepository.SelectAsync(a => a.Id == id);
 
         if (address is null)
             throw new FleetFlowException(404, "Address Not Found");
 
-        var mapped = this.mapper.Map<AddressForResultDto>(address);
+        var mapped = mapper.Map<AddressForResultDto>(address);
 
         return mapped;
     }
 
     public async Task<AddressForResultDto> UpdateByIdAsync(long id, AddressForCreationDto dto)
     {
-        var address = await this.addressRepository.SelectAsync(a => a.Id == id);
+        var address = await addressRepository.SelectAsync(a => a.Id == id);
 
         if (address is null)
             throw new FleetFlowException(404, "Couldn't find Address");
 
-        var mapped = this.mapper.Map(dto, address);
+        var mapped = mapper.Map(dto, address);
         mapped.UpdatedAt = DateTime.UtcNow;
 
-        await this.addressRepository.SaveAsync();
+        await addressRepository.SaveAsync();
 
-        return this.mapper.Map<AddressForResultDto>(mapped);
+        return mapper.Map<AddressForResultDto>(mapped);
     }
 }

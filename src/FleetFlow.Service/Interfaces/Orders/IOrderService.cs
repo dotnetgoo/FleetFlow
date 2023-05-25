@@ -2,7 +2,7 @@
 using FleetFlow.Domain.Enums;
 using FleetFlow.Service.DTOs.Orders;
 
-namespace FleetFlow.Service.Interfaces
+namespace FleetFlow.Service.Interfaces.Orders
 {
     public interface IOrderService
     {

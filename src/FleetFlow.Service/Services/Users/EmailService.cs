@@ -1,10 +1,10 @@
-﻿using FleetFlow.Service.Interfaces;
+﻿using FleetFlow.Service.Interfaces.Users;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
 
-namespace FleetFlow.Service.Services
+namespace FleetFlow.Service.Services.Users
 {
     public class EmailService : IEmailService
     {

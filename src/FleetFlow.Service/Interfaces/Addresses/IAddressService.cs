@@ -3,7 +3,7 @@ using FleetFlow.Domain.Entities;
 using FleetFlow.Service.DTOs.Address;
 using System.Linq.Expressions;
 
-namespace FleetFlow.Service.Interfaces
+namespace FleetFlow.Service.Interfaces.Addresses
 {
     public interface IAddressService
     {

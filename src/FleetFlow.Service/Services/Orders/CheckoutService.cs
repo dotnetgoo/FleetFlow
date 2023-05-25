@@ -5,11 +5,12 @@ using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Enums;
 using FleetFlow.Service.DTOs.Address;
 using FleetFlow.Service.Exceptions;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Addresses;
+using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;
 
-namespace FleetFlow.Service.Services
+namespace FleetFlow.Service.Services.Orders
 {
     public class CheckoutService : ICheckoutService
     {
@@ -27,27 +28,27 @@ namespace FleetFlow.Service.Services
 
         public async ValueTask<AddressForResultDto> AssignAddressAsync(AddressForCreationDto addressDto)
         {
-            var order = await this.orderRepository.SelectAll(o => o.UserId == HttpContextHelper.UserId
+            var order = await orderRepository.SelectAll(o => o.UserId == HttpContextHelper.UserId
                 && o.Status == OrderStatus.Checkout)
                 .OrderBy(o => o.Id)
                 .LastOrDefaultAsync();
             if (order == null)
                 throw new FleetFlowException(404, "Order not found in 'checkout' status");
 
-            order.Address = this.mapper.Map<Address>(addressDto);
+            order.Address = mapper.Map<Address>(addressDto);
 
-            await this.orderRepository.SaveAsync();
+            await orderRepository.SaveAsync();
 
-            return this.mapper.Map<AddressForResultDto>(order.Address);
+            return mapper.Map<AddressForResultDto>(order.Address);
         }
 
         public async ValueTask<AddressForResultDto> RetrieveLastAddressAsync()
         {
-            var order = await this.orderRepository.SelectAll(o => o.UserId == HttpContextHelper.UserId)
+            var order = await orderRepository.SelectAll(o => o.UserId == HttpContextHelper.UserId)
                 .OrderBy(o => o.Id)
                 .LastOrDefaultAsync();
 
-            return await this.addressService.GetByIdAsync(order?.AddressId ?? 0);
+            return await addressService.GetByIdAsync(order?.AddressId ?? 0);
         }
     }
 }

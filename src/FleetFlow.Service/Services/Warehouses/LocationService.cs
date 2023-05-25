@@ -4,12 +4,12 @@ using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.Location;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Warehouses;
 using FleetFlow.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;
 using Location = FleetFlow.Domain.Entities.Warehouses.Location;
 
-namespace FleetFlow.Service.Services
+namespace FleetFlow.Service.Services.Warehouses
 {
     public class LocationService : ILocationService
     {
@@ -25,64 +25,64 @@ namespace FleetFlow.Service.Services
         public async Task<LocationForResultDto> AddAsync(LocationForCreationDto dto)
         {
             // Check for exist Address
-            var location = await this.locationRepository.SelectAsync(x => x.Code.Equals(dto.Code));
+            var location = await locationRepository.SelectAsync(x => x.Code.Equals(dto.Code));
             if (location is not null && !location.IsDeleted)
                 throw new FleetFlowException(409, "Location already exist");
 
-            var mappedLocation = this.mapper.Map<Location>(dto);
+            var mappedLocation = mapper.Map<Location>(dto);
             mappedLocation.CreatedAt = DateTime.UtcNow;
-            var addedLocation = await this.locationRepository.InsertAsync(mappedLocation);
+            var addedLocation = await locationRepository.InsertAsync(mappedLocation);
 
-            await this.locationRepository.SaveAsync();
+            await locationRepository.SaveAsync();
 
-            return this.mapper.Map<LocationForResultDto>(addedLocation);
+            return mapper.Map<LocationForResultDto>(addedLocation);
 
         }
 
         public async Task<bool> RemoveAsync(long id)
         {
-            var location = await this.locationRepository.SelectAsync(l => l.Id == id);
-            if (location is null || location.IsDeleted) 
+            var location = await locationRepository.SelectAsync(l => l.Id == id);
+            if (location is null || location.IsDeleted)
                 throw new FleetFlowException(404, "Not found");
 
-            await this.locationRepository.DeleteAsync(l => l.Id == id);
+            await locationRepository.DeleteAsync(l => l.Id == id);
             location.DeletedBy = HttpContextHelper.UserId;
-            await this.locationRepository.SaveAsync();
+            await locationRepository.SaveAsync();
 
             return true;
         }
 
         public async Task<IEnumerable<LocationForResultDto>> RetrieveAllAsync(PaginationParams @params)
         {
-            var locations = await this.locationRepository.SelectAll()
+            var locations = await locationRepository.SelectAll()
                 .Where(l => !l.IsDeleted)
                 .ToPagedList(@params)
                 .ToListAsync();
 
-            return this.mapper.Map<IEnumerable<LocationForResultDto>>(locations);
+            return mapper.Map<IEnumerable<LocationForResultDto>>(locations);
         }
 
         public async Task<LocationForResultDto> RetrieveByIdAsync(long id)
         {
-            var location = await this.locationRepository.SelectAsync(l => l.Id == id);
+            var location = await locationRepository.SelectAsync(l => l.Id == id);
             if (location is null || location.IsDeleted)
                 throw new FleetFlowException(404, "Not Found");
 
-            return this.mapper.Map<LocationForResultDto>(location);
+            return mapper.Map<LocationForResultDto>(location);
         }
 
         public async Task<LocationForResultDto> ModifyAsync(long id, LocationForCreationDto dto)
         {
-            var location = await this.locationRepository.SelectAsync(l => l.Id == id);
+            var location = await locationRepository.SelectAsync(l => l.Id == id);
             if (location is null || location.IsDeleted)
                 throw new FleetFlowException(404, "Not found");
 
-            var modifiedLocation = this.mapper.Map(dto, location);
+            var modifiedLocation = mapper.Map(dto, location);
             modifiedLocation.UpdatedAt = DateTime.UtcNow;
             modifiedLocation.UpdatedBy = HttpContextHelper.UserId;
-            await this.locationRepository.SaveAsync();
+            await locationRepository.SaveAsync();
 
-            return this.mapper.Map<LocationForResultDto>(modifiedLocation);
+            return mapper.Map<LocationForResultDto>(modifiedLocation);
         }
     }
 }

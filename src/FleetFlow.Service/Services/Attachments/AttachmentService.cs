@@ -1,11 +1,11 @@
 ﻿using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Entities.Attachments;
 using FleetFlow.Service.DTOs.Attachments;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Attachments;
 using FleetFlow.Shared.Helpers;
 using Path = System.IO.Path;
 
-namespace FleetFlow.Service.Services;
+namespace FleetFlow.Service.Services.Attachments;
 
 public class AttachmentService : IAttachmentService
 {
@@ -40,6 +40,6 @@ public class AttachmentService : IAttachmentService
             FilePath = fullPath,
             CreatedAt = DateTime.UtcNow,
         };
-        return await this.attachmentRepository.InsertAsync(attachment);
+        return await attachmentRepository.InsertAsync(attachment);
     }
 }

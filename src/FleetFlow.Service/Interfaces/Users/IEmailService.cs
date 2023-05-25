@@ -1,4 +1,4 @@
-﻿namespace FleetFlow.Service.Interfaces
+﻿namespace FleetFlow.Service.Interfaces.Users
 {
     public interface IEmailService
     {

@@ -2,7 +2,7 @@
 using FleetFlow.GraphQL.Extensions;
 using FleetFlow.Service.DTOs.Attachments;
 using FleetFlow.Service.DTOs.Payments;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Orders;
 
 namespace FleetFlow.GraphQL.Mutations
 {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FleetFlow.Service.Interfaces
+namespace FleetFlow.Service.Interfaces.Orders
 {
     public interface ICartService
     {

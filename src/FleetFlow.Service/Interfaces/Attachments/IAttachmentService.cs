@@ -1,7 +1,7 @@
 ﻿using FleetFlow.Domain.Entities.Attachments;
 using FleetFlow.Service.DTOs.Attachments;
 
-namespace FleetFlow.Service.Interfaces;
+namespace FleetFlow.Service.Interfaces.Attachments;
 
 public interface IAttachmentService
 {

@@ -4,15 +4,15 @@ using FleetFlow.Shared.Helpers;
 using FleetFlow.Domain.Entities;
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Service.Exceptions;
-using FleetFlow.Service.Interfaces;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Service.Extentions;
 using Microsoft.EntityFrameworkCore;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Users;
+using FleetFlow.Service.Interfaces.Orders;
 
-namespace FleetFlow.Service.Services
+namespace FleetFlow.Service.Services.Orders
 {
     public class OrderService : IOrderService
     {
@@ -35,7 +35,7 @@ namespace FleetFlow.Service.Services
         {
             var httpContext = HttpContextHelper.HttpContext;
             string role = HttpContextHelper.UserRole;
-            var cart = await this.cartRepository.SelectAsync(c => c.UserId == HttpContextHelper.UserId, new string[] { "Items" });
+            var cart = await cartRepository.SelectAsync(c => c.UserId == HttpContextHelper.UserId, new string[] { "Items" });
             if (cart == null)
                 throw new FleetFlowException(404, "Cart not found");
 
@@ -56,15 +56,15 @@ namespace FleetFlow.Service.Services
                 });
             }
             order.Actions = new List<OrderAction>();
-            var createdOrder = await this.orderRepository.InsertAsync(order);
-            await this.orderRepository.SaveAsync();
+            var createdOrder = await orderRepository.InsertAsync(order);
+            await orderRepository.SaveAsync();
 
-            return this.mapper.Map<OrderResultDto>(createdOrder);
+            return mapper.Map<OrderResultDto>(createdOrder);
         }
 
         public async ValueTask<OrderResultDto> CancelAsync(long id)
         {
-            var order = await this.orderRepository.SelectAsync(order => !order.IsDeleted && order.Id == id, new string[] { "User", "Actions" });
+            var order = await orderRepository.SelectAsync(order => !order.IsDeleted && order.Id == id, new string[] { "User", "Actions" });
             if (order is null)
                 throw new FleetFlowException(404, "Order is not found");
 
@@ -79,9 +79,9 @@ namespace FleetFlow.Service.Services
             // Creating new order action
             order.Actions.Add(new OrderAction() { Status = OrderStatus.Cancelled });
 
-            await this.orderRepository.SaveAsync();
+            await orderRepository.SaveAsync();
 
-            var result = this.mapper.Map<OrderResultDto>(order);
+            var result = mapper.Map<OrderResultDto>(order);
             // is this best practice to avoid object cycle?
             result.User.Orders = null;
 
@@ -90,7 +90,7 @@ namespace FleetFlow.Service.Services
 
         public async ValueTask<bool> RemoveAsync(long id)
         {
-            var isDeleted = await this.orderRepository.DeleteAsync(order => order.Id == id);
+            var isDeleted = await orderRepository.DeleteAsync(order => order.Id == id);
             if (!isDeleted)
                 throw new FleetFlowException(404, "Order is not found");
 
@@ -99,7 +99,7 @@ namespace FleetFlow.Service.Services
 
         public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllAsync(PaginationParams @params, OrderStatus status = OrderStatus.Pending)
         {
-            var orders = await this.orderRepository
+            var orders = await orderRepository
                 .SelectAll(order => !order.IsDeleted && order.Status == status)
                 .ToPagedList(@params)
                 .ToListAsync();
@@ -107,50 +107,50 @@ namespace FleetFlow.Service.Services
             if (!orders.Any())
                 throw new FleetFlowException(400, "No orders found.");
 
-            return this.mapper.Map<IEnumerable<OrderResultDto>>(orders);
+            return mapper.Map<IEnumerable<OrderResultDto>>(orders);
         }
 
         public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByClientIdAsync(long clientId)
         {
-            var orders = await this.orderRepository
+            var orders = await orderRepository
                 .SelectAll(order => !order.IsDeleted && order.UserId == clientId)
                 .ToListAsync();
             // checking something exists or not
             if (!orders.Any())
                 throw new FleetFlowException(400, "No orders found.");
 
-            return this.mapper.Map<IEnumerable<OrderResultDto>>(orders);
+            return mapper.Map<IEnumerable<OrderResultDto>>(orders);
         }
 
         public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByPhoneAsync(PaginationParams @params, string phone, OrderStatus? status = null)
         {
-            var user = await this.userRepository.SelectAsync(user => !user.IsDeleted && user.Phone == phone);
+            var user = await userRepository.SelectAsync(user => !user.IsDeleted && user.Phone == phone);
             if (user is null)
                 throw new FleetFlowException(404, "User is not found");
 
-            var ordersQuery = this.orderRepository
+            var ordersQuery = orderRepository
                 .SelectAll(order => !order.IsDeleted && order.UserId == user.Id);
             if (status is not null)
                 ordersQuery = ordersQuery.Where(order => order.Status == status);
 
             ordersQuery = ordersQuery.ToPagedList(@params);
-        
+
             var orders = await ordersQuery.ToListAsync();
-            
+
             // checking something exists or not
             if (!orders.Any())
                 throw new FleetFlowException(400, "No orders found.");
 
-            return this.mapper.Map<IEnumerable<OrderResultDto>>(orders);
+            return mapper.Map<IEnumerable<OrderResultDto>>(orders);
         }
 
         public async ValueTask<OrderResultDto> RetrieveAsync(long id)
         {
-            Order order = await this.orderRepository.SelectAsync(order => !order.IsDeleted && order.Id == id, new string[] { "Address", "User" });
+            Order order = await orderRepository.SelectAsync(order => !order.IsDeleted && order.Id == id, new string[] { "Address", "User" });
             if (order is null)
                 throw new FleetFlowException(404, "Order is not found");
 
-            return this.mapper.Map<OrderResultDto>(order);
+            return mapper.Map<OrderResultDto>(order);
         }
 
         public ValueTask<OrderResultDto> StartPreparingAsync(long id)

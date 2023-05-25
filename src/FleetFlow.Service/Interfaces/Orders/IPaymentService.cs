@@ -3,7 +3,7 @@ using FleetFlow.Domain.Enums;
 using FleetFlow.Service.DTOs.Attachments;
 using FleetFlow.Service.DTOs.Payments;
 
-namespace FleetFlow.Service.Interfaces;
+namespace FleetFlow.Service.Interfaces.Orders;
 
 public interface IPaymentService
 {
@@ -12,5 +12,5 @@ public interface IPaymentService
     Task<PaymentResultDto> ModifyAsync(long id, PaymentCreationDto dto);
     Task<IEnumerable<PaymentResultDto>> RetrieveAllAsync(PaginationParams @params);
     Task<PaymentResultDto> RetrieveByIdAsync(long id);
-    Task<PaymentResultDto> ChangeStatusAsync(long id, PaymentStatus status); 
+    Task<PaymentResultDto> ChangeStatusAsync(long id, PaymentStatus status);
 }

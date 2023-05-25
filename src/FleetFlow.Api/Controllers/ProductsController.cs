@@ -2,7 +2,7 @@
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Service.DTOs.Product;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Products;
 using FleetFlow.Service.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
