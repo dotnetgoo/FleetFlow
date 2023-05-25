@@ -1,6 +1,6 @@
 # FleetFlow
 The best delivering system with api, mobile, web application in .NET Core
-![alt text](https://raw.githubusercontent.com/kerakmas/picutres/main/Copy%20of%20Untitled%20Diagram.png)
+![alt text](https://raw.githubusercontent.com/kerakmas/picutres/main/Screenshot_59.png)
 Link: https://dbdiagram.io/d/645cc1c7dca9fb07c4e6bcd1
 
 # FleetFlow

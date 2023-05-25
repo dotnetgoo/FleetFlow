@@ -102,8 +102,8 @@ namespace FleetFlow.DAL.DbContexts
 
             modelBuilder.Entity<Discount>()
                 .HasOne(discount => discount.Product)
-                .WithOne(product => product.Discount)
-                .HasForeignKey<Discount>(discount => discount.ProductId)
+                .WithMany(product => product.Discounts)
+                .HasForeignKey(discount => discount.ProductId)
                 .OnDelete(DeleteBehavior.NoAction);
             #endregion
 
@@ -118,12 +118,12 @@ namespace FleetFlow.DAL.DbContexts
                 );
 
             modelBuilder.Entity<Location>().HasData(
-                new Location() { Id = 1, Code = "a1", Type = LocationType.Shelf, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 2, Code = "a2", Type = 0, Description = "In the beginning of entry", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 3, Code = "i7", Type = LocationType.Cart, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 4, Code = "i9", Type = LocationType.Shelf, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 5, Code = "m1", Type = LocationType.Cart, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 6, Code = "m2", Type = LocationType.Shelf, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null }
+                new Location() {Id = 1, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() {Id = 2, Description = "In the beginning of entry", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() {Id = 3, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() { Id = 4,  Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() { Id = 5, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() { Id = 6,  Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
 
             modelBuilder.Entity<Role>().HasData(
