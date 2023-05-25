@@ -25,7 +25,7 @@ namespace FleetFlow.Service.Services.Warehouses
         public async Task<LocationForResultDto> AddAsync(LocationForCreationDto dto)
         {
             // Check for exist Address
-            var location = await locationRepository.SelectAsync(x => x.Code.Equals(dto.Code));
+            var location = await locationRepository.SelectAsync(x => x.Name.Equals(dto.Name));
             if (location is not null && !location.IsDeleted)
                 throw new FleetFlowException(409, "Location already exist");
 

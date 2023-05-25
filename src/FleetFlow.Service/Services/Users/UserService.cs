@@ -2,6 +2,7 @@
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities;
+using FleetFlow.Domain.Entities.Authorizations;
 using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Domain.Enums;
 using FleetFlow.Service.DTOs.User;
@@ -108,10 +109,10 @@ public class UserService : IUserService
     /// <param name="params"></param>
     /// <param name="role"></param>
     /// <returns></returns>
-    public async Task<IEnumerable<UserForResultDto>> RetrieveAllByRoleAsync(PaginationParams @params, UserRole role = UserRole.Admin)
+    public async Task<IEnumerable<UserForResultDto>> RetrieveAllByRoleAsync(PaginationParams @params, long roleId)
     {
         var users = await userRepository.SelectAll()
-            .Where(u => u.Role == role && !u.IsDeleted)
+            .Where(u => u.RoleId == roleId && !u.IsDeleted)
             .ToPagedList(@params)
             .ToListAsync();
 
