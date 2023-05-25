@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Service.Interfaces.Orders;
+using FleetFlow.Domain.Entities.Authorizations;
 
 namespace FleetFlow.Service.Services.Orders
 {
@@ -20,15 +21,18 @@ namespace FleetFlow.Service.Services.Orders
         private readonly IRepository<Cart> cartRepository;
         private readonly IRepository<Order> orderRepository;
         private readonly IRepository<User> userRepository;
+        private readonly IRepository<Role> roleRepository;
         public OrderService(IRepository<Order> orderRepository,
             IRepository<Cart> cartRepository,
             IRepository<User> userRepository,
-            IMapper mapper)
+            IMapper mapper,
+            IRepository<Role> roleRepository)
         {
             this.orderRepository = orderRepository;
             this.cartRepository = cartRepository;
             this.mapper = mapper;
             this.userRepository = userRepository;
+            this.roleRepository = roleRepository;
         }
 
         public async ValueTask<OrderResultDto> AddAsync()
@@ -68,7 +72,9 @@ namespace FleetFlow.Service.Services.Orders
             if (order is null)
                 throw new FleetFlowException(404, "Order is not found");
 
-            if (order.User.Role != UserRole.Admin && order.UserId != HttpContextHelper.UserId)
+
+            var role = await this.roleRepository.SelectAsync(r => r.Name == "Admin");
+            if (order.User.Role != role && order.UserId != HttpContextHelper.UserId)
                 throw new FleetFlowException(400, "Invalid operation.");
 
             // TODO: Add business logic for canceled order.

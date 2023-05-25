@@ -57,7 +57,7 @@ namespace FleetFlow.GraphQL.Extensions
                 .AddQueryType<Query>()
                 .AddMutationType<Mutation>()
 
-                .AddTypes(typeof(UserType), typeof(UserRoleEnumType))
+                //.AddTypes(typeof(UserType), typeof(UserRoleEnumType))
                 .AddType<UploadType>();
         }
     }
