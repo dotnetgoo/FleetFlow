@@ -118,12 +118,12 @@ namespace FleetFlow.DAL.DbContexts
                 );
 
             modelBuilder.Entity<Location>().HasData(
-                new Location() { Id = 1, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 2, Description = "In the beginning of entry", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 3, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 4, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 5, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 6, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null }
+                new Location() {Id = 1, Name = "First", Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() {Id = 2, Name = "Second", Description = "In the beginning of entry", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() {Id = 3, Name = "Third", Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() { Id = 4,  Name = "Fourth", Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() { Id = 5, Name = "Fifth", Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() { Id = 6,  Name = "Sixth", Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
 
             modelBuilder.Entity<Role>().HasData(
