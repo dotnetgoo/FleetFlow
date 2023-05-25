@@ -366,3 +366,4 @@ FodyWeavers.xsd
 
 
 /src/FleetFlow.Api/appsettings.json
+/src/FleetFlow.DAL/Migrations/
