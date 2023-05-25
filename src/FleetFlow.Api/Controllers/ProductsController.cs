@@ -9,7 +9,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
 {
-    [Authorize]
     public class ProductsController : RestfulSense
     {
         private readonly IProductService productService;
@@ -23,7 +22,7 @@ namespace FleetFlow.Api.Controllers
         /// Get all products
         /// </summary>
         /// <returns></returns>
-        [HttpGet, AllowAnonymous]
+        [HttpGet]
         public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
             => Ok(new Response
             {
@@ -38,7 +37,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("id"), AllowAnonymous]
+        [HttpGet("id")]
         public async ValueTask<IActionResult> GetAsync(long id)
         {
             return Ok(new Response
@@ -54,7 +53,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost, Authorize(Roles = "Admin,Merchant")]
+        [HttpPost]
         public async ValueTask<IActionResult> PostAsync([FromBody] ProductForCreationDto dto)
             => Ok(new Response
             {
