@@ -101,8 +101,8 @@ namespace FleetFlow.DAL.DbContexts
 
             modelBuilder.Entity<Discount>()
                 .HasOne(discount => discount.Product)
-                .WithOne(product => product.Discount)
-                .HasForeignKey<Discount>(discount => discount.ProductId)
+                .WithMany(product => product.Discounts)
+                .HasForeignKey(discount => discount.ProductId)
                 .OnDelete(DeleteBehavior.NoAction);
             #endregion
 
