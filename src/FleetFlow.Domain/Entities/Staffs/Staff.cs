@@ -11,9 +11,9 @@ namespace FleetFlow.Domain.Entities.Staffs
 {
     public class Staff : Auditable
     {
-        public int RoleId { get; set; }
+        public long RoleId { get; set; }
         public Role Role { get; set; }
-        public int UserId { get; set; }
+        public long UserId { get; set; }
         public User User { get; set; }
     }
 }
