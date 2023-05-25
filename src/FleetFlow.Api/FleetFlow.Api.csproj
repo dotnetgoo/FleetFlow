@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <Folder Include="Helpers\" />
+    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>

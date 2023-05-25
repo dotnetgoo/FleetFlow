@@ -1,6 +1,11 @@
 using FleetFlow.DAL.DbContexts;
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Entities;
+using FleetFlow.Domain.Entities.Addresses;
+using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Domain.Entities.Products;
+using FleetFlow.Domain.Entities.Users;
+using FleetFlow.Domain.Entities.Warehouses;
 
 namespace FleetFlow.DAL.Repositories
 {

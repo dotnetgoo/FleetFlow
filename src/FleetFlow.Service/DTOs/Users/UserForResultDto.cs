@@ -1,4 +1,4 @@
-﻿using FleetFlow.Domain.Entities;
+﻿using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Enums;
 using System.ComponentModel;
 using System.Text.Json.Serialization;

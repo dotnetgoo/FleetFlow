@@ -1,4 +1,6 @@
-﻿using FleetFlow.Domain.Entities;
+﻿using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Domain.Entities.Products;
+using FleetFlow.Domain.Entities.Warehouses;
 
 namespace FleetFlow.Service.DTOs.Product;
 

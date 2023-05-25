@@ -1,7 +1,7 @@
 ﻿using FleetFlow.Api.Models;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Enums;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Orders;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

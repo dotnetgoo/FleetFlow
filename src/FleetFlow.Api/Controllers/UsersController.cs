@@ -1,7 +1,7 @@
 using FleetFlow.Api.Models;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.User;
-using FleetFlow.Service.Interfaces;
+using FleetFlow.Service.Interfaces.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

@@ -1,4 +1,11 @@
 using FleetFlow.Domain.Entities;
+using FleetFlow.Domain.Entities.Addresses;
+using FleetFlow.Domain.Entities.Attachments;
+using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Domain.Entities.Orders.Feedbacks;
+using FleetFlow.Domain.Entities.Products;
+using FleetFlow.Domain.Entities.Users;
+using FleetFlow.Domain.Entities.Warehouses;
 using FleetFlow.Domain.Enums;
 using FleetFlow.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;
@@ -23,7 +30,9 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<OrderAction> OrderActions { get; set; }
-
+        public DbSet<Attachment> Attachments { get; set; }
+        public DbSet<Feedback> Feedbacks { get; set; }
+        public DbSet<FeedbackAttachment> FeedbackAttachments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -69,6 +78,24 @@ namespace FleetFlow.DAL.DbContexts
                 .HasOne(action => action.Order)
                 .WithMany(order => order.Actions)
                 .HasForeignKey(action => action.OrderId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Feedback>()
+                .HasOne(f => f.Order)
+                .WithMany(o => o.Feedbacks)
+                .HasForeignKey(f => f.OrderId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<FeedbackAttachment>()
+                .HasOne(fa => fa.Feedback)
+                .WithMany(f => f.Attachments)
+                .HasForeignKey(fa => fa.FeedbackId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<FeedbackAttachment>()
+                .HasOne(fa => fa.Attachment)
+                .WithMany()
+                .HasForeignKey(fa => fa.AttachmentId)
                 .OnDelete(DeleteBehavior.NoAction);
             #endregion
 
