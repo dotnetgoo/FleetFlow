@@ -1,19 +1,19 @@
 ﻿using AutoMapper;
-using FleetFlow.Domain.Enums;
 using FleetFlow.DAL.IRepositories;
+using FleetFlow.Domain.Congirations;
+using FleetFlow.Domain.Entities.Attachments;
+using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Domain.Enums;
+using FleetFlow.Service.DTOs.Attachments;
+using FleetFlow.Service.DTOs.Orders;
+using FleetFlow.Service.DTOs.Payments;
 using FleetFlow.Service.DTOs.User;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
-using Microsoft.EntityFrameworkCore;
-using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.DTOs.Orders;
-using FleetFlow.Service.DTOs.Payments;
-using FleetFlow.Service.DTOs.Attachments;
-using FleetFlow.Domain.Entities.Orders;
-using FleetFlow.Domain.Entities.Attachments;
-using FleetFlow.Service.Interfaces.Users;
-using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Service.Interfaces.Attachments;
+using FleetFlow.Service.Interfaces.Orders;
+using FleetFlow.Service.Interfaces.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetFlow.Service.Services.Orders;
 

@@ -2,13 +2,11 @@ using FleetFlow.Api.Extensions;
 using FleetFlow.Api.Middlewares;
 using FleetFlow.Api.Models;
 using FleetFlow.DAL.DbContexts;
-using System.Text.Json.Serialization;
-using FleetFlow.Shared.Helpers;
 using FleetFlow.Service.Mappers;
+using FleetFlow.Shared.Helpers;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
-using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 

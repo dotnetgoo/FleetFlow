@@ -1,8 +1,6 @@
 ﻿using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities.UserQuestions;
-using FleetFlow.Service.DTOs.Address;
 using FleetFlow.Service.DTOs.Questions;
-using FleetFlow.Service.DTOs.User;
 
 namespace FleetFlow.Service.Interfaces.UserQuestions;
 

@@ -5,7 +5,6 @@ using FleetFlow.Service.DTOs.Attachments;
 using FleetFlow.Service.DTOs.Payments;
 using FleetFlow.Service.Interfaces.Orders;
 using Microsoft.AspNetCore.Mvc;
-using System.Xml;
 
 namespace FleetFlow.Api.Controllers;
 

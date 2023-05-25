@@ -58,10 +58,10 @@ public class DiscountService : IDiscountService
 
     public async Task<IEnumerable<DiscountResultDto>> RetrieveAllAsync(PaginationParams @params)
     {
-        var discounts  = await this.discountRepository.SelectAll(t => !t.IsDeleted)
+        var discounts = await this.discountRepository.SelectAll(t => !t.IsDeleted)
             .ToPagedList(@params)
             .ToListAsync();
-        
+
         return this.mapper.Map<IEnumerable<DiscountResultDto>>(discounts);
     }
 

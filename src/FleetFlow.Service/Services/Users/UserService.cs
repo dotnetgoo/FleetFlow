@@ -4,7 +4,6 @@ using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities;
 using FleetFlow.Domain.Entities.Authorizations;
 using FleetFlow.Domain.Entities.Users;
-using FleetFlow.Domain.Enums;
 using FleetFlow.Service.DTOs.User;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;

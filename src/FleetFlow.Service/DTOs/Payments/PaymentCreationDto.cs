@@ -1,7 +1,4 @@
-﻿using FleetFlow.Service.DTOs.Attachments;
-using Microsoft.AspNetCore.Http;
-
-namespace FleetFlow.Service.DTOs.Payments;
+﻿namespace FleetFlow.Service.DTOs.Payments;
 
 public class PaymentCreationDto
 {

@@ -8,8 +8,6 @@ using FleetFlow.Service.Models.Insights;
 using FleetFlow.Service.Services.Products;
 using FleetFlow.Service.Services.Users;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.Design;
-using System.Xml.Schema;
 
 namespace FleetFlow.Service.Services.Insights;
 
@@ -44,7 +42,7 @@ public class InsightsService : IInsightsService
     {
         var sellsTable = new SellsTableModel();
 
-        sellsTable.SumOfSells = (decimal) await paymentRepository
+        sellsTable.SumOfSells = (decimal)await paymentRepository
             .SelectAll(p => !p.IsDeleted && p.CreatedAt <= to && p.CreatedAt >= from)
             .SumAsync(p => p.Amount);
 
@@ -82,7 +80,7 @@ public class InsightsService : IInsightsService
                 .SelectAll(o => o.Id == product.Id && !o.IsDeleted && o.CreatedAt <= to && o.CreatedAt >= from)
                 .Select(o => o.Amount)
                 .SumAsync();
-           
+
             productModel.SumOfSells = productModel.SellsNumber * product.Price;
 
             allProductModels.Add(productModel);

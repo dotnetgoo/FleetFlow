@@ -2,8 +2,6 @@
 using FleetFlow.DAL.Repositories;
 using FleetFlow.GraphQL.Mutations;
 using FleetFlow.GraphQL.Queries;
-using FleetFlow.GraphQL.Types;
-using FleetFlow.GraphQL.Types.EnumTypes;
 using FleetFlow.Service.Interfaces.Addresses;
 using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Service.Interfaces.Products;

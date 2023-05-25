@@ -8,8 +8,8 @@ public interface IFeedbackService
 {
     Task<FeedbackResultDto> AddAsync(FeedbackCreationDto dto);
     Task<bool> DeleteAsync(long id);
-    Task <FeedbackResultDto> RetrieveAsync(long id);
-    
+    Task<FeedbackResultDto> RetrieveAsync(long id);
+
     // for admins
     Task<IEnumerable<FeedbackResultDto>> RetriveAllByClientIdAsync(long clientId);
     Task<IEnumerable<FeedbackResultDto>> RetriveAllByStatusAsync(PaginationParams @params,

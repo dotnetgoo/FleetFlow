@@ -19,8 +19,8 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async ValueTask<IActionResult> GetAllAsync([FromQuery]PaginationParams @params)
-            =>Ok(new Response
+        public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
+            => Ok(new Response
             {
                 Code = 200,
                 Message = "OK",
@@ -48,7 +48,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
-        public async ValueTask<IActionResult> PostAsync([FromBody]LocationForCreationDto dto)
+        public async ValueTask<IActionResult> PostAsync([FromBody] LocationForCreationDto dto)
             => Ok(new Response
             {
                 Code = 200,

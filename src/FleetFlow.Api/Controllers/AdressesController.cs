@@ -66,10 +66,10 @@ namespace FleetFlow.Api.Controllers
         [HttpPut("{id}")]
         public async ValueTask<IActionResult> PutAsync(long id, AddressForCreationDto dto)
             => Ok(new Response
-            { 
-                Code = 200, 
-                Message = "OK", 
-                Data = await this.addressService.UpdateByIdAsync(id, dto) 
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await this.addressService.UpdateByIdAsync(id, dto)
             });
     }
 }

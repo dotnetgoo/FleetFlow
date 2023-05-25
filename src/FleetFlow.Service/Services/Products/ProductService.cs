@@ -8,7 +8,6 @@ using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces.Products;
 using FleetFlow.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 
 namespace FleetFlow.Service.Services.Products;
 

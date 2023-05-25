@@ -1,12 +1,8 @@
-﻿using AutoMapper;
-using FleetFlow.DAL.IRepositories;
-using FleetFlow.Domain.Entities;
+﻿using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Entities.Orders;
-using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Domain.Enums;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Interfaces.Orders;
-using MailKit.Search;
 
 namespace FleetFlow.Service.Services.Orders;
 
@@ -91,7 +87,7 @@ public class OrderActionService : IOrderActionService
         order.Id = id;
         order.Status = OrderStatus.Shipping;
 
-        order.Actions.Add(new OrderAction() { Status = OrderStatus.Shipping});
+        order.Actions.Add(new OrderAction() { Status = OrderStatus.Shipping });
 
         await orderRepository.SaveAsync();
 

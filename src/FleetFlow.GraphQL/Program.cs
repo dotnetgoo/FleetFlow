@@ -1,9 +1,6 @@
 using FleetFlow.DAL.DbContexts;
 using FleetFlow.GraphQL.Extensions;
-using FleetFlow.GraphQL.Queries;
-using FleetFlow.Service.Interfaces;
 using FleetFlow.Service.Mappers;
-using FleetFlow.Service.Services;
 using FleetFlow.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +19,7 @@ builder.Services.AddGraphQLService();
 builder.Services.AddCustomServices();
 builder.Services.AddAutoMapper(typeof(MapperProfile));
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddDbContext<FleetFlowDbContext>(options => 
+builder.Services.AddDbContext<FleetFlowDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
@@ -37,7 +34,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // Init accessor
-if(app.Services.GetRequiredService<IHttpContextAccessor>() != null)
+if (app.Services.GetRequiredService<IHttpContextAccessor>() != null)
 {
     HttpContextHelper.Accessor = app.Services.GetRequiredService<IHttpContextAccessor>();
 }

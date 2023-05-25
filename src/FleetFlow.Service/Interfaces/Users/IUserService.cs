@@ -1,14 +1,6 @@
 ﻿using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities.Authorizations;
 using FleetFlow.Domain.Entities.Users;
-using FleetFlow.Domain.Enums;
 using FleetFlow.Service.DTOs.User;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FleetFlow.Service.Interfaces.Users
 {

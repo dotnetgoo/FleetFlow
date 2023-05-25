@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FleetFlow.Service.Interfaces.Authorizations
+﻿namespace FleetFlow.Service.Interfaces.Authorizations
 {
-	internal class IPermissionService
-	{
-	}
+    internal class IPermissionService
+    {
+    }
 }

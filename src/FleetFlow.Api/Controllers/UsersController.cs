@@ -2,7 +2,6 @@ using FleetFlow.Api.Models;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.User;
 using FleetFlow.Service.Interfaces.Users;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
@@ -20,7 +19,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="params"></param>
         /// <returns></returns>
-        [HttpGet] 
+        [HttpGet]
         public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
             => Ok(new Response
             {

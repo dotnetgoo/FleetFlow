@@ -1,6 +1,4 @@
-﻿using FleetFlow.Domain.Enums;
-
-namespace FleetFlow.Service.DTOs.Location
+﻿namespace FleetFlow.Service.DTOs.Location
 {
     public class LocationForResultDto
     {

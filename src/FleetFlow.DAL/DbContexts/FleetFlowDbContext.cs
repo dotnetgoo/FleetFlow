@@ -114,16 +114,16 @@ namespace FleetFlow.DAL.DbContexts
                 new ProductCategory() { Id = 3, Name = "Jewellery", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
                 new ProductCategory() { Id = 4, Name = "Medicines", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
                 new ProductCategory() { Id = 5, Name = "Telephones", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new ProductCategory() { Id = 6, Name = "Toys", CreatedAt = DateTime.UtcNow, UpdatedAt = null } 
+                new ProductCategory() { Id = 6, Name = "Toys", CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
 
             modelBuilder.Entity<Location>().HasData(
-                new Location() {Id = 1, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() {Id = 2, Description = "In the beginning of entry", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() {Id = 3, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 4,  Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() { Id = 1, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() { Id = 2, Description = "In the beginning of entry", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() { Id = 3, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() { Id = 4, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
                 new Location() { Id = 5, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 6,  Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null }
+                new Location() { Id = 6, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
 
             modelBuilder.Entity<Role>().HasData(
@@ -136,16 +136,16 @@ namespace FleetFlow.DAL.DbContexts
                 );
 
             modelBuilder.Entity<User>().HasData(
-                new User() { Id = 1, FirstName = "Mukhammadkarim", LastName = "Tukhtaboyev", Email = "dotnetgo@icloud.com", Phone = "+998 991239999", RoleId = 2, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new User() { Id = 2, FirstName = "Jamshid", LastName = "Ma'ruf", Email = "wonderboy1w3@gmail.com", Phone = "+998 991231999", RoleId = 3, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new User() { Id = 3, FirstName = "Kabeer", LastName = "Solutions", Email = "kabeersolutions@gmail.com", Phone = "+998 991232999", RoleId = 4, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new User() { Id = 4, FirstName = "Muzaffar", LastName = "Nurillayev", Email = "nurillaewmuzaffar@gmail.com", Phone = "+998 995030110", RoleId = 5, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new User() { Id = 5, FirstName = "Azim", LastName = "Ochilov", Email = "azimochilov@icloud.com", Phone = "+998 991233999", RoleId = 6, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new User() { Id = 6, FirstName = "Abdulloh", LastName = "Ahmadjonov", Email = "abdulloh@icloud.com", Phone = "+998 991236999", RoleId = 1, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new User() { Id = 7, FirstName = "Komron", LastName = "Rahmonov", Email = "komron2052@gmail.com", Phone = "+998 991234999", RoleId = 2, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new User() { Id = 8, FirstName = "Nozimjon", LastName = "Usmonaliyev", Email = "nozimjon@gmail.com", Phone = "+998 991235999", RoleId = 3, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new User() { Id = 9, FirstName = "AlJavhar", LastName = "Boyaliyev", Email = "aljavhar@gmail.com", Phone = "+998 902344545", RoleId = 4, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new User() { Id = 10, FirstName = "Muhammad", LastName = "Rahimboyev", Email = "muhammad@gmail.com", Phone = "+998 937770202", RoleId = 5, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null}
+                new User() { Id = 1, FirstName = "Mukhammadkarim", LastName = "Tukhtaboyev", Email = "dotnetgo@icloud.com", Phone = "+998 991239999", RoleId = 2, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new User() { Id = 2, FirstName = "Jamshid", LastName = "Ma'ruf", Email = "wonderboy1w3@gmail.com", Phone = "+998 991231999", RoleId = 3, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new User() { Id = 3, FirstName = "Kabeer", LastName = "Solutions", Email = "kabeersolutions@gmail.com", Phone = "+998 991232999", RoleId = 4, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new User() { Id = 4, FirstName = "Muzaffar", LastName = "Nurillayev", Email = "nurillaewmuzaffar@gmail.com", Phone = "+998 995030110", RoleId = 5, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new User() { Id = 5, FirstName = "Azim", LastName = "Ochilov", Email = "azimochilov@icloud.com", Phone = "+998 991233999", RoleId = 6, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new User() { Id = 6, FirstName = "Abdulloh", LastName = "Ahmadjonov", Email = "abdulloh@icloud.com", Phone = "+998 991236999", RoleId = 1, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new User() { Id = 7, FirstName = "Komron", LastName = "Rahmonov", Email = "komron2052@gmail.com", Phone = "+998 991234999", RoleId = 2, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new User() { Id = 8, FirstName = "Nozimjon", LastName = "Usmonaliyev", Email = "nozimjon@gmail.com", Phone = "+998 991235999", RoleId = 3, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new User() { Id = 9, FirstName = "AlJavhar", LastName = "Boyaliyev", Email = "aljavhar@gmail.com", Phone = "+998 902344545", RoleId = 4, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new User() { Id = 10, FirstName = "Muhammad", LastName = "Rahimboyev", Email = "muhammad@gmail.com", Phone = "+998 937770202", RoleId = 5, Password = PasswordHelper.Hash("12345678"), CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
 
             modelBuilder.Entity<Address>().HasData(
@@ -156,23 +156,23 @@ namespace FleetFlow.DAL.DbContexts
                 );
 
             modelBuilder.Entity<Product>().HasData(
-                new Product() { Id = 1, Name = "HP-Victus", Serial = "a1B5", Price = 630, Weight = 2.2M, CategoryId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new Product() { Id = 2, Name = "MacBook-Pro", Serial = "AKJ-12445", Price = 2000, Weight = 1.2M, CategoryId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new Product() { Id = 3, Name = "Iphone-14", Serial = "KLKJL-324342", Price = 1500, Weight = 0.1M, CategoryId = 5, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new Product() { Id = 4, Name = "Spintronics", Serial = "MMMLW-11234", Price = 100, Weight = 4.2M, CategoryId = 6, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new Product() { Id = 5, Name = "Trimol", Serial = "MML-32423", Price = 1, Weight = 0.002M, CategoryId = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new Product() { Id = 6, Name = "SmartWatch", Serial = "JJJO-23423", Price = 50, Weight = 0.1M, CategoryId = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null}
+                new Product() { Id = 1, Name = "HP-Victus", Serial = "a1B5", Price = 630, Weight = 2.2M, CategoryId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Product() { Id = 2, Name = "MacBook-Pro", Serial = "AKJ-12445", Price = 2000, Weight = 1.2M, CategoryId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Product() { Id = 3, Name = "Iphone-14", Serial = "KLKJL-324342", Price = 1500, Weight = 0.1M, CategoryId = 5, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Product() { Id = 4, Name = "Spintronics", Serial = "MMMLW-11234", Price = 100, Weight = 4.2M, CategoryId = 6, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Product() { Id = 5, Name = "Trimol", Serial = "MML-32423", Price = 1, Weight = 0.002M, CategoryId = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Product() { Id = 6, Name = "SmartWatch", Serial = "JJJO-23423", Price = 50, Weight = 0.1M, CategoryId = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
 
             modelBuilder.Entity<Inventory>().HasData(
-                new Inventory() { Id = 1, ProductId = 6, Amount = 1000, LocationId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 2, ProductId = 1, Amount = 50, LocationId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 3, ProductId = 3, Amount = 100, LocationId = 2, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 4, ProductId = 5, Amount = 100000, LocationId = 3, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 5, ProductId = 2, Amount = 100, LocationId = 3, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null}
+                new Inventory() { Id = 1, ProductId = 6, Amount = 1000, LocationId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null },
+                new Inventory() { Id = 2, ProductId = 1, Amount = 50, LocationId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null },
+                new Inventory() { Id = 3, ProductId = 3, Amount = 100, LocationId = 2, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null },
+                new Inventory() { Id = 4, ProductId = 5, Amount = 100000, LocationId = 3, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null },
+                new Inventory() { Id = 5, ProductId = 2, Amount = 100, LocationId = 3, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null }
                 );
             modelBuilder.Entity<Order>().HasData(
-                new Order() { Id = 1, UserId = 1, AddressId = 2, Status = OrderStatus.Pending, CreatedAt = DateTime.UtcNow, UpdatedAt = null}
+                new Order() { Id = 1, UserId = 1, AddressId = 2, Status = OrderStatus.Pending, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
 
             modelBuilder.Entity<OrderItem>().HasData(

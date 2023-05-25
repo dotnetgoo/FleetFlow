@@ -1,11 +1,9 @@
 ﻿using AutoMapper;
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities.Attachments;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Orders.Feedbacks;
 using FleetFlow.Domain.Enums;
-using FleetFlow.Service.DTOs.Carts;
 using FleetFlow.Service.DTOs.Feedbacks;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
@@ -19,7 +17,7 @@ public class FeedbackService : IFeedbackService
 {
     private readonly IMapper mapper;
     private readonly IRepository<Feedback> feedbackRepository;
-    private readonly IRepository<Order> orderRepository; 
+    private readonly IRepository<Order> orderRepository;
     private readonly IAttachmentService attachmentService;
     private readonly IRepository<FeedbackAttachment> feedbackAttachmentRepository;
     public FeedbackService(IMapper mapper,
@@ -31,16 +29,16 @@ public class FeedbackService : IFeedbackService
         this.feedbackAttachmentRepository = feedbackAttachmentRepository;
         this.feedbackRepository = feedbackRepository;
         this.mapper = mapper;
-        this.orderRepository = orderRepository;        
+        this.orderRepository = orderRepository;
         this.attachmentService = attachmentService;
     }
 
     public async Task<FeedbackResultDto> AddAsync(FeedbackCreationDto dto)
     {
         var order = await orderRepository.SelectAsync(o => o.Id == dto.OrderId && !o.IsDeleted);
-        if(order is null)
+        if (order is null)
             throw new FleetFlowException(404, "Order not found");
-        
+
         var feedback = mapper.Map<Feedback>(dto);
         var insertedFeedback = await feedbackRepository.InsertAsync(feedback);
 
@@ -58,7 +56,7 @@ public class FeedbackService : IFeedbackService
         }
 
         await feedbackRepository.SaveAsync();
-        
+
         return mapper.Map<FeedbackResultDto>(insertedFeedback); ;
     }
 
@@ -79,7 +77,7 @@ public class FeedbackService : IFeedbackService
 
         var isDeleted = await feedbackRepository.DeleteAsync(f => f.Id == id);
         await this.feedbackRepository.SaveAsync();
-        
+
         return isDeleted;
     }
 

@@ -21,15 +21,15 @@ namespace FleetFlow.Service.Mappers
     {
         public MapperProfile()
         {
-            CreateMap<Product,ProductForCreationDto>().ReverseMap();
-            CreateMap<Product,ProductForResultDto>().ReverseMap();
+            CreateMap<Product, ProductForCreationDto>().ReverseMap();
+            CreateMap<Product, ProductForResultDto>().ReverseMap();
 
             CreateMap<Address, AddressForCreationDto>().ReverseMap();
             CreateMap<Address, AddressForResultDto>().ReverseMap();
 
             CreateMap<Location, LocationForCreationDto>().ReverseMap();
             CreateMap<Location, LocationForResultDto>().ReverseMap();
-                    
+
             CreateMap<User, UserForCreationDto>().ReverseMap();
             CreateMap<User, UserForResultDto>().ReverseMap();
             CreateMap<User, UserForUpdateDto>().ReverseMap();
@@ -38,8 +38,8 @@ namespace FleetFlow.Service.Mappers
             CreateMap<Order, OrderResultDto>().ReverseMap();
             CreateMap<OrderItem, OrderItemForResultDto>().ReverseMap();
 
-            CreateMap<Feedback,FeedbackResultDto>().ReverseMap();
-            CreateMap<Feedback,FeedbackCreationDto>().ReverseMap();
+            CreateMap<Feedback, FeedbackResultDto>().ReverseMap();
+            CreateMap<Feedback, FeedbackCreationDto>().ReverseMap();
 
             CreateMap<Discount, DiscountResultDto>().ReverseMap();
             CreateMap<Discount, DiscountCreationDto>().ReverseMap();

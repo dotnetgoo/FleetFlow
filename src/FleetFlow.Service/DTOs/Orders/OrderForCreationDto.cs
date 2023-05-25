@@ -1,11 +1,4 @@
-﻿using FleetFlow.Domain.Entities;
-using FleetFlow.Domain.Enums;
-using FleetFlow.Service.DTOs.Address;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FleetFlow.Service.DTOs.Address;
 
 namespace FleetFlow.Service.DTOs.Orders
 {

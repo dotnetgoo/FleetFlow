@@ -1,17 +1,16 @@
 ﻿using AutoMapper;
-using FleetFlow.Domain.Enums;
-using FleetFlow.Shared.Helpers;
-using FleetFlow.Domain.Entities;
 using FleetFlow.DAL.IRepositories;
-using FleetFlow.Service.Exceptions;
 using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.DTOs.Orders;
-using FleetFlow.Service.Extentions;
-using Microsoft.EntityFrameworkCore;
+using FleetFlow.Domain.Entities;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Users;
+using FleetFlow.Domain.Enums;
+using FleetFlow.Service.DTOs.Orders;
+using FleetFlow.Service.Exceptions;
+using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces.Orders;
-using FleetFlow.Domain.Entities.Authorizations;
+using FleetFlow.Shared.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetFlow.Service.Services.Orders
 {
@@ -95,17 +94,17 @@ namespace FleetFlow.Service.Services.Orders
 
         }
 
-    /*    public async Task ChangeStatus(long orderId, OrderStatus status)
-        {
-            var order = await this.orderRepository.SelectAsync(t => t.Id == orderId);
-            if (order is null)
-                throw new FleetFlowException(404, "");
+        /*    public async Task ChangeStatus(long orderId, OrderStatus status)
+            {
+                var order = await this.orderRepository.SelectAsync(t => t.Id == orderId);
+                if (order is null)
+                    throw new FleetFlowException(404, "");
 
-            order.Id = orderId;
-            order.Status = status;
-            await orderRepository.SaveAsync();
+                order.Id = orderId;
+                order.Status = status;
+                await orderRepository.SaveAsync();
 
-        }*/
+            }*/
 
 
         public async ValueTask<bool> RemoveAsync(long id)
