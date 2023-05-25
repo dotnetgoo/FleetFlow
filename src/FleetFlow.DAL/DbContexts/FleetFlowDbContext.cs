@@ -33,6 +33,7 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<Attachment> Attachments { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<FeedbackAttachment> FeedbackAttachments { get; set; }
+        public DbSet<Discount> Discounts { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -96,6 +97,12 @@ namespace FleetFlow.DAL.DbContexts
                 .HasOne(fa => fa.Attachment)
                 .WithMany()
                 .HasForeignKey(fa => fa.AttachmentId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Discount>()
+                .HasOne(discount => discount.Product)
+                .WithOne(product => product.Discount)
+                .HasForeignKey<Discount>(discount => discount.ProductId)
                 .OnDelete(DeleteBehavior.NoAction);
             #endregion
 
