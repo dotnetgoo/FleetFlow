@@ -5,9 +5,11 @@ using FleetFlow.Domain.Entities.Attachments;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Orders.Feedbacks;
 using FleetFlow.Domain.Enums;
+using FleetFlow.Service.DTOs.Attachments;
 using FleetFlow.Service.DTOs.Carts;
 using FleetFlow.Service.DTOs.Feedbacks;
 using FleetFlow.Service.Exceptions;
+using FleetFlow.Service.Extensions;
 using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces.Attachments;
 using FleetFlow.Service.Interfaces.Orders;
@@ -35,46 +37,53 @@ public class FeedbackService : IFeedbackService
         this.attachmentService = attachmentService;
     }
 
-    public async Task<FeedbackResultDto> AddAsync(FeedbackCreationDto dto)
+    public async Task<FeedbackResultDto> AddAsync(FeedbackCreationDto dto, List<AttachmentCreationDto> attachments)
     {
+        // checking existance of order
         var order = await orderRepository.SelectAsync(o => o.Id == dto.OrderId && !o.IsDeleted);
-        if(order is null)
+        if (order is null)
             throw new FleetFlowException(404, "Order not found");
-        
+
+        // inserting feedback into db
         var feedback = mapper.Map<Feedback>(dto);
         var insertedFeedback = await feedbackRepository.InsertAsync(feedback);
+        await feedbackRepository.SaveAsync();
 
-        if (dto.Attachments is not null && dto.Attachments.Any())
+        var result = mapper.Map<FeedbackResultDto>(insertedFeedback);
+        
+        // attachment copying and saving process
+        if (attachments is not null && attachments.Any())
         {
-            foreach (var attachment in dto.Attachments)
+            foreach (var attachment in attachments)
             {
+                // inserting file info into db and copying it to static file path
                 var insertedAttachment = await attachmentService.UploadAsync(attachment);
+                // additional info
+                result.Attachments.Add(this.mapper.Map<AttachmentResultDto>(insertedAttachment));
+                // relations to relational table, many-to-many
                 await feedbackAttachmentRepository.InsertAsync(new FeedbackAttachment
                 {
                     AttachmentId = insertedAttachment.Id,
-                    FeedbackId = insertedAttachment.Id
+                    FeedbackId = insertedFeedback.Id
                 });
             }
+            await this.feedbackAttachmentRepository.SaveAsync();
         }
-
-        await feedbackRepository.SaveAsync();
-        
-        return mapper.Map<FeedbackResultDto>(insertedFeedback); ;
+        return result;
     }
 
     public async Task<bool> DeleteAsync(long id)
     {
-        Feedback feedback = await feedbackRepository.SelectAsync(f => f.Id == id && !f.IsDeleted, new string[] { "Attachments" });
+        Feedback feedback = await feedbackRepository.SelectAsync(f => f.Id == id && !f.IsDeleted, new string[] { "Attachments.Attachment" });
         if (feedback is null)
             throw new FleetFlowException(404, "Feedback not found");
 
         // removing attachments
         foreach (var attachment in feedback.Attachments)
         {
-            await attachmentService.DeleteAsync(attachment.Id);
+            await attachmentService.DeleteAsync(attachment.Attachment.Id);
             await feedbackAttachmentRepository.DeleteAsync(fa => fa.Id == attachment.Id);
             await feedbackAttachmentRepository.SaveAsync();
-
         }
 
         var isDeleted = await feedbackRepository.DeleteAsync(f => f.Id == id);
@@ -101,30 +110,33 @@ public class FeedbackService : IFeedbackService
         if (feedback is null)
             throw new FleetFlowException(404, "Feedback not found");
 
-        return this.mapper.Map<FeedbackResultDto>(feedback);
+        return feedback.ToFeedbackResultDto();
     }
 
     public async Task<IEnumerable<FeedbackResultDto>> RetriveAllByClientIdAsync(long clientId)
     {
-        var feedbacks = await this.feedbackRepository.SelectAll(f => !f.IsDeleted && f.Order.User.Id == clientId).ToListAsync();
+        var feedbacks = await this.feedbackRepository
+            .SelectAll(f => !f.IsDeleted && f.Order.User.Id == clientId, new string[] {"Attachments.Attachment"})
+            .ToArrayAsync();
         if (feedbacks is null || !feedbacks.Any())
             throw new FleetFlowException(404, "Feedback not found");
 
-        return this.mapper.Map<IEnumerable<FeedbackResultDto>>(feedbacks);
+        return Array.ConvertAll<Feedback, FeedbackResultDto>(feedbacks, x => x.ToFeedbackResultDto());
     }
 
     public async Task<IEnumerable<FeedbackResultDto>> RetriveAllByStatusAsync(PaginationParams @params, FeedbackStatus? status = null)
     {
-        var feedbacksQuery = this.feedbackRepository.SelectAll(f => !f.IsDeleted);
+        var feedbacksQuery = this.feedbackRepository.SelectAll(f => !f.IsDeleted, new string[] { "Attachments.Attachment" });
         if (status is not null)
             feedbacksQuery = feedbacksQuery.Where(f => f.Status == status);
 
         feedbacksQuery = feedbacksQuery.ToPagedList(@params);
 
-        var feedbacks = await feedbacksQuery.ToListAsync();
+        var feedbacks = await feedbacksQuery.ToArrayAsync();
         if (feedbacks is null || !feedbacks.Any())
             throw new FleetFlowException(404, "Feedback not found");
+     
+        return Array.ConvertAll<Feedback, FeedbackResultDto>(feedbacks, x => x.ToFeedbackResultDto());
 
-        return this.mapper.Map<IEnumerable<FeedbackResultDto>>(feedbacks);
     }
 }
