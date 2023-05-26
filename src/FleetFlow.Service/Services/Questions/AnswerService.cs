@@ -46,11 +46,16 @@ public class AnswerService : IAnswerService
         if (question is null)
             throw new FleetFlowException(404, "Question Not Found");
 
-        var mapped = mapper.Map<Answer>(dto);
+        var mapped = mapper.Map<QuestionForCreationDto>(question);
+        var mapped2 = mapper.Map<Answer>(dto);
 
-        mapped.QuestionId = questionId;
+        mapped2.QuestionId = questionId;
 
-        var insertedAnswer = await answerRepository.InsertAsync(mapped);
+        var insertedAnswer = await answerRepository.InsertAsync(mapped2);
+
+        question.IsAnswered = true;
+
+        await questionService.UpdateByIdAsync(questionId, mapped);
 
         await answerRepository.SaveAsync();
 

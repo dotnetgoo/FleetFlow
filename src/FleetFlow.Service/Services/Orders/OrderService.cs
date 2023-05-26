@@ -61,7 +61,8 @@ namespace FleetFlow.Service.Services.Orders
             {
                 UserId = HttpContextHelper.UserId ?? 0,
                 OrderItems = new List<OrderItem>(),
-                
+                PaymentId = payment.Id,
+                AddressId =  address.Id,
             };
 
             // create order items using cart
@@ -71,6 +72,7 @@ namespace FleetFlow.Service.Services.Orders
                 {
                     Amount = cartItem.Amount,
                     ProductId = cartItem.ProductId
+                    
                 });
             }
    

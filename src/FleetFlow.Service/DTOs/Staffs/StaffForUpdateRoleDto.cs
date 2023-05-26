@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FleetFlow.Service.DTOs.Staffs
+﻿namespace FleetFlow.Service.DTOs.Staffs
 {
     public class StaffForUpdateRoleDto
     {
+        public long StaffId { get; set; }
         public long RoleId { get; set; }
     }
 }

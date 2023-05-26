@@ -34,7 +34,7 @@ namespace FleetFlow.Service.Services.Warehouses
             if (await this.addressService.GetByIdAsync(dto.AddressId) is null)
                 throw new FleetFlowException(403, "There is no address with given address id");
             
-            var mappedInventory = this.mapper.Map<Inventory>(existInventory);
+            var mappedInventory = this.mapper.Map<Inventory>(dto);
             mappedInventory.CreatedAt = DateTime.UtcNow;
             mappedInventory.OwnerId = HttpContextHelper.UserId;
             var addedInventory = await this.repository.InsertAsync(mappedInventory);
