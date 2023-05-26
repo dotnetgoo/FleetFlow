@@ -38,7 +38,8 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<Permission> Permissions { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
-
+        public DbSet<InventoryLog> InventoryLogs { get; set; }
+        public DbSet<ProductInventoryAssignment> ProductInventoryAssignments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Fluent API relations
@@ -174,8 +175,17 @@ namespace FleetFlow.DAL.DbContexts
                 new Inventory() {Id = 4, Name = "Shodlik", Description = "Eng shinam filial", AddressId = 3, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null },
                 new Inventory() {Id = 5, Name = "Charxiy", Description = "Eng kichik filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null }
                 );
+
             modelBuilder.Entity<Order>().HasData(
                 new Order() { Id = 1, UserId = 1, AddressId = 2, Status = OrderStatus.Pending, CreatedAt = DateTime.UtcNow, UpdatedAt = null}
+                );
+
+            modelBuilder.Entity<ProductInventoryAssignment>().HasData(
+                new ProductInventoryAssignment() { Id = 1, ProductId = 1, Amount = 1, InventoryId = 1, LocationId = 1, CreatedAt = DateTime.UtcNow },
+                new ProductInventoryAssignment() { Id = 2, ProductId = 2, Amount = 2, InventoryId = 2, LocationId = 2, CreatedAt = DateTime.UtcNow },
+                new ProductInventoryAssignment() { Id = 3, ProductId = 3, Amount = 3, InventoryId = 3, LocationId = 3, CreatedAt = DateTime.UtcNow },
+                new ProductInventoryAssignment() { Id = 4, ProductId = 4, Amount = 4, InventoryId = 4, LocationId = 4, CreatedAt = DateTime.UtcNow },
+                new ProductInventoryAssignment() { Id = 5, ProductId = 5, Amount = 5, InventoryId = 5, LocationId = 5, CreatedAt = DateTime.UtcNow }
                 );
 
             modelBuilder.Entity<OrderItem>().HasData(

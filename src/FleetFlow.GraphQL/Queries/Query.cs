@@ -7,7 +7,7 @@ using FleetFlow.Service.Services;
 
 namespace FleetFlow.GraphQL.Queries
 {
-    public class Query
+    public partial class Query
     {
         public async ValueTask<UserForResultDto> GetUserAsync([Service] IUserService userService,
             long id)
