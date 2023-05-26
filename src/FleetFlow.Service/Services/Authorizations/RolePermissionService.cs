@@ -87,7 +87,7 @@ namespace FleetFlow.Service.Services.Authorizations
 		public async Task<bool> CheckPermission(string role, string accessedMethod)
 		{
 			var permissions = await this.rolePermissionRepository
-				.SelectAll(p=> p.Role.Name.ToLower() == role.ToLower())
+				.SelectAll(p => p.Role.Name.ToLower() == role.ToLower(), new string[] { "Permisson" })
 				.ToListAsync();
 			foreach(var permission in permissions)
 			{

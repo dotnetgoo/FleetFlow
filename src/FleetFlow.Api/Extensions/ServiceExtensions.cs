@@ -19,6 +19,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 
+
 namespace FleetFlow.Api.Extensions
 {
     public static class ServiceExtensions
@@ -47,6 +48,7 @@ namespace FleetFlow.Api.Extensions
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IOrderActionService, OrderActionService>();
             services.AddScoped<IDiscountService, DiscountService>();
+            services.AddScoped<IRolePermissionService, RolePermissionService>();
             services.AddScoped<IInventoryLogService, InventoryLogService>();
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<IProductInventoryAssignmentService, ProductInventoryAssignmentService>();
