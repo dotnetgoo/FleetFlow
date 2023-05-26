@@ -35,15 +35,19 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<FeedbackAttachment> FeedbackAttachments { get; set; }
         public DbSet<Discount> Discounts { get; set; }
-
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
+        public DbSet<InventoryLog> InventoryLogs { get; set; }
+        public DbSet<ProductInventoryAssignment> ProductInventoryAssignments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Fluent API relations
 
             modelBuilder.Entity<Inventory>()
-                .HasOne(i => i.Location)
+                .HasOne(i => i.Address)
                 .WithMany()
-                .HasForeignKey(i => i.LocationId)
+                .HasForeignKey(i => i.AddressId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Order>()
@@ -118,12 +122,12 @@ namespace FleetFlow.DAL.DbContexts
                 );
 
             modelBuilder.Entity<Location>().HasData(
-                new Location() {Id = 1, Name = "First", Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() {Id = 2, Name = "Second", Description = "In the beginning of entry", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() {Id = 3, Name = "Third", Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 4,  Name = "Fourth", Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 5, Name = "Fifth", Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 6,  Name = "Sixth", Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null }
+                new Location() {Id = 1, Code = 1, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() {Id = 2, Code = 2, Description = "In the beginning of entry", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() {Id = 3, Code = 3, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() { Id = 4,  Code = 4, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() { Id = 5, Code = 5, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() { Id = 6,  Code = 6, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
 
             modelBuilder.Entity<Role>().HasData(
@@ -165,14 +169,23 @@ namespace FleetFlow.DAL.DbContexts
                 );
 
             modelBuilder.Entity<Inventory>().HasData(
-                new Inventory() { Id = 1, ProductId = 6, Amount = 1000, LocationId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 2, ProductId = 1, Amount = 50, LocationId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 3, ProductId = 3, Amount = 100, LocationId = 2, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 4, ProductId = 5, Amount = 100000, LocationId = 3, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 5, ProductId = 2, Amount = 100, LocationId = 3, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null}
+                new Inventory() { Id = 1, Name = "Shayxon", Description = "Eng katta va asosiy filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
+                new Inventory() { Id = 2, Name = "Chilonzor", Description = "Chilonzor filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
+                new Inventory() {Id = 3, Name = "Xadra", Description = "Xadra filial", AddressId = 2, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null },
+                new Inventory() {Id = 4, Name = "Shodlik", Description = "Eng shinam filial", AddressId = 3, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null },
+                new Inventory() {Id = 5, Name = "Charxiy", Description = "Eng kichik filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null }
                 );
+
             modelBuilder.Entity<Order>().HasData(
                 new Order() { Id = 1, UserId = 1, AddressId = 2, Status = OrderStatus.Pending, CreatedAt = DateTime.UtcNow, UpdatedAt = null}
+                );
+
+            modelBuilder.Entity<ProductInventoryAssignment>().HasData(
+                new ProductInventoryAssignment() { Id = 1, ProductId = 1, Amount = 1, InventoryId = 1, LocationId = 1, CreatedAt = DateTime.UtcNow },
+                new ProductInventoryAssignment() { Id = 2, ProductId = 2, Amount = 2, InventoryId = 2, LocationId = 2, CreatedAt = DateTime.UtcNow },
+                new ProductInventoryAssignment() { Id = 3, ProductId = 3, Amount = 3, InventoryId = 3, LocationId = 3, CreatedAt = DateTime.UtcNow },
+                new ProductInventoryAssignment() { Id = 4, ProductId = 4, Amount = 4, InventoryId = 4, LocationId = 4, CreatedAt = DateTime.UtcNow },
+                new ProductInventoryAssignment() { Id = 5, ProductId = 5, Amount = 5, InventoryId = 5, LocationId = 5, CreatedAt = DateTime.UtcNow }
                 );
 
             modelBuilder.Entity<OrderItem>().HasData(

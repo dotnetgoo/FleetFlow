@@ -1,20 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace FleetFlow.Service.DTOs.Inventories
 {
     public class InventoryForUpdateDto
     {
-
-        [Required(ErrorMessage = "Product id is required")]
-        public long ProductId { get; set; }
-        [Required(ErrorMessage = "Amount is requred")]
-        public int Amount { get; set; }
-        [Required(ErrorMessage = "Location id is requred")]
-        public long LocationId { get; set; }
+        [Required(ErrorMessage = "Name is required")]
+        public string Name { get; set; }
+        public string Description { get; set; }
+        [Required(ErrorMessage = "Address id is required")]
+        public long AddressId { get; set; }
     }
 }

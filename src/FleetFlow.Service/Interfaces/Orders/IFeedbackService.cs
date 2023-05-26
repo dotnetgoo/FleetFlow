@@ -1,12 +1,13 @@
 ﻿using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Enums;
+using FleetFlow.Service.DTOs.Attachments;
 using FleetFlow.Service.DTOs.Feedbacks;
 
 namespace FleetFlow.Service.Interfaces.Orders;
 
 public interface IFeedbackService
 {
-    Task<FeedbackResultDto> AddAsync(FeedbackCreationDto dto);
+    Task<FeedbackResultDto> AddAsync(FeedbackCreationDto dto, List<AttachmentCreationDto> attachments);
     Task<bool> DeleteAsync(long id);
     Task <FeedbackResultDto> RetrieveAsync(long id);
     
