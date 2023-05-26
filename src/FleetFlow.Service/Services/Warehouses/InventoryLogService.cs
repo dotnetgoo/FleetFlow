@@ -15,9 +15,10 @@ namespace FleetFlow.Service.Services.Warehouses
         private readonly Repository<InventoryLog> inventoryRepository;
         private readonly IMapper mapper;
 
-        public InventoryLogService(Repository<InventoryLog> inventoryRepository)
+        public InventoryLogService(Repository<InventoryLog> inventoryRepository, IMapper mapper)
         {
             this.inventoryRepository = inventoryRepository;
+            this.mapper = mapper;
         }
 
         public async Task<InventoryLogForResultDto> AddAsync(InventoryLogForCreationDto dto)
