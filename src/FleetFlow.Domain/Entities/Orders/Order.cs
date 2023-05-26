@@ -12,6 +12,8 @@ namespace FleetFlow.Domain.Entities.Orders
         public User User { get; set; }
         public long? AddressId { get; set; }
         public Address Address { get; set; }
+        public long PaymentId {get; set;}
+        public Payment Payment { get; set; }
         public OrderStatus Status { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
 
