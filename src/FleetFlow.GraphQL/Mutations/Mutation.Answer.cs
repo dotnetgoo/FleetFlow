@@ -8,10 +8,9 @@ namespace FleetFlow.GraphQL.Mutations
     public partial class Mutation
     {
         public async ValueTask<Answer> CreateAddressAsync([Service] IAnswerService answerService,
-            long questionId,
             AnswerForCreationDto answer)
         {
-            return await answerService.AddAsync(questionId, answer);
+            return await answerService.AddAsync(answer);
         }
 
         public async ValueTask<bool> DeleteAsnwerAsync([Service] IAnswerService answerService,
