@@ -19,7 +19,7 @@ namespace FleetFlow.Api.Controllers
         public async ValueTask<IActionResult> GetByIdAsync(long id) =>
             Ok(await this._inventoryLogService.RetrieveById(id));
         [HttpGet]
-        public async ValueTask<IActionResult> GetAllByFilteringAsync(Filter filter, PaginationParams @params = null) =>
+        public async ValueTask<IActionResult> GetAllByFilteringAsync([FromQuery]Filter filter, [FromBody]PaginationParams @params = null) =>
             Ok(await this._inventoryLogService.RetrieveAllByFiltering(filter, @params));
     }
 }
