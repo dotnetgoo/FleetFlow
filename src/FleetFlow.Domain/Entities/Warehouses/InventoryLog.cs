@@ -13,6 +13,6 @@ namespace FleetFlow.Domain.Entities.Warehouses
         public long OwnerId { get; set; }
         public User User { get; set; }
         public string Description { get; set; }
-        public InventoryLogType RemovedOrNot { get; set; }
+        public InventoryLogType Type { get; set; }
     }
 }

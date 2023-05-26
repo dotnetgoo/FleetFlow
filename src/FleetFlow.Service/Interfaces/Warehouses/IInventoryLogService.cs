@@ -1,4 +1,5 @@
-﻿using FleetFlow.Domain.Congirations;
+﻿using FleetFlow.Domain.Configurations;
+using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.InventoryLogs;
 using System;
 using System.Collections.Generic;
@@ -12,6 +13,6 @@ namespace FleetFlow.Service.Interfaces.Warehouses
     {
         Task<InventoryLogForResultDto> AddAsync(InventoryLogForCreationDto dto);
         Task<InventoryLogForResultDto> RetrieveById(long id);
-        Task<IEnumerable<InventoryLogForResultDto>> RetrieveAllByProductId(Filter filter, PaginationParams @params = null);
+        Task<IEnumerable<InventoryLogForResultDto>> RetrieveAllByFiltering(Filter filter, PaginationParams @params = null);
     }
 }

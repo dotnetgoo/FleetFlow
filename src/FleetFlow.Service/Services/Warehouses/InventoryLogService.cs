@@ -23,14 +23,16 @@ namespace FleetFlow.Service.Services.Warehouses
         public async Task<InventoryLogForResultDto> AddAsync(InventoryLogForCreationDto dto)
         {
             var mapped = this.mapper.Map<InventoryLog>(dto);
+
             await this.inventoryRepository.InsertAsync(mapped);
             await this.inventoryRepository.SaveAsync();
+
             return this.mapper.Map<InventoryLogForResultDto>(mapped);
         }
 
-        public async Task<IEnumerable<InventoryLogForResultDto>> RetrieveAllByProductId(Filter filter, PaginationParams @params = null)
+        public async Task<IEnumerable<InventoryLogForResultDto>> RetrieveAllByFiltering(Filter filter, PaginationParams @params = null)
         {
-            var logsQuery = this.inventoryRepository.SelectAll(x => x.RemovedOrNot == filter.Type);
+            var logsQuery = this.inventoryRepository.SelectAll(x => x.Type == filter.Type);
 
             if (filter.OwnerId != null)
                 logsQuery = logsQuery.Where(x => x.OwnerId == filter.OwnerId);
