@@ -1,6 +1,7 @@
 ﻿using FleetFlow.Domain.Commons;
 using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Domain.Entities.Users;
+using FleetFlow.Domain.Enums;
 
 namespace FleetFlow.Domain.Entities.Warehouses
 {
@@ -12,6 +13,6 @@ namespace FleetFlow.Domain.Entities.Warehouses
         public long OwnerId { get; set; }
         public User User { get; set; }
         public string Description { get; set; }
-        public bool RemovedOrNot { get; set; }
+        public InventoryLogType Type { get; set; }
     }
 }
