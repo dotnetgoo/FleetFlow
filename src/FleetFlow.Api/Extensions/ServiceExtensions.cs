@@ -47,6 +47,7 @@ namespace FleetFlow.Api.Extensions
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IOrderActionService, OrderActionService>();
             services.AddScoped<IDiscountService, DiscountService>();
+            services.AddScoped<IInventoryLogService, InventoryLogService>();
         }
 
         /// <summary>
