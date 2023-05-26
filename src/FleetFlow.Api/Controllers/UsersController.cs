@@ -22,7 +22,6 @@ namespace FleetFlow.Api.Controllers
         /// <param name="params"></param>
         /// <returns></returns>
         [HttpGet]
-        [CustomAuthorize]
         public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
             => Ok(new Response
             {

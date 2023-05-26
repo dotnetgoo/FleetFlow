@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FleetFlow.Shared.Helpers;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Security.Claims;
 
 namespace FleetFlow.Api.Attributes;
 
@@ -15,10 +17,11 @@ public class CustomAuthorizeAttribute : TypeFilterAttribute
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var controllerDescriptor = context.ActionDescriptor as ControllerActionDescriptor;
-            var controllerName = controllerDescriptor?.ControllerName;
+            var result = controllerDescriptor?.ControllerName.ToLower() + "." + controllerDescriptor?.ActionName.ToLower();
+            var role = context.HttpContext.User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role).Value;
 
-            string token = context.HttpContext.Request.Headers["Authorization"];
-            var tokeen = token;
+            var res = role;
         }
+
     }
 }
