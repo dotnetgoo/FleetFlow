@@ -23,7 +23,7 @@ namespace FleetFlow.Api.Controllers
                 Data = await this.answerService.AddAsync(dto)
             });
 
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async ValueTask<IActionResult> DeleteAnswerAsync([FromRoute(Name = "id")] long answerId)
             => Ok(new Response
             {
@@ -32,7 +32,7 @@ namespace FleetFlow.Api.Controllers
                 Data = await this.answerService.DeleteByIdAsync(answerId)
             });
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public async ValueTask<IActionResult> GetByIdAsync([FromRoute(Name = "id")] long answerId)
             => Ok(new Response
             {
@@ -50,7 +50,7 @@ namespace FleetFlow.Api.Controllers
                 Data = await this.answerService.GetAllAsync(@params)
             });
 
-        [HttpGet]
+        [HttpGet("admin/{id}")]
         public async ValueTask<IActionResult> GetAllByAdminIdAsync([FromQuery] PaginationParams @params, long adminId)
             => Ok(new Response
             {
@@ -59,7 +59,7 @@ namespace FleetFlow.Api.Controllers
                 Data = await this.answerService.GetAllByAdminIdAsync(@params, adminId)
             });
 
-        [HttpGet]
+        [HttpGet("user/{id}")]
         public async ValueTask<IActionResult> GetAllByUserIdAsync([FromQuery] PaginationParams @params, long userId)
             => Ok(new Response
             {
