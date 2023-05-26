@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using FleetFlow.DAL.Repositories;
+using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Configurations;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities.Warehouses;
