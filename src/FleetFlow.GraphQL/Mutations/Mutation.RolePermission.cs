@@ -5,12 +5,12 @@ namespace FleetFlow.GraphQL.Mutations
 {
     public partial class Mutation
     {
-        public async ValueTask<RolePermissionForResultDto> CreateAsync([Service] IRolePermissionService rolePermissionService, RolePermissionForCreateDto dto)
+        public async ValueTask<RolePermissionForResultDto> CreateRolePermissionAsync([Service] IRolePermissionService rolePermissionService, RolePermissionForCreateDto dto)
         {
             return await rolePermissionService.CreateAsync(dto);
         }
 
-        public async ValueTask<bool> DeleteAsync([Service] IRolePermissionService rolePermissionService, long id)
+        public async ValueTask<bool> DeleteRolePermissionAsync([Service] IRolePermissionService rolePermissionService, long id)
         {
             var result = await rolePermissionService.DeleteAsync(id);
             if (result)
@@ -18,7 +18,7 @@ namespace FleetFlow.GraphQL.Mutations
             return false;
         }
 
-        public async ValueTask<RolePermissionForResultDto> UpdateAsync([Service] IRolePermissionService rolePermissionService, RolePermissionForUpdateDto dto)
+        public async ValueTask<RolePermissionForResultDto> UpdateRolePermissionAsync([Service] IRolePermissionService rolePermissionService, RolePermissionForUpdateDto dto)
         {
             return await rolePermissionService.ModifyAsync(dto);
         }
