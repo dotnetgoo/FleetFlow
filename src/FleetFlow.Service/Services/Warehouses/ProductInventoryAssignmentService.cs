@@ -74,8 +74,7 @@ namespace FleetFlow.Service.Services.Warehouses
         }
         public async Task<ProductInventoryAssignmentForResultDto> RemoveQuantity(long ProductId, long InventoryId, int amount)
         {
-            var model = await this.repository.SelectAsync(x => x.ProductId == ProductId && x.
-            == InventoryId);
+            var model = await this.repository.SelectAsync(x => x.ProductId == ProductId && x.Id == InventoryId);
             if (model is null || model.IsDeleted == true)
                 throw new FleetFlowException(404, "Product not found");
             model.Amount -= amount;

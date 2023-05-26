@@ -60,7 +60,8 @@ namespace FleetFlow.Service.Services.Orders
             var order = new Order()
             {
                 UserId = HttpContextHelper.UserId ?? 0,
-                OrderItems = new List<OrderItem>() 
+                OrderItems = new List<OrderItem>(),
+                
             };
 
             // create order items using cart
