@@ -6,15 +6,15 @@ namespace FleetFlow.GraphQL.Queries
 {
     public partial class Query
     {
-        public ValueTask<DiscountResultDto> GetDiscountByIdAsync([Service] IDiscountService discountService, long id)
+        public async ValueTask<DiscountResultDto> GetDiscountByIdAsync([Service] IDiscountService discountService, long id)
         {
-            throw new NotImplementedException();
+            return await discountService.RetrieveAsync(id);
         }
 
-        public ValueTask<IEnumerable<DiscountResultDto>> GetAllDiscountsAsync([Service] IDiscountService discountService,
+        public async ValueTask<IEnumerable<DiscountResultDto>> GetAllDiscountsAsync([Service] IDiscountService discountService,
             PaginationParams @params)
         {
-            throw new NotImplementedException();
+            return await discountService.RetrieveAllAsync(@params);
         }
     }
 }
