@@ -1,16 +1,16 @@
 ﻿using FleetFlow.Domain.Commons;
-using FleetFlow.Domain.Entities.Products;
+using FleetFlow.Domain.Entities.Addresses;
+using FleetFlow.Domain.Entities.Users;
 
 namespace FleetFlow.Domain.Entities.Warehouses
 {
     public class Inventory : Auditable
     {
-        public long ProductId { get; set; }
-        public Product Product { get; set; }
-
-        public int Amount { get; set; }
-
-        public long LocationId { get; set; }
-        public Location Location { get; set; }
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public long AddressId { get; set; }
+        public Address Address { get; set; }
+        public long? OwnerId { get; set; }
+        public User User { get; set; }
     }
 }

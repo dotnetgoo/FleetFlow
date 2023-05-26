@@ -8,11 +8,11 @@ namespace FleetFlow.Service.Interfaces.UserQuestions;
 
 public interface IAnswerService
 {
-    Task<Answer> AddAsync(AnswerForCreationDto dto);
+    Task<Answer> AddAsync(long questionId, AnswerForCreationDto dto);
     Task<bool> DeleteByIdAsync(long id);
     Task<Answer> UpdateByIdAsync(long id, AnswerForCreationDto dto);
     Task<Answer> GetByIdAsync(long id);
     Task<IEnumerable<Answer>> GetAllAsync(PaginationParams @params);
-    Task<IEnumerable<Answer>> GetAllByUserIdAsync(long userId);
-    Task<IEnumerable<Answer>> GetAllByAdminIdAsync(long adminId);
+    Task<IEnumerable<Answer>> GetAllByUserIdAsync(PaginationParams @params, long userId);
+    Task<IEnumerable<Answer>> GetAllByAdminIdAsync(PaginationParams @params, long adminId);
 }

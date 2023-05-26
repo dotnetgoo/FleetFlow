@@ -1,16 +1,25 @@
 ﻿using AutoMapper;
 using FleetFlow.Domain.Entities;
 using FleetFlow.Domain.Entities.Addresses;
+using FleetFlow.Domain.Entities.Attachments;
+using FleetFlow.Domain.Entities.Authorizations;
 using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Domain.Entities.Orders.Feedbacks;
 using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Domain.Entities.UserQuestions;
 using FleetFlow.Domain.Entities.Users;
+using FleetFlow.Domain.Entities.Warehouses;
 using FleetFlow.Service.DTOs.Address;
+using FleetFlow.Service.DTOs.Attachments;
 using FleetFlow.Service.DTOs.Carts;
+using FleetFlow.Service.DTOs.Discounts;
+using FleetFlow.Service.DTOs.Feedbacks;
+using FleetFlow.Service.DTOs.Inventories;
+using FleetFlow.Service.DTOs.InventoryLogs;
 using FleetFlow.Service.DTOs.Location;
 using FleetFlow.Service.DTOs.Orders;
+using FleetFlow.Service.DTOs.Permissions;
 using FleetFlow.Service.DTOs.Product;
-using FleetFlow.Service.DTOs.Questions;
 using FleetFlow.Service.DTOs.User;
 using Location = FleetFlow.Domain.Entities.Warehouses.Location;
 
@@ -37,8 +46,6 @@ namespace FleetFlow.Service.Mappers
             CreateMap<Order, OrderResultDto>().ReverseMap();
             CreateMap<OrderItem, OrderItemForResultDto>().ReverseMap();
 
-            CreateMap<Question, QuestionForCreationDto>().ReverseMap();
-            CreateMap<Question, QuestionForResultDto>().ReverseMap();
         }
     }
 }

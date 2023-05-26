@@ -3,6 +3,10 @@
     public enum LocationType
     {
         Shelf,
-        Cart
+        Counter,
+        Freezer,
+        Outdoor,
+        Damaged,
+        Other
     }
 }

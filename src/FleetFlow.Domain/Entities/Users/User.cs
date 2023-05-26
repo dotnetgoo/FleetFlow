@@ -1,4 +1,5 @@
 ﻿using FleetFlow.Domain.Commons;
+using FleetFlow.Domain.Entities.Authorizations;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Enums;
 using Newtonsoft.Json;
@@ -15,8 +16,11 @@ namespace FleetFlow.Domain.Entities.Users
         public string Phone { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public UserRole Role { get; set; } = UserRole.User;
 
+        public long RoleId { get; set; } 
+        public Role Role { get; set; }
+
+        
         [JsonIgnore]
         public ICollection<Order> Orders { get; set; }
     }
