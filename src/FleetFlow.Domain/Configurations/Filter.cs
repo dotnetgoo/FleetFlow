@@ -8,7 +8,5 @@ namespace FleetFlow.Domain.Configurations
 {
     public class Filter
     {
-        public long? ProductId { get; set; }
-        public bool RemovedOrNot { get; set; }
     }
 }

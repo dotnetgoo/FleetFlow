@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FleetFlow.DAL.Repositories;
+using FleetFlow.Domain.Configurations;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities.Warehouses;
 using FleetFlow.Service.DTOs.InventoryLogs;
@@ -29,17 +30,27 @@ namespace FleetFlow.Service.Services.Warehouses
 
         public async Task<IEnumerable<InventoryLogForResultDto>> RetrieveAllByProductId(Filter filter, PaginationParams @params = null)
         {
+            var logsQuery = this.inventoryRepository.SelectAll(x => x.RemovedOrNot == filter.Type);
+
+            if (filter.OwnerId != null)
+                logsQuery = logsQuery.Where(x => x.OwnerId == filter.OwnerId);
+
+            if (filter.ProductId != null)
+                logsQuery = logsQuery.Where(x => x.ProductId == filter.ProductId);
+
             if (@params is null)
             {
-
-                var logs = await this.inventoryRepository.SelectAll(x => x.OwnerId == filter.OwnerId  && x.ProductId == filter.ProductId && x.RemovedOrNot == filter.Type).ToListAsync();
+                var logs = await logsQuery.ToListAsync();
                 return this.mapper.Map<IEnumerable<InventoryLogForResultDto>>(logs);
             }
-            var pagedlogs = await this.inventoryRepository.SelectAll(x => x.OwnerId == filter.OwnerId && x.ProductId == filter.ProductId && x.RemovedOrNot == filter.Type).ToPagedList(@params).ToListAsync();
-            return this.mapper.Map<IEnumerable<InventoryLogForResultDto>>(pagedlogs);
+
+            var pagedLogs = await logsQuery.ToPagedList(@params).ToListAsync();
+            return this.mapper.Map<IEnumerable<InventoryLogForResultDto>>(pagedLogs);
         }
 
- 
+
+
+
         public async Task<InventoryLogForResultDto> RetrieveById(long id)
         {
             var log = await this.inventoryRepository.SelectAsync(x => x.Id == id && x.IsDeleted == false);
