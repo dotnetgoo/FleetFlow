@@ -12,10 +12,10 @@ namespace FleetFlow.Service.Services.Warehouses
 {
     public class InventoryLogService : IInventoryLogService
     {
-        private readonly Repository<InventoryLog> inventoryRepository;
+        private readonly IRepository<InventoryLog> inventoryRepository;
         private readonly IMapper mapper;
 
-        public InventoryLogService(Repository<InventoryLog> inventoryRepository, IMapper mapper)
+        public InventoryLogService(IRepository<InventoryLog> inventoryRepository, IMapper mapper)
         {
             this.inventoryRepository = inventoryRepository;
             this.mapper = mapper;
