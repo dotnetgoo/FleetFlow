@@ -1,6 +1,6 @@
-﻿namespace FleetFlow.Service.DTOs.Staffs
+﻿namespace FleetFlow.Service.DTOs.StaffPermissions
 {
-    public class StaffForUpdatePermissionDto
+    public class StaffPermissionsForCreationDto
     {
         public long StaffId { get; set; }
         public long PermissionId { get; set; }
