@@ -1,4 +1,5 @@
-﻿using FleetFlow.Service.DTOs.Attachments;
+﻿using FleetFlow.Domain.Enums;
+using FleetFlow.Service.DTOs.Attachments;
 
 namespace FleetFlow.Service.DTOs.Feedbacks
 {
@@ -7,6 +8,8 @@ namespace FleetFlow.Service.DTOs.Feedbacks
         public long Id { get; set; }
         public long OrderId { get; set; }
         public string Message { get; set; }
-        public IEnumerable<AttachmentResultDto> Attachments { get; set; }
+        public FeedbackStatus Status { get; set; }
+
+        public List<AttachmentResultDto> Attachments { get; set; }
     }
 }
