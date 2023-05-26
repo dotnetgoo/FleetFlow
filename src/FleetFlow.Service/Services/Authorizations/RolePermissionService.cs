@@ -83,5 +83,19 @@ namespace FleetFlow.Service.Services.Authorizations
 
 			return this.mapper.Map<List<RolePermissionForResultDto>>(result);
 		}
+
+		public async Task<bool> CheckPermission(string role, string accessedMethod)
+		{
+			var permissions = await this.rolePermissionRepository
+				.SelectAll(p=> p.Role.Name.ToLower() == role.ToLower())
+				.ToListAsync();
+			foreach(var permission in permissions)
+			{
+				if(permission?.Permisson?.Name.ToLower()==accessedMethod.ToLower())
+					return true;
+			}
+			return false;
+			
+		}
 	}
 }
