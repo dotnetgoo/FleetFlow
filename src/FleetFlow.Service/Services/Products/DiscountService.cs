@@ -47,7 +47,7 @@ public class DiscountService : IDiscountService
         return this.mapper.Map<DiscountResultDto>(insertedDiscount);
     }
 
-    public async Task<DiscountResultDto> ModifyAsync(DiscountUpdateDto dto)
+    public async Task<DiscountResultDto> ModifyAsync(long id, DiscountUpdateDto dto)
     {
         if (dto.PercentageToCheapen < 1 || dto.PercentageToCheapen > 100)
             throw new FleetFlowException(401, "PercentageToCheapen must be between 1 and 100.");
@@ -56,7 +56,7 @@ public class DiscountService : IDiscountService
         if (product is null)
             throw new FleetFlowException(404, "Product not found");
 
-        var discount = await this.discountRepository.SelectAsync(t => t.Id == dto.Id && !t.IsDeleted);
+        var discount = await this.discountRepository.SelectAsync(t => t.Id == id && !t.IsDeleted);
         if (discount is null)
             throw new FleetFlowException(404, "Discount not found");
 

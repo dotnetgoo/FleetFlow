@@ -26,15 +26,15 @@ namespace FleetFlow.Api.Controllers
             });
 
         [HttpPut("discount")]
-        public async Task<IActionResult> PutAsync(DiscountUpdateDto dto)
+        public async Task<IActionResult> PutAsync(long id, DiscountUpdateDto dto)
             => Ok(new Response
             {
                 Code = 200,
                 Message = "Success",
-                Data = await this.discountService.ModifyAsync(dto)
+                Data = await this.discountService.ModifyAsync(id, dto)
             });
 
-        [HttpGet("id")]
+        [HttpGet("{id:long}")]
         public async Task<IActionResult> GetAsync(long id)
             => Ok(new Response
             {
@@ -52,7 +52,7 @@ namespace FleetFlow.Api.Controllers
                 Data = await this.discountService.RetrieveAllAsync(@params, status)
             });
 
-        [HttpPut("stop")]
+        [HttpPut("stop/{id:long}")]
         public async Task<IActionResult> StopAsync(long id)
             => Ok(new Response
             {
@@ -61,7 +61,7 @@ namespace FleetFlow.Api.Controllers
                 Data = await this.discountService.StopAsync(id)
             });
 
-        [HttpPut("stop - productId")]
+        [HttpPut("stop/{productId:long}")]
         public async Task<IActionResult> StopByProductIdAsync(long productId)
             => Ok(new Response
             {
