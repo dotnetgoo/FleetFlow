@@ -87,18 +87,20 @@ namespace FleetFlow.Service.Services.Warehouses
 
         public async Task<InventoryForResultDto> RetrieveById(long id)
         {
-            var inventory = await this.repository.SelectAsync(i=>i.Id == id);
-
+            var inventory = await this.repository.SelectAsync(i => i.Id == id);
             if (inventory is null || inventory.IsDeleted)
                 throw new FleetFlowException(404, "Inventory not found");
 
-            return mapper.Map<InventoryForResultDto>(inventory);
+            return this.mapper.Map<InventoryForResultDto>(inventory);
         }
 
         public async Task<InventoryForResultDto> RetrieveByName(string name)
         {
-            var inventory = await this.repository.SelectAsync(i=>i.Name== name);
+            var inventory = await this.repository.SelectAsync(i => i.Name == name);
+            if (inventory is null || inventory.IsDeleted)
+                throw new FleetFlowException(404, "Inventory not found");
 
+            return this.mapper.Map<InventoryForResultDto>(inventory);
         }
     }
 }
