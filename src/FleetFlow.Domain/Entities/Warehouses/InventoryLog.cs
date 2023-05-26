@@ -11,6 +11,7 @@ namespace FleetFlow.Domain.Entities.Warehouses
         public int Amount { get; set; }
         public long OwnerId { get; set; }
         public User User { get; set; }
-
+        public string Description { get; set; }
+        public bool RemovedOrNot { get; set; }
     }
 }
