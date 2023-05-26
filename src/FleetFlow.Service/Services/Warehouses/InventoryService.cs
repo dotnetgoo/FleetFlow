@@ -3,10 +3,13 @@ using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities.Warehouses;
 using FleetFlow.Service.DTOs.Inventories;
+using FleetFlow.Service.DTOs.Product;
 using FleetFlow.Service.Exceptions;
+using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces.Addresses;
 using FleetFlow.Service.Interfaces.Warehouses;
 using FleetFlow.Shared.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetFlow.Service.Services.Warehouses
 {
@@ -42,29 +45,60 @@ namespace FleetFlow.Service.Services.Warehouses
             return this.mapper.Map<InventoryForResultDto>(addedInventory);
         }
 
-        public async Task<InventoryForResultDto> ModifyAsync(InventoryForUpdateDto inventoryForUpdateDto)
+        public async Task<InventoryForResultDto> ModifyAsync(long id,InventoryForUpdateDto inventoryForUpdateDto)
         {
-            throw new NotImplementedException();
+            var existInventory = await this.repository.SelectAsync(model => model.Id == id);
+            if (existInventory is null || existInventory.IsDeleted == true)
+                throw new FleetFlowException(404, "Inventory not found");
+
+            var location = await this.addressService.GetByIdAsync(inventoryForUpdateDto.LocationId);
+            if (location is null)
+                throw new FleetFlowException(400, "Given location id is not exist");
+
+            var mappedInventory = this.mapper.Map(inventoryForUpdateDto, existInventory);
+            mappedInventory.UpdatedAt = DateTime.UtcNow;
+            mappedInventory.UpdatedBy = HttpContextHelper.UserId;
+            await this.repository.SaveAsync();
+
+            return mapper.Map<InventoryForResultDto>(mappedInventory);
         }
 
-        public Task<bool> RemoveAsync(long id)
+        public async Task<bool> RemoveAsync(long id)
         {
-            throw new NotImplementedException();
+            var existInventory = await this.repository.SelectAsync(i => i.Id == id);
+            if (existInventory is null || existInventory.IsDeleted)
+                throw new FleetFlowException(404, "Couldn't find inventory for this given Id");
+
+            await this.repository.DeleteAsync(i => i.Id.Equals(existInventory));
+            existInventory.DeletedBy = HttpContextHelper.UserId;
+            await this.repository.SaveAsync();
+            return true;
         }
 
-        public Task<IEnumerable<InventoryForResultDto>> RetrieveAllInventory(PaginationParams @params)
+        public async Task<IEnumerable<InventoryForResultDto>> RetrieveAllInventory(PaginationParams @params)
         {
-            throw new NotImplementedException();
+            var inventories = await this.repository.SelectAll()
+            .Where(p => !p.IsDeleted)
+            .ToPagedList(@params)
+            .ToListAsync();
+
+            return this.mapper.Map<IEnumerable<InventoryForResultDto>>(inventories);
         }
 
-        public Task<InventoryForResultDto> RetrieveById(long id)
+        public async Task<InventoryForResultDto> RetrieveById(long id)
         {
-            throw new NotImplementedException();
+            var inventory = await this.repository.SelectAsync(i=>i.Id == id);
+
+            if (inventory is null || inventory.IsDeleted)
+                throw new FleetFlowException(404, "Inventory not found");
+
+            return mapper.Map<InventoryForResultDto>(inventory);
         }
 
-        public Task<InventoryForResultDto> RetrieveByName(string name)
+        public async Task<InventoryForResultDto> RetrieveByName(string name)
         {
-            throw new NotImplementedException();
+            var inventory = await this.repository.SelectAsync(i=>i.Name== name);
+
         }
     }
 }
