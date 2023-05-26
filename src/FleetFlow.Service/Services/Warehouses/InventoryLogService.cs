@@ -21,7 +21,7 @@ namespace FleetFlow.Service.Services.Warehouses
             this.mapper = mapper;
         }
 
-        internal async Task<InventoryLogForResultDto> AddAsync(InventoryLogForCreationDto dto)
+        public async Task<InventoryLogForResultDto> AddAsync(InventoryLogForCreationDto dto)
         {
             var mapped = this.mapper.Map<InventoryLog>(dto);
             mapped.CreatedAt = DateTime.UtcNow;
