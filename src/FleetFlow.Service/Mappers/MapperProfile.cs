@@ -2,6 +2,7 @@
 using FleetFlow.Domain.Entities;
 using FleetFlow.Domain.Entities.Addresses;
 using FleetFlow.Domain.Entities.Attachments;
+using FleetFlow.Domain.Entities.Authorizations;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Orders.Feedbacks;
 using FleetFlow.Domain.Entities.Products;
@@ -16,7 +17,10 @@ using FleetFlow.Service.DTOs.Inventories;
 using FleetFlow.Service.DTOs.InventoryLogs;
 using FleetFlow.Service.DTOs.Location;
 using FleetFlow.Service.DTOs.Orders;
+using FleetFlow.Service.DTOs.Permissions;
 using FleetFlow.Service.DTOs.Product;
+using FleetFlow.Service.DTOs.RolePermissions;
+using FleetFlow.Service.DTOs.Roles;
 using FleetFlow.Service.DTOs.User;
 using Location = FleetFlow.Domain.Entities.Warehouses.Location;
 
@@ -63,6 +67,19 @@ namespace FleetFlow.Service.Mappers
 
             CreateMap<AttachmentCreationDto, Attachment>().ReverseMap();
             CreateMap<AttachmentResultDto, Attachment>().ReverseMap();
+            
+            CreateMap<Permission, PermissionForCreationDto>().ReverseMap();
+            CreateMap<Permission, PermissionForResultDto>().ReverseMap();
+            CreateMap<Permission, PermissionForUpdateDto>().ReverseMap();
+
+            CreateMap<RolePermission, RolePermissionForCreateDto>().ReverseMap();
+            CreateMap<RolePermission, RolePermissionForResultDto>().ReverseMap();
+            CreateMap<RolePermission, RolePermissionForUpdateDto>().ReverseMap();
+
+
+            CreateMap<Role, RoleCreationDto>().ReverseMap();
+            CreateMap<Role, RoleResultDto>().ReverseMap();
+            CreateMap<Role, RoleUpdateDto>().ReverseMap();
         }
     }
 }
