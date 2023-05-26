@@ -4,6 +4,7 @@ using FleetFlow.Domain.Entities.Attachments;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Orders.Feedbacks;
 using FleetFlow.Domain.Entities.Products;
+using FleetFlow.Domain.Entities.UserQuestions;
 using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Domain.Entities.Warehouses;
 using FleetFlow.Domain.Enums;
@@ -18,7 +19,6 @@ namespace FleetFlow.DAL.DbContexts
             : base(options)
         {
         }
-
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Location> Locations { get; set; }
@@ -34,6 +34,8 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<FeedbackAttachment> FeedbackAttachments { get; set; }
         public DbSet<Discount> Discounts { get; set; }
+        public DbSet<Answer> Answers { get; set; }
+        public DbSet<Question> Questions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -169,6 +171,9 @@ namespace FleetFlow.DAL.DbContexts
                 new OrderItem() { Id = 1, OrderId = 1, ProductId = 3, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
                 new OrderItem() { Id = 2, OrderId = 1, ProductId = 6, Amount = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
                 new OrderItem() { Id = 3, OrderId = 1, ProductId = 2, Amount = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
+                );
+            modelBuilder.Entity<Question>().HasData(
+                new Question() { Id = 1, IsDeleted = false, CreatedAt = DateTime.UtcNow, IsAnswered = true, Message = "Hello .NET N6 group", UserId = 1 ,UpdatedAt = null}
                 );
 
             #endregion
