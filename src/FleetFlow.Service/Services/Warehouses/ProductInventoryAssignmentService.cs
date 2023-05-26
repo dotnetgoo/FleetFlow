@@ -63,18 +63,18 @@ namespace FleetFlow.Service.Services.Warehouses
             return this.mapper.Map<ProductInventoryAssignmentForResultDto>(added);
                 
         }
-        public async Task<ProductInventoryAssignmentForResultDto> AddQuantity(long id, int amount)
+        public async Task<ProductInventoryAssignmentForResultDto> AddQuantity(long ProductId, long InventoryId, int amount)
         {
-            var model = await this.repository.SelectAsync(x => x.Id == id);
+            var model = await this.repository.SelectAsync(x => x.ProductId == ProductId && x.InventoryId == InventoryId);
             if (model is null || model.IsDeleted == true)
                 throw new FleetFlowException(404, "Product not found");
             model.Amount += amount;
             await this.repository.SaveAsync();
             return this.mapper.Map<ProductInventoryAssignmentForResultDto>(model);
         }
-        public async Task<ProductInventoryAssignmentForResultDto> RemoveQuantity(long id, int amount)
+        public async Task<ProductInventoryAssignmentForResultDto> RemoveQuantity(long ProductId, long InventoryId, int amount)
         {
-            var model = await this.repository.SelectAsync(x => x.Id == id);
+            var model = await this.repository.SelectAsync(x => x.ProductId == ProductId && x.InventoryId == InventoryId);
             if (model is null || model.IsDeleted == true)
                 throw new FleetFlowException(404, "Product not found");
             model.Amount -= amount;
