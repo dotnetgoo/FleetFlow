@@ -28,7 +28,7 @@ namespace FleetFlow.Service.Services.Warehouses
         {
             var existInventory = await this.repository.SelectAsync(i => i.Name.ToLower()
             .Equals(dto.Name.ToLower()));
-            if (existInventory is not null || existInventory.IsDeleted == false)
+            if (existInventory is not null && existInventory.IsDeleted == false)
                 throw new FleetFlowException(409, "Inventory already exist");
 
             if (await this.addressService.GetByIdAsync(dto.AddressId) is null)

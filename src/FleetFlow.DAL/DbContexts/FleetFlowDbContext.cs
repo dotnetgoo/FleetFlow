@@ -169,11 +169,11 @@ namespace FleetFlow.DAL.DbContexts
                 );
 
             modelBuilder.Entity<Inventory>().HasData(
-                new Inventory() { Id = 1, Name = "Shayxon", Description = "Eng katta va asosiy filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 2, Name = "Chilonzor", Description = "Chilonzor filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() {Id = 3, Name = "Xadra", Description = "Xadra filial", AddressId = 2, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null },
-                new Inventory() {Id = 4, Name = "Shodlik", Description = "Eng shinam filial", AddressId = 3, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null },
-                new Inventory() {Id = 5, Name = "Charxiy", Description = "Eng kichik filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null }
+                new Inventory() { Id = 1, Name = "Shayxon", Description = "Eng katta va asosiy filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new Inventory() { Id = 2, Name = "Chilonzor", Description = "Chilonzor filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new Inventory() {Id = 3, Name = "Xadra", Description = "Xadra filial", AddressId = 2, OwnerId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Inventory() {Id = 4, Name = "Shodlik", Description = "Eng shinam filial", AddressId = 3, OwnerId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Inventory() {Id = 5, Name = "Charxiy", Description = "Eng kichik filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
 
             modelBuilder.Entity<Order>().HasData(
