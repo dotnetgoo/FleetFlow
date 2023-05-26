@@ -1,11 +1,6 @@
 ﻿using FleetFlow.Domain.Commons;
 using FleetFlow.Domain.Entities.Authorizations;
 using FleetFlow.Domain.Entities.Staffs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FleetFlow.Domain.Entities.StaffPermissions
 {
