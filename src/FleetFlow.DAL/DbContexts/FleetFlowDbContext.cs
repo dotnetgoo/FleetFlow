@@ -35,6 +35,9 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<FeedbackAttachment> FeedbackAttachments { get; set; }
         public DbSet<Discount> Discounts { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
