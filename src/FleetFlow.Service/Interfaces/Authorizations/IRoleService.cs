@@ -9,7 +9,7 @@ namespace FleetFlow.Service.Interfaces.Authorizations
         Task<RoleResultDto> AddAsync(RoleCreationDto dto);
         Task<bool> ModifyAsync(RoleUpdateDto dto);
         Task<bool> RemoveAsync(long id);
-        Task<IEnumerable<RoleResultDto>> GetAllAsync(PaginationParams @params);
+        Task<IEnumerable<RoleResultDto>> RetrieveAllAsync(PaginationParams @params);
         Task<Role> RetrieveByIdAsync(long id);
     }
 }
