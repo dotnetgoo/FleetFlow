@@ -169,7 +169,7 @@ namespace FleetFlow.DAL.DbContexts
                 new Inventory() { Id = 2, Name = "Chilonzor", Description = "Chilonzor filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
                 new Inventory() {Id = 3, Name = "Xadra", Description = "Xadra filial", AddressId = 2, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null },
                 new Inventory() {Id = 4, Name = "Shodlik", Description = "Eng shinam filial", AddressId = 3, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null },
-                new Inventory() {Id = 5, Name = "Charxiy", Description = "Eng kichik filial", AddressId = 5, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null }
+                new Inventory() {Id = 5, Name = "Charxiy", Description = "Eng kichik filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null }
                 );
             modelBuilder.Entity<Order>().HasData(
                 new Order() { Id = 1, UserId = 1, AddressId = 2, Status = OrderStatus.Pending, CreatedAt = DateTime.UtcNow, UpdatedAt = null}
