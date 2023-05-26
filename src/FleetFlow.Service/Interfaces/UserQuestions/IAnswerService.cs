@@ -8,7 +8,7 @@ namespace FleetFlow.Service.Interfaces.UserQuestions;
 
 public interface IAnswerService
 {
-    Task<Answer> AddAsync(AnswerForCreationDto dto);
+    Task<Answer> AddAsync(long questionId, AnswerForCreationDto dto);
     Task<bool> DeleteByIdAsync(long id);
     Task<Answer> UpdateByIdAsync(long id, AnswerForCreationDto dto);
     Task<Answer> GetByIdAsync(long id);

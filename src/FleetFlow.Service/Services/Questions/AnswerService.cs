@@ -10,6 +10,7 @@ using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces.UserQuestions;
 using FleetFlow.Shared.Helpers;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics.CodeAnalysis;
 
@@ -18,15 +19,18 @@ namespace FleetFlow.Service.Services.UserQuestions;
 public class AnswerService : IAnswerService
 {
     private readonly IRepository<Answer> answerRepository;
+    private readonly IRepository<Question> questionRepository;
     private readonly IQuestionService questionService;
     private readonly IMapper mapper;
 
     public AnswerService(
         IRepository<Answer> answerRepository,
+        IRepository<Question> questionRepository,
         IQuestionService questionService,
         IMapper mapper)
     {
         this.answerRepository = answerRepository;
+        this.questionRepository = questionRepository;
         this.questionService = questionService;
         this.mapper = mapper;
     }
@@ -36,9 +40,16 @@ public class AnswerService : IAnswerService
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    public async Task<Answer> AddAsync(AnswerForCreationDto dto)
+    public async Task<Answer> AddAsync(long questionId, AnswerForCreationDto dto)
     {
+        var question = await questionService.GetByIdAsync(questionId);
+        if (question is null)
+            throw new FleetFlowException(404, "Question Not Found");
+
         var mapped = mapper.Map<Answer>(dto);
+
+        mapped.QuestionId = questionId;
+
         var insertedAnswer = await answerRepository.InsertAsync(mapped);
 
         await answerRepository.SaveAsync();
