@@ -3,5 +3,5 @@
 public class AttachmentResultDto
 {
     public long Id { get; set; }
-    public string Path { get; set; }
+    public string FileName { get; set; }
 }
