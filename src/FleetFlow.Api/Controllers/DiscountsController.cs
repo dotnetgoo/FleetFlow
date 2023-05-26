@@ -1,7 +1,9 @@
 ﻿using FleetFlow.Api.Models;
 using FleetFlow.Domain.Congirations;
+using FleetFlow.Domain.Enums;
 using FleetFlow.Service.DTOs.Discounts;
 using FleetFlow.Service.Interfaces.Products;
+using FleetFlow.Service.Services.Products;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
@@ -42,12 +44,12 @@ namespace FleetFlow.Api.Controllers
             });
 
         [HttpGet("discounts")]
-        public async Task<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
+        public async Task<IActionResult> GetAllAsync([FromQuery] PaginationParams @params, DiscountState? status = null)
             => Ok(new Response
             {
                 Code = 200,
                 Message = "Success",
-                Data = await this.discountService.RetrieveAllAsync(@params)
+                Data = await this.discountService.RetrieveAllAsync(@params, status)
             });
 
         [HttpPut("stop")]
