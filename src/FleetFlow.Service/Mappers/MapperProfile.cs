@@ -48,12 +48,16 @@ namespace FleetFlow.Service.Mappers
             CreateMap<Discount, DiscountCreationDto>().ReverseMap();
             CreateMap<Discount, DiscountUpdateDto>().ReverseMap();
 
-            CreateMap<Inventory, InventoryCreationDto>().ReverseMap();
+            CreateMap<Inventory, InventoryForCreationDto>().ReverseMap();
             CreateMap<Inventory, InventoryForResultDto>().ReverseMap();
             CreateMap<Inventory, InventoryForUpdateDto>().ReverseMap();
 
             CreateMap<InventoryLog, InventoryLogForCreationDto>().ReverseMap();
             CreateMap<InventoryLog, InventoryLogForResultDto>().ReverseMap();
+
+            CreateMap<ProductInventoryAssignment, ProductInventoryAssignmentForCreationDto>().ReverseMap();
+            CreateMap<ProductInventoryAssignment, ProductInventoryAssignmentForResultDto>().ReverseMap();
+            CreateMap<ProductInventoryAssignment, ProductInventoryAssignmentForUpdateDto>().ReverseMap();
         }
     }
 }
