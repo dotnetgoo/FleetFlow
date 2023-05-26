@@ -21,6 +21,7 @@ public class AnswerService : IAnswerService
     private readonly IRepository<Answer> answerRepository;
     private readonly IRepository<Question> questionRepository;
     private readonly IQuestionService questionService;
+    private readonly IRepository<User> userRepository;
     private readonly IMapper mapper;
 
     public AnswerService(
@@ -40,22 +41,27 @@ public class AnswerService : IAnswerService
     /// </summary>
     /// <param name="dto"></param>
     /// <returns></returns>
-    public async Task<Answer> AddAsync(long questionId, AnswerForCreationDto dto)
+    public async Task<Answer> AddAsync(AnswerForCreationDto dto)
     {
-        var question = await questionService.GetByIdAsync(questionId);
-        if (question is null)
-            throw new FleetFlowException(404, "Question Not Found");
+        if (dto.AnsweredQuestionId is not null)
+        {
+            long questionId = (long)dto.AnsweredQuestionId;
 
-        var mapped = mapper.Map<QuestionForCreationDto>(question);
+            var question = await questionService.RetrieveByIdAsync(questionId);
+            if (question is null)
+                throw new FleetFlowException(404, "Question Not Found");
+
+            var mapped = mapper.Map<QuestionForCreationDto>(question);
+            question.IsAnswered = true;
+            await questionService.ModifyAsync(questionId, mapped);
+        }
+        else if ((await this.userRepository.SelectAsync(u => u.Id == dto.AnsweredUserId)) is null)
+            throw new FleetFlowException(404, "User is not found");
+
+
         var mapped2 = mapper.Map<Answer>(dto);
 
-        mapped2.QuestionId = questionId;
-
         var insertedAnswer = await answerRepository.InsertAsync(mapped2);
-
-        question.IsAnswered = true;
-
-        await questionService.UpdateByIdAsync(questionId, mapped);
 
         await answerRepository.SaveAsync();
 
@@ -126,7 +132,7 @@ public class AnswerService : IAnswerService
     public async Task<IEnumerable<Answer>> GetAllByUserIdAsync(PaginationParams @params, long userId)
     {
         var userAnswers = await answerRepository.SelectAll()
-            .Where(a => a.UserId == userId)
+            .Where(a => a.AnsweredUserId == userId)
             .ToPagedList(@params)
             .ToListAsync();
 
