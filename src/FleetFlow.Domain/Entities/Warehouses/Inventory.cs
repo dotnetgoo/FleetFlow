@@ -1,5 +1,6 @@
 ﻿using FleetFlow.Domain.Commons;
 using FleetFlow.Domain.Entities.Addresses;
+using FleetFlow.Domain.Entities.Users;
 
 namespace FleetFlow.Domain.Entities.Warehouses
 {
@@ -9,5 +10,7 @@ namespace FleetFlow.Domain.Entities.Warehouses
         public string Description { get; set; }
         public long AddressId { get; set; }
         public Address Address { get; set; }
+        public long? OwnerId { get; set; }
+        public User User { get; set; }
     }
 }
