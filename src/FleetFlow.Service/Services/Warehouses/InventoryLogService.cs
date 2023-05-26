@@ -21,10 +21,10 @@ namespace FleetFlow.Service.Services.Warehouses
             this.mapper = mapper;
         }
 
-        public async Task<InventoryLogForResultDto> AddAsync(InventoryLogForCreationDto dto)
+        internal async Task<InventoryLogForResultDto> AddAsync(InventoryLogForCreationDto dto)
         {
             var mapped = this.mapper.Map<InventoryLog>(dto);
-
+            mapped.CreatedAt = DateTime.UtcNow;
             await this.inventoryRepository.InsertAsync(mapped);
             await this.inventoryRepository.SaveAsync();
 
