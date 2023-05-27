@@ -22,6 +22,8 @@ namespace FleetFlow.DAL.DbContexts
         }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<InventoryLog> InventoryLogs { get; set; }
+        public DbSet<ProductInventoryAssignment> ProductInventoryAssignments { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
@@ -233,7 +235,7 @@ namespace FleetFlow.DAL.DbContexts
                 new OrderItem() { Id = 14, OrderId = 5, ProductId = 3, Amount = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
                 new OrderItem() { Id = 15, OrderId = 5, ProductId = 1, Amount = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
 
-                new OrderItem() { Id = 16, OrderId = 6, ProductId = 2, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
+                new OrderItem() { Id = 16, OrderId = 6, ProductId = 2, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null });
 
             modelBuilder.Entity<ProductInventoryAssignment>().HasData(
                 new ProductInventoryAssignment() { Id = 1, ProductId = 1, Amount = 1, InventoryId = 1, LocationId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
