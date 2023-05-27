@@ -40,7 +40,7 @@ namespace FleetFlow.Api.Controllers
             {
                 Code = 200,
                 Message = "OK",
-                Data = await this.answerService.DeleteByIdAsync(answerId)
+                Data = await this.answerService.RemoveByIdAsync(answerId)
             });
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace FleetFlow.Api.Controllers
             {
                 Code = 200,
                 Message = "OK",
-                Data = await this.answerService.GetByIdAsync(answerId)
+                Data = await this.answerService.RetrieveByIdAsync(answerId)
             });
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace FleetFlow.Api.Controllers
             {
                 Code = 200,
                 Message = "OK",
-                Data = await this.answerService.GetAllAsync(@params)
+                Data = await this.answerService.RetrieveAllAsync(@params)
             });
 
         /// <summary>
@@ -83,7 +83,7 @@ namespace FleetFlow.Api.Controllers
             {
                 Code = 200,
                 Message = "OK",
-                Data = await this.answerService.GetAllByAdminIdAsync(@params, adminId)
+                Data = await this.answerService.RetrieveAllByAdminIdAsync(@params, adminId)
             });
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace FleetFlow.Api.Controllers
             {
                 Code = 200,
                 Message = "OK",
-                Data = await this.answerService.GetAllByUserIdAsync(@params, userId)
+                Data = await this.answerService.RetrieveAllByUserIdAsync(@params, userId)
             });
 
         /// <summary>
@@ -108,12 +108,12 @@ namespace FleetFlow.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPut("{id:long}")]
-        public async ValueTask<IActionResult> UpdateAnswerAsync([FromRoute]long id, AnswerForCreationDto dto)
+        public async ValueTask<IActionResult> UpdateAnswerAsync([FromRoute]long id, [FromBody]string message)
             => Ok(new Response
             {
                 Code = 200,
                 Message = "OK",
-                Data = await this.answerService.UpdateByIdAsync(id, dto)
+                Data = await this.answerService.ModifyByIdAsync(id, message)
             });
     }
 }

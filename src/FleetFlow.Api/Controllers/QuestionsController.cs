@@ -77,12 +77,12 @@ namespace FleetFlow.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPut("id")]
-        public async ValueTask<IActionResult> PutAsync(long id, [FromBody] QuestionForCreationDto dto)
+        public async ValueTask<IActionResult> PutAsync(long id, [FromBody]string message)
             => Ok(new Response
             {
                 Code = 200,
                 Message = "Success",
-                Data = await this.questionService.ModifyAsync(id, dto)
+                Data = await this.questionService.ModifyAsync(id, message)
             });
 
         /// <summary>
