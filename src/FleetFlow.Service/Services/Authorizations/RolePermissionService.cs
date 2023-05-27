@@ -24,7 +24,7 @@ namespace FleetFlow.Service.Services.Authorizations
 
 		public async Task<RolePermissionForResultDto> CreateAsync(RolePermissionForCreateDto permission)
 		{
-			var rolePermission = await this.rolePermissionRepository.SelectAsync(rp => rp.RoleId==permission.RoleId && rp.PermissonId==permission.PermissonId);
+			var rolePermission = await this.rolePermissionRepository.SelectAsync(rp => rp.RoleId==permission.RoleId && rp.PermissonId==permission.PermissonId && rp.IsDeleted ==true);
 			if (rolePermission is not null)
 				throw new FleetFlowException(409, "RolePermission is already exist");
 
@@ -36,9 +36,9 @@ namespace FleetFlow.Service.Services.Authorizations
 			return this.mapper.Map<RolePermissionForResultDto>(result);
 		}
 
-		public async Task<bool> DeleteAsync(long id)
+		public async Task<bool> RemoveAsync(long id)
 		{
-			var result = await this.rolePermissionRepository.DeleteAsync(rp => rp.Id == id);
+			var result = await this.rolePermissionRepository.DeleteAsync(rp => rp.Id == id && rp.IsDeleted == false);
 			if (!result)
 				throw new FleetFlowException(404, "RolePermission is not available");
 
@@ -47,7 +47,7 @@ namespace FleetFlow.Service.Services.Authorizations
 
 		public async Task<List<RolePermissionForResultDto>> RetrieveAllAsync(PaginationParams @params)
 		{
-			var permissions = await rolePermissionRepository.SelectAll()
+			var permissions = await rolePermissionRepository.SelectAll(p => p.IsDeleted == false && p.Permisson.IsDeleted == false && p.Role.IsDeleted == false, new string[] { "Permisson","Role" })
 		  .Where(p => p.IsDeleted == false)
 		  .ToPagedList(@params)
 		  .ToListAsync();
@@ -57,7 +57,7 @@ namespace FleetFlow.Service.Services.Authorizations
 
 		public async Task<RolePermissionForResultDto> ModifyAsync(RolePermissionForUpdateDto permission)
 		{
-			var rolePermission = await this.rolePermissionRepository.SelectAsync(rp => rp.Id == permission.Id);
+			var rolePermission = await this.rolePermissionRepository.SelectAsync(rp => rp.Id == permission.Id && rp.IsDeleted ==false);
 			if (rolePermission is null)
 				throw new FleetFlowException(404, "RolePermission is not available");
 			var result = this.mapper.Map(permission, rolePermission);
@@ -69,20 +69,12 @@ namespace FleetFlow.Service.Services.Authorizations
 
 		public async Task<RolePermissionForResultDto> RetrieveByIdAsync(long id)
 		{
-			var rolePermission = await this.rolePermissionRepository.SelectAsync(rp => rp.Id == id);
+			var rolePermission = await this.rolePermissionRepository.SelectAll(rp => rp.Id == id && rp.IsDeleted == false && rp.Permisson.IsDeleted ==false && rp.Role.IsDeleted ==false,new string[] {"Permission","Role"})
+				.FirstOrDefaultAsync();
 			if (rolePermission is null)
 				throw new FleetFlowException(404, "RolePermission is not found");
 
 			return this.mapper.Map<RolePermissionForResultDto>(rolePermission);
-		}
-
-		public async Task<List<RolePermissionForResultDto>> RetrieveAllPermissionsByRole(long roleId, string role)
-		{
-			var result = await this.rolePermissionRepository.SelectAll()
-				.Where(r => r.RoleId == roleId || r.Role.Name.ToLower() == role.ToLower())
-				.ToListAsync();
-
-			return this.mapper.Map<List<RolePermissionForResultDto>>(result);
 		}
 
 		public async Task<bool> CheckPermission(string role, string accessedMethod)

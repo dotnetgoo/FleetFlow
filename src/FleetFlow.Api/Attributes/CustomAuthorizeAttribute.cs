@@ -30,7 +30,6 @@ public class CustomAuthorizeAttribute : TypeFilterAttribute
             var controllerDescriptor = context.ActionDescriptor as ControllerActionDescriptor;
 			var result = controllerDescriptor?.ControllerName.ToLower() + "." + controllerDescriptor?.ActionName.ToLower();
 			var role = context.HttpContext?.User?.Claims?.FirstOrDefault(u => u.Type == ClaimTypes.Role)?.Value ?? string.Empty;
-			//var res = await this.rolePermissionService.CheckPermission(role, result);
 			var res = this.rolePermissionService.CheckPermission(role, result).GetAwaiter().GetResult();
 
             if (!res)
@@ -41,9 +40,9 @@ public class CustomAuthorizeAttribute : TypeFilterAttribute
 					Code = exception.Code,
 					Message = exception.Message
 				})
-				    {
-						StatusCode = exception.Code
-				    };
+				 {
+					StatusCode = exception.Code
+				 };
 			    }
         }
 

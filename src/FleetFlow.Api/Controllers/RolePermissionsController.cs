@@ -44,7 +44,7 @@ namespace FleetFlow.Api.Controllers
             {
                 Code = 200,
                 Message = "OK",
-                Data = await this.rolePermissionService.DeleteAsync(id)
+                Data = await this.rolePermissionService.RemoveAsync(id)
             });
 
         [HttpGet("{id}")]
