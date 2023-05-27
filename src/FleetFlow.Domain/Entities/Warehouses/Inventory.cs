@@ -11,6 +11,6 @@ namespace FleetFlow.Domain.Entities.Warehouses
         public long AddressId { get; set; }
         public Address Address { get; set; }
         public long? OwnerId { get; set; }
-        public User User { get; set; }
+        public User Owner { get; set; }
     }
 }
