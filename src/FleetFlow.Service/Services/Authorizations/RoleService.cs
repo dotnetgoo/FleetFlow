@@ -24,7 +24,7 @@ namespace FleetFlow.Service.Services.Authorizations
 
         public async Task<RoleResultDto> AddAsync(RoleCreationDto dto)
         {
-            var exist = await this.roleRepository.SelectAsync(r => r.Name.Equals(dto.Name));
+            var exist = await this.roleRepository.SelectAsync(r => r.Name.Equals(dto.Name) && r.IsDeleted == true);
             if (exist is not null)
                 throw new FleetFlowException(404, "Role is already exist");
 
@@ -47,7 +47,7 @@ namespace FleetFlow.Service.Services.Authorizations
 
         public async Task<bool> ModifyAsync(RoleUpdateDto dto)
         {
-            var exist = await this.roleRepository.SelectAsync(r => r.Name.Equals(dto.Name));
+            var exist = await this.roleRepository.SelectAsync(r => r.Name.Equals(dto.Name) && r.IsDeleted == false);
             if (exist is null)
                 throw new FleetFlowException(404, "Role is not found");
 
@@ -62,7 +62,7 @@ namespace FleetFlow.Service.Services.Authorizations
 
         public async Task<bool> RemoveAsync(long id)
         {
-            var exist = await this.roleRepository.SelectAsync(r => r.Id.Equals(id));
+            var exist = await this.roleRepository.SelectAsync(r => r.Id.Equals(id) && r.IsDeleted == false);
             if (exist is null)
                 throw new FleetFlowException(404, "Role is not found");
 
@@ -73,7 +73,7 @@ namespace FleetFlow.Service.Services.Authorizations
         }
 
         public async Task<Role> RetrieveByIdAsync(long id)
-            => await this.roleRepository.SelectAsync(u => u.Id == id);
+            => await this.roleRepository.SelectAsync(u => u.Id == id && u.IsDeleted == false);
 
 
     }

@@ -24,7 +24,7 @@ namespace FleetFlow.Service.Services.Authorizations
 
 		public async Task<PermissionForResultDto> CreateAsync(PermissionForCreationDto dto)
 		{
-			var permission =  await this.permissionRepository.SelectAsync(p => p.Name.ToLower() == dto.Name.ToLower());
+			var permission =  await this.permissionRepository.SelectAsync(p => p.Name.ToLower() == dto.Name.ToLower() && p.IsDeleted == true);
 			if (permission is not null)
 				throw new FleetFlowException(409, "Permission is already available");
 
@@ -48,7 +48,7 @@ namespace FleetFlow.Service.Services.Authorizations
 
 		public async Task<PermissionForResultDto> RetrieveByIdAsync(long id)
 		{
-			var permission = await this.permissionRepository.SelectAsync(p => p.Id==id);
+			var permission = await this.permissionRepository.SelectAsync(p => p.Id == id && p.IsDeleted == false);
 			if (permission is null)
 				throw new FleetFlowException(404, "Permission is not available");
 
@@ -57,7 +57,7 @@ namespace FleetFlow.Service.Services.Authorizations
 
 		public async Task<bool> RemoveAsync(long id)
 		{
-			var permission = await this.permissionRepository.DeleteAsync(p => p.Id == id);
+			var permission = await this.permissionRepository.DeleteAsync(p => p.Id == id && p.IsDeleted == false);
 			if (!permission)
 				throw new FleetFlowException(404, "Permission is not available");
 			
@@ -67,7 +67,7 @@ namespace FleetFlow.Service.Services.Authorizations
 
 		public async Task<PermissionForResultDto> ModifyAsync(PermissionForUpdateDto dto)
 		{
-			var permission = await this.permissionRepository.SelectAsync(u => u.Id == dto.Id);
+			var permission = await this.permissionRepository.SelectAsync(u => u.Id == dto.Id && u.IsDeleted == false);
 			if (permission is null)
 				throw new FleetFlowException(404, "Permission is not found ");
 
