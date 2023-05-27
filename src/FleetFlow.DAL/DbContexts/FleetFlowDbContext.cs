@@ -39,6 +39,31 @@ namespace FleetFlow.DAL.DbContexts
         {
             #region Fluent API relations
 
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.ProductInventoryAssignment)
+                .WithMany()
+                .HasForeignKey(oi => oi.ProductInventoryAssignmentId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProductInventoryAssignment>()
+                .HasOne(pia => pia.Product)
+                .WithMany()
+                .HasForeignKey(pia => pia.ProductId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProductInventoryAssignment>()
+                .HasOne(pia => pia.Location)
+                .WithMany()
+                .HasForeignKey(pia => pia.LocationId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProductInventoryAssignment>()
+                .HasOne(pia => pia.Inventory)
+                .WithMany()
+                .HasForeignKey(pia => pia.InventoryId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+
             modelBuilder.Entity<Inventory>()
                 .HasOne(i => i.Address)
                 .WithMany()
@@ -53,8 +78,14 @@ namespace FleetFlow.DAL.DbContexts
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Address)
-                .WithMany(a => a.Orders)
+                .WithMany()
                 .HasForeignKey(o => o.AddressId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Payment)
+                .WithOne(p => p.Order)
+                .HasForeignKey<Order>(o => o.PaymentId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<OrderItem>()
@@ -183,15 +214,14 @@ namespace FleetFlow.DAL.DbContexts
                 new ProductInventoryAssignment() { Id = 5, ProductId = 5, Amount = 5, InventoryId = 5, LocationId = 5, CreatedAt = DateTime.UtcNow }
                 );
 
-            modelBuilder.Entity<OrderItem>().HasData(
-                new OrderItem() { Id = 1, OrderId = 1, ProductId = 3, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new OrderItem() { Id = 2, OrderId = 1, ProductId = 6, Amount = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new OrderItem() { Id = 3, OrderId = 1, ProductId = 2, Amount = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
-                );
+            //modelBuilder.Entity<OrderItem>().HasData(
+            //    new OrderItem() { Id = 1, OrderId = 1, ProductId = 3, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+            //    new OrderItem() { Id = 2, OrderId = 1, ProductId = 6, Amount = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+            //    new OrderItem() { Id = 3, OrderId = 1, ProductId = 2, Amount = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
+            //    );
             modelBuilder.Entity<Question>().HasData(
                 new Question() { Id = 1, IsDeleted = false, CreatedAt = DateTime.UtcNow, IsAnswered = true, Message = "Hello .NET N6 group", UserId = 1 ,UpdatedAt = null}
                 );
-
             #endregion
         }
     }

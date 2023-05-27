@@ -19,15 +19,15 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost("answer")]
-        public async ValueTask<IActionResult> AddAsnwerAsync([FromBody] AnswerForCreationDto dto,
-            long questionId)
-            => Ok(new Response
-            {
-                Code = 200,
-                Message = "OK",
-                Data = await this.answerService.AddAsync(questionId, dto)
-            });
+        //[HttpPost("answer")]
+        //public async ValueTask<IActionResult> AddAsnwerAsync([FromBody] AnswerForCreationDto dto,
+        //    long questionId)
+        //    => Ok(new Response
+        //    {
+        //        Code = 200,
+        //        Message = "OK",
+        //        Data = await this.answerService.AddAsync(questionId, dto)
+        //    });
 
         /// <summary>
         /// Delete Answer by id from database

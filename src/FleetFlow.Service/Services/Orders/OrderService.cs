@@ -24,7 +24,7 @@ namespace FleetFlow.Service.Services.Orders
         private readonly IRepository<Cart> cartRepository;
         private readonly IRepository<Order> orderRepository;
         private readonly IRepository<User> userRepository;
-        private readonly IOrderActionService orderActionService;
+        //private readonly IOrderActionService orderActionService;
         private readonly IPaymentService paymentService;
         private readonly IAddressService addressService;
 
@@ -32,7 +32,7 @@ namespace FleetFlow.Service.Services.Orders
             IRepository<Cart> cartRepository,
             IRepository<User> userRepository,
             IMapper mapper,
-            IOrderActionService orderActionService,
+          //  IOrderActionService orderActionService,
             IAddressService addressService,
             IPaymentService paymentService)
         {
@@ -40,7 +40,7 @@ namespace FleetFlow.Service.Services.Orders
             this.cartRepository = cartRepository;
             this.mapper = mapper;
             this.userRepository = userRepository;
-            this.orderActionService = orderActionService;
+            //this.orderActionService = orderActionService;
             this.addressService = addressService;
             this.paymentService = paymentService;
         }
@@ -79,7 +79,10 @@ namespace FleetFlow.Service.Services.Orders
             var createdOrder = await orderRepository.InsertAsync(order);
             await orderRepository.SaveAsync();
 
-            await this.orderActionService.StartPendingAsync((int)order.Id);
+            ///@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            ///Circular injection detected
+            //await this.orderActionService.StartPendingAsync((int)order.Id);
+            ///@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
             return mapper.Map<OrderResultDto>(createdOrder);
         }

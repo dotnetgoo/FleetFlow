@@ -20,7 +20,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("product-inventory-assignment")]
         public async ValueTask<ActionResult<ProductInventoryAssignmentForResultDto>> PostAsync([FromBody] ProductInventoryAssignmentForCreationDto dto)
             => Ok(new Response
             {
@@ -47,8 +47,8 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPut("id")]
-        public async ValueTask<ActionResult<ProductInventoryAssignment>> PutAsync(long id, [FromBody] ProductInventoryAssignmentForUpdateDto dto)
+        [HttpPut("{id:long}")]
+        public async ValueTask<ActionResult<ProductInventoryAssignment>> PutAsync([FromRoute] long id, [FromBody] ProductInventoryAssignmentForUpdateDto dto)
            => Ok(new Response
            {
                Code = 200,
@@ -60,7 +60,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="params"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("get-list")]
         public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
             => Ok(new Response
             {
@@ -74,8 +74,8 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("id")]
-        public async ValueTask<IActionResult> GetByIdAsync(long id)
+        [HttpGet("{id:long}")]
+        public async ValueTask<IActionResult> GetByIdAsync([FromRoute] long id)
             => Ok(new Response
             {
                 Code = 200,
@@ -87,13 +87,13 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("id")]
-        public async ValueTask<IActionResult> GetProductByIdAsync(long id)
+        [HttpGet("product-id")]
+        public async ValueTask<IActionResult> GetProductByIdAsync(long productId)
             => Ok(new Response
             {
                 Code = 200,
                 Message = "OK",
-                Data = await this.service.RetrieveProductById(id)
+                Data = await this.service.RetrieveProductById(productId)
             });
         /// <summary>
         /// Delete Quantity
@@ -102,7 +102,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="InventoryId"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        [HttpDelete]
+        [HttpDelete("quantity")]
         public async ValueTask<IActionResult> DeleteQuantityAsync(long productId, long inventoryId, int amount)
             => Ok(new Response
             {
@@ -117,7 +117,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="InventoryId"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPost("quantity")]
         public async ValueTask<IActionResult> PostQuantityAsync(long productId, long inventoryId, int amount)
             => Ok(new Response
             {

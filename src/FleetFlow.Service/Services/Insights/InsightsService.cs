@@ -1,9 +1,12 @@
-﻿using FleetFlow.DAL.Repositories;
+﻿using FleetFlow.DAL.IRepositories;
+using FleetFlow.DAL.Repositories;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Domain.Enums;
 using FleetFlow.Service.Interfaces.Insights;
+using FleetFlow.Service.Interfaces.Products;
+using FleetFlow.Service.Interfaces.Users;
 using FleetFlow.Service.Models.Insights;
 using FleetFlow.Service.Services.Products;
 using FleetFlow.Service.Services.Users;
@@ -15,21 +18,21 @@ namespace FleetFlow.Service.Services.Insights;
 
 public class InsightsService : IInsightsService
 {
-    private UserService userService;
-    private ProductService productService;
-    private Repository<User> userRepository;
-    private Repository<Order> orderRepository;
-    private Repository<Payment> paymentRepository;
-    private Repository<Product> productRepository;
-    private Repository<OrderItem> orderItemRepository;
+    private IUserService userService;
+    private IProductService productService;
+    private IRepository<User> userRepository;
+    private IRepository<Order> orderRepository;
+    private IRepository<Payment> paymentRepository;
+    private IRepository<Product> productRepository;
+    private IRepository<OrderItem> orderItemRepository;
 
-    public InsightsService(Repository<Order> orderRepository,
-        Repository<OrderItem> orderItemRepository,
-        Repository<Payment> paymentRepository,
-        Repository<Product> productRepository,
-        ProductService productService,
-        UserService userService,
-        Repository<User> userRepository = null)
+    public InsightsService(IRepository<Order> orderRepository,
+        IRepository<OrderItem> orderItemRepository,
+        IRepository<Payment> paymentRepository,
+        IRepository<Product> productRepository,
+        IProductService productService,
+        IUserService userService,
+        IRepository<User> userRepository)
     {
         this.userService = userService;
         this.productService = productService;
