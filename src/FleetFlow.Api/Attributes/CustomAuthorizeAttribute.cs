@@ -1,4 +1,5 @@
-﻿using FleetFlow.Service.Exceptions;
+﻿using FleetFlow.Api.Models;
+using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Interfaces.Authorizations;
 using FleetFlow.Shared.Helpers;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ public class CustomAuthorizeAttribute : TypeFilterAttribute
     {
     }
 
-    public class CustomAuthorizationFilter : IAuthorizationFilter
+    public  class CustomAuthorizationFilter : IAuthorizationFilter
     {
         private readonly IRolePermissionService rolePermissionService;
 
@@ -23,22 +24,29 @@ public class CustomAuthorizeAttribute : TypeFilterAttribute
             this.rolePermissionService = rolePermissionService;
         }
 
-        public async void OnAuthorization(AuthorizationFilterContext context)
+        public  void OnAuthorization(AuthorizationFilterContext context)
         {
-            try
-            {
-                var controllerDescriptor = context.ActionDescriptor as ControllerActionDescriptor;
-                var result = controllerDescriptor?.ControllerName.ToLower() + "." + controllerDescriptor?.ActionName.ToLower();
-                var role = context.HttpContext.User.Claims.FirstOrDefault(u => u.Type == ClaimTypes.Role).Value;
-                var res = await this.rolePermissionService.CheckPermission(role, result);
-                if (!res)
-                    throw new FleetFlowException(403, "You do not have permission for this method");
-            }
-            catch (Exception ex)
-            {
-                throw new FleetFlowException(400, ex.Message);
-            }
+
+            var controllerDescriptor = context.ActionDescriptor as ControllerActionDescriptor;
+			var result = controllerDescriptor?.ControllerName.ToLower() + "." + controllerDescriptor?.ActionName.ToLower();
+			var role = context.HttpContext?.User?.Claims?.FirstOrDefault(u => u.Type == ClaimTypes.Role)?.Value ?? string.Empty;
+			//var res = await this.rolePermissionService.CheckPermission(role, result);
+			var res = this.rolePermissionService.CheckPermission(role, result).GetAwaiter().GetResult();
+
+            if (!res)
+                {
+			    var exception = new FleetFlowException(403, "You do not have permission for this method");
+				context.Result = new ObjectResult(new Response
+				{
+					Code = exception.Code,
+					Message = exception.Message
+				})
+				    {
+						StatusCode = exception.Code
+				    };
+			    }
         }
 
     }
+    
 }

@@ -6,6 +6,7 @@ using FleetFlow.Service.DTOs.RolePermissions;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces.Authorizations;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -87,13 +88,14 @@ namespace FleetFlow.Service.Services.Authorizations
 		public async Task<bool> CheckPermission(string role, string accessedMethod)
 		{
 			var permissions = await this.rolePermissionRepository
-				.SelectAll(p => p.Role.Name.ToLower() == role.ToLower(), new string[] { "Permisson" })
+				.SelectAll(p => p.Role.Name.ToLower() == role.ToLower() && p.Permisson.IsDeleted==false && p.Role.IsDeleted == false, new string[] { "Permisson" })
 				.ToListAsync();
 			foreach(var permission in permissions)
 			{
 				if(permission?.Permisson?.Name.ToLower()==accessedMethod.ToLower())
 					return true;
 			}
+
 			return false;
 			
 		}

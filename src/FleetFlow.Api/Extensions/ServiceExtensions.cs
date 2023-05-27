@@ -75,7 +75,6 @@ namespace FleetFlow.Api.Extensions
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IProductInventoryAssignmentService, ProductInventoryAssignmentService>();
-
         }
 
         /// <summary>

@@ -37,6 +37,11 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<FeedbackAttachment> FeedbackAttachments { get; set; }
         public DbSet<Discount> Discounts { get; set; }
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Fluent API relations
@@ -205,8 +210,32 @@ namespace FleetFlow.DAL.DbContexts
                 );
 
             modelBuilder.Entity<Order>().HasData(
-                new Order() { Id = 1, UserId = 1, AddressId = 2, Status = OrderStatus.Pending, CreatedAt = DateTime.UtcNow, UpdatedAt = null}
+                new Order() { Id = 1, UserId = 1, AddressId = 1, Status = OrderStatus.Shipped, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new Order() { Id = 2, UserId = 3, AddressId = 2, PaymentStatus = PaymentStatus.Paid, Status = OrderStatus.Shipped, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Order() { Id = 3, UserId = 4, AddressId = 1, PaymentStatus = PaymentStatus.Paid, Status = OrderStatus.Shipped, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Order() { Id = 4, UserId = 3, AddressId = 2, PaymentStatus = PaymentStatus.Paid, Status = OrderStatus.Shipped, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Order() { Id = 5, UserId = 2, AddressId = 1, PaymentStatus = PaymentStatus.Paid, Status = OrderStatus.Shipped, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Order() { Id = 6, UserId = 4, AddressId = 2, PaymentStatus = PaymentStatus.Paid, Status = OrderStatus.Shipped, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
+
+            modelBuilder.Entity<OrderItem>().HasData(
+                new OrderItem() { Id = 4, OrderId = 2, ProductId = 1, Amount = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new OrderItem() { Id = 5, OrderId = 2, ProductId = 2, Amount = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new OrderItem() { Id = 6, OrderId = 2, ProductId = 3, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+
+                new OrderItem() { Id = 7, OrderId = 3, ProductId = 4, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new OrderItem() { Id = 8, OrderId = 3, ProductId = 3, Amount = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new OrderItem() { Id = 9, OrderId = 3, ProductId = 2, Amount = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new OrderItem() { Id = 10, OrderId = 3, ProductId = 1, Amount = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+
+                new OrderItem() { Id = 11, OrderId = 4, ProductId = 2, Amount = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new OrderItem() { Id = 12, OrderId = 4, ProductId = 1, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new OrderItem() { Id = 13, OrderId = 4, ProductId = 3, Amount = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+
+                new OrderItem() { Id = 14, OrderId = 5, ProductId = 3, Amount = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new OrderItem() { Id = 15, OrderId = 5, ProductId = 1, Amount = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+
+                new OrderItem() { Id = 16, OrderId = 6, ProductId = 2, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
 
             modelBuilder.Entity<ProductInventoryAssignment>().HasData(
                 new ProductInventoryAssignment() { Id = 1, ProductId = 1, Amount = 1, InventoryId = 1, LocationId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
@@ -215,12 +244,15 @@ namespace FleetFlow.DAL.DbContexts
                 new ProductInventoryAssignment() { Id = 4, ProductId = 4, Amount = 4, InventoryId = 4, LocationId = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
                 new ProductInventoryAssignment() { Id = 5, ProductId = 5, Amount = 5, InventoryId = 5, LocationId = 5, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
+            modelBuilder.Entity<Attachment>().HasData(
+                new Attachment() { Id = 1, CreatedAt = DateTime.UtcNow, FileName = "s", FilePath = "s" });
+            modelBuilder.Entity<Payment>().HasData(
+                new Payment() { UserId = 3, Id = 1, Amount = 6130, OrderId = 2,CreatedAt = DateTime.UtcNow, Status = PaymentStatus.Paid, FileId = 1 },
+                new Payment() { UserId = 4, Id = 2, Amount = 11620, OrderId = 3, CreatedAt = DateTime.UtcNow, Status = PaymentStatus.Paid, FileId = 1 },
+                new Payment() { UserId = 3, Id = 3, Amount = 9630, OrderId = 4, CreatedAt = DateTime.UtcNow, Status = PaymentStatus.Paid, FileId = 1 },
+                new Payment() { UserId = 2, Id = 4, Amount = 7260, OrderId = 5, CreatedAt = DateTime.UtcNow, Status = PaymentStatus.Paid, FileId = 1 },
+                new Payment() { UserId = 4, Id = 5, Amount = 2000, OrderId = 6, CreatedAt = DateTime.UtcNow, Status = PaymentStatus.Paid, FileId = 1 });
 
-            //modelBuilder.Entity<OrderItem>().HasData(
-            //    new OrderItem() { Id = 1, OrderId = 1, ProductId = 3, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-            //    new OrderItem() { Id = 2, OrderId = 1, ProductId = 6, Amount = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-            //    new OrderItem() { Id = 3, OrderId = 1, ProductId = 2, Amount = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
-            //    );
             modelBuilder.Entity<Question>().HasData(
                 new Question() { Id = 1, IsDeleted = false, CreatedAt = DateTime.UtcNow, IsAnswered = true, Message = "Hello .NET N6 group", UserId = 1 ,UpdatedAt = null}
                 );

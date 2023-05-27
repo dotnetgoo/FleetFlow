@@ -4,6 +4,7 @@ using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Domain.Enums;
+using FleetFlow.Service.Comparers;
 using FleetFlow.Service.Interfaces.Insights;
 using FleetFlow.Service.Interfaces.Products;
 using FleetFlow.Service.Interfaces.Users;
@@ -43,33 +44,35 @@ public class InsightsService : IInsightsService
         this.orderItemRepository = orderItemRepository;
     }
 
-    public async Task<SellsTableModel> GetSellsTableAsync(DateTime from, DateTime to)
+    public async Task<SellsTableModel> GetSellsTableAsync(InsightsParams parameters)
     {
         var sellsTable = new SellsTableModel();
 
         sellsTable.SumOfSells = (decimal) await paymentRepository
-            .SelectAll(p => !p.IsDeleted && p.CreatedAt <= to && p.CreatedAt >= from)
+            .SelectAll(p => !p.IsDeleted && p.CreatedAt <= parameters.To && p.CreatedAt >= parameters.From)
             .SumAsync(p => p.Amount);
 
         sellsTable.NumberOfOrders = await orderRepository
-            .SelectAll(o => !o.IsDeleted && o.CreatedAt <= to && o.CreatedAt >= from && o.PaymentStatus == PaymentStatus.Paid)
+            .SelectAll(o => !o.IsDeleted && o.CreatedAt <= parameters.To && o.CreatedAt >= parameters.From && o.PaymentStatus == PaymentStatus.Paid)
             .Select(o => o.Id)
             .CountAsync();
 
         sellsTable.NumberOfOrderedUsers = await orderRepository
-            .SelectAll(o => !o.IsDeleted && o.CreatedAt <= to && o.CreatedAt >= from && o.PaymentStatus == PaymentStatus.Paid)
+            .SelectAll(o => !o.IsDeleted && o.CreatedAt <= parameters.To && o.CreatedAt >= parameters.From && o.PaymentStatus == PaymentStatus.Paid)
             .Select(o => o.UserId)
             .Distinct<long>()
             .CountAsync();
 
-        sellsTable.AvarageOrder = sellsTable.SumOfSells / sellsTable.NumberOfOrders;
-        sellsTable.From = from;
-        sellsTable.To = to;
+        sellsTable.AvarageOrder = sellsTable.NumberOfOrders != 0 
+                                ? sellsTable.SumOfSells / sellsTable.NumberOfOrders 
+                                : 0;
+        sellsTable.From = parameters.From;
+        sellsTable.To = parameters.To;
 
         return sellsTable;
     }
 
-    public async Task<IEnumerable<TopProductModel>> GetTopProducts(DateTime from, DateTime to, int top = 10)
+    public async Task<IEnumerable<TopProductModel>> GetTopProductsAsync(InsightsParams parameters)
     {
         var allProductModels = new List<TopProductModel>();
         var allProductIdAndPrices = await productRepository
@@ -82,30 +85,33 @@ public class InsightsService : IInsightsService
             var productModel = new TopProductModel() { ProductId = product.Id };
 
             productModel.SellsNumber = await orderItemRepository
-                .SelectAll(o => o.Id == product.Id && !o.IsDeleted && o.CreatedAt <= to && o.CreatedAt >= from)
+                .SelectAll(o => o.ProductId == product.Id && !o.IsDeleted && o.CreatedAt <= parameters.To && o.CreatedAt >= parameters.From)
                 .Select(o => o.Amount)
                 .SumAsync();
-           
+
             productModel.SumOfSells = productModel.SellsNumber * product.Price;
 
             allProductModels.Add(productModel);
         }
 
-        allProductModels.OrderByDescending(p => p.SumOfSells);
+        allProductModels.Sort(new SumOfSellsComparer());
+        allProductModels.Reverse();
 
-        var topProductModels = allProductModels.Take(top).ToList();
+        var topProductModels = allProductModels.Take(parameters.Top).ToList();
 
+        int i = 0;
         foreach (var item in allProductModels)
         {
             item.Product = await productService.RetrieveByIdAsync(item.ProductId);
-            item.From = from;
-            item.To = to;
+            item.From = parameters.From;
+            item.To = parameters.To;
+            item.Top = ++i;
         }
 
         return topProductModels;
     }
 
-    public async Task<IEnumerable<TopUserModel>> GetTopUsers(DateTime from, DateTime to, int top = 10)
+    public async Task<IEnumerable<TopUserModel>> GetTopUsersAsync(InsightsParams parameters)
     {
         var allUserModels = new List<TopUserModel>();
         var allUserIds = await userRepository
@@ -117,25 +123,28 @@ public class InsightsService : IInsightsService
         {
             var userModel = new TopUserModel() { UserId = userId };
 
-            userModel.SumOfAllOrders = (decimal)await paymentRepository
-                .SelectAll(p => p.UserId == userId && !p.IsDeleted && p.CreatedAt <= to && p.CreatedAt >= from)
+            userModel.SumOfAllOrders = (decimal) await paymentRepository
+                .SelectAll(p => p.UserId == userId && !p.IsDeleted && p.CreatedAt <= parameters.To && p.CreatedAt >= parameters.From)
                 .Select(p => p.Amount)
                 .SumAsync();
 
             allUserModels.Add(userModel);
         }
 
-        allUserModels.OrderByDescending(p => p.SumOfAllOrders);
+        allUserModels.Sort(new SumOfOrdersComparer());
+        allUserModels.Reverse();
 
-        var topUserModels = allUserModels.Take(top).ToList();
+        var topUserModels = allUserModels.Take(parameters.Top).ToList();
 
+        int i = 0;
         foreach (var item in allUserModels)
         {
             item.User = await userService.RetrieveByIdAsync(item.UserId);
-            item.From = from;
-            item.To = to;
+            item.From = parameters.From;
+            item.To = parameters.To;
+            item.Top = ++i;
             item.AllOrdersNumber = await orderRepository
-                .SelectAll(o => o.UserId == item.UserId && !o.IsDeleted && o.PaymentStatus == PaymentStatus.Paid && o.CreatedAt <= to && o.CreatedAt >= from)
+                .SelectAll(o => o.UserId == item.UserId && !o.IsDeleted && o.PaymentStatus == PaymentStatus.Paid && o.CreatedAt <= parameters.To && o.CreatedAt >= parameters.From)
                 .Select(o => o.Id)
                 .CountAsync();
         }
