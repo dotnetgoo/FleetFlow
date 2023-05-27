@@ -3,6 +3,7 @@ using FleetFlow.DAL.Repositories;
 using FleetFlow.Service.Interfaces.Addresses;
 using FleetFlow.Service.Interfaces.Attachments;
 using FleetFlow.Service.Interfaces.Authorizations;
+using FleetFlow.Service.Interfaces.Insights;
 using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Service.Interfaces.Products;
 using FleetFlow.Service.Interfaces.Users;
@@ -10,6 +11,7 @@ using FleetFlow.Service.Interfaces.Warehouses;
 using FleetFlow.Service.Services.Addresses;
 using FleetFlow.Service.Services.Attachments;
 using FleetFlow.Service.Services.Authorizations;
+using FleetFlow.Service.Services.Insights;
 using FleetFlow.Service.Services.Orders;
 using FleetFlow.Service.Services.Products;
 using FleetFlow.Service.Services.Users;
@@ -47,6 +49,7 @@ namespace FleetFlow.Api.Extensions
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IOrderActionService, OrderActionService>();
             services.AddScoped<IDiscountService, DiscountService>();
+            services.AddScoped<IInsightsService, InsightsService>();
         }
 
         /// <summary>
