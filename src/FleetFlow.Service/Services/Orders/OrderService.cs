@@ -12,6 +12,9 @@ using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Domain.Entities.Authorizations;
+using FleetFlow.Service.DTOs.Payments;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using FleetFlow.Service.Interfaces.Addresses;
 
 namespace FleetFlow.Service.Services.Orders
 {
@@ -21,21 +24,28 @@ namespace FleetFlow.Service.Services.Orders
         private readonly IRepository<Cart> cartRepository;
         private readonly IRepository<Order> orderRepository;
         private readonly IRepository<User> userRepository;
-        private readonly IOrderActionService orderActionService;
+        //private readonly IOrderActionService orderActionService;
+        private readonly IPaymentService paymentService;
+        private readonly IAddressService addressService;
+
         public OrderService(IRepository<Order> orderRepository,
             IRepository<Cart> cartRepository,
             IRepository<User> userRepository,
             IMapper mapper,
-            IOrderActionService orderActionService)
+          //  IOrderActionService orderActionService,
+            IAddressService addressService,
+            IPaymentService paymentService)
         {
             this.orderRepository = orderRepository;
             this.cartRepository = cartRepository;
             this.mapper = mapper;
             this.userRepository = userRepository;
-            this.orderActionService = orderActionService;
+            //this.orderActionService = orderActionService;
+            this.addressService = addressService;
+            this.paymentService = paymentService;
         }
 
-        public async ValueTask<OrderResultDto> AddAsync()
+        public async ValueTask<OrderResultDto> AddAsync(OrderForCreationDto orderForCreationDto)
         {
             var httpContext = HttpContextHelper.HttpContext;
             string role = HttpContextHelper.UserRole;
@@ -43,11 +53,16 @@ namespace FleetFlow.Service.Services.Orders
             if (cart == null)
                 throw new FleetFlowException(404, "Cart not found");
 
+            var payment = await this.paymentService.AddAsync(orderForCreationDto.PaymentCreationDto, orderForCreationDto.AttachmentCreationDto);
+            var address = await this.addressService.AddAsync(orderForCreationDto.AddressDto);
+
             // create new order
             var order = new Order()
             {
                 UserId = HttpContextHelper.UserId ?? 0,
-                OrderItems = new List<OrderItem>()
+                OrderItems = new List<OrderItem>(),
+                PaymentId = payment.Id,
+                AddressId =  address.Id,
             };
 
             // create order items using cart
@@ -57,56 +72,44 @@ namespace FleetFlow.Service.Services.Orders
                 {
                     Amount = cartItem.Amount,
                     ProductId = cartItem.ProductId
+                    
                 });
             }
-            order.Actions = new List<OrderAction>();
+   
             var createdOrder = await orderRepository.InsertAsync(order);
             await orderRepository.SaveAsync();
+
+            ///@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            ///Circular injection detected
+            //await this.orderActionService.StartPendingAsync((int)order.Id);
+            ///@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
             return mapper.Map<OrderResultDto>(createdOrder);
         }
 
-        public async ValueTask<OrderResultDto> CancelAsync(long id)
-        {
-            var order = await orderRepository.SelectAsync(order => !order.IsDeleted && order.Id == id, new string[] { "User", "Actions" });
-            if (order is null)
-                throw new FleetFlowException(404, "Order is not found");
+        //public async ValueTask<OrderResultDto> CancelAsync(long id)
+        //{
+        //    var order = await orderRepository.SelectAsync(order => !order.IsDeleted && order.Id == id, new string[] { "User", "Actions" });
+        //    if (order is null)
+        //        throw new FleetFlowException(404, "Order is not found");
 
 
-            //var role = await this.roleRepository.SelectAsync(r => r.Name == "Admin");
-            //if (order.User.Role != role && order.UserId != HttpContextHelper.UserId)
-            //    throw new FleetFlowException(400, "Invalid operation.");
+        //    // TODO: Add business logic for canceled order.
+        //    // Returning products to warehouse, assignments to workers 
 
-            // TODO: Add business logic for canceled order.
-            // Returning products to warehouse, assignments to workers 
+        //    /* order.Status = OrderStatus.Cancelled;
 
-            /* order.Status = OrderStatus.Cancelled;
+        //     // Creating new order action
+        //     order.Actions.Add(new OrderAction() { Status = OrderStatus.Cancelled });
 
-             // Creating new order action
-             order.Actions.Add(new OrderAction() { Status = OrderStatus.Cancelled });
+        //     await orderRepository.SaveAsync();*/
 
-             await orderRepository.SaveAsync();*/
+        //    var result = mapper.Map<OrderResultDto>(await this.orderActionService.CancelledAsync((int)order.Id));
+        //    // is this best practice to avoid object cycle?
+        //    result.User.Orders = null;
 
-            var result = mapper.Map<OrderResultDto>(await this.orderActionService.CancelledAsync((int)order.Id));
-            // is this best practice to avoid object cycle?
-            result.User.Orders = null;
-
-            return result;
-
-        }
-
-    /*    public async Task ChangeStatus(long orderId, OrderStatus status)
-        {
-            var order = await this.orderRepository.SelectAsync(t => t.Id == orderId);
-            if (order is null)
-                throw new FleetFlowException(404, "");
-
-            order.Id = orderId;
-            order.Status = status;
-            await orderRepository.SaveAsync();
-
-        }*/
-
+        //    return result;
+        //}
 
         public async ValueTask<bool> RemoveAsync(long id)
         {
@@ -166,7 +169,7 @@ namespace FleetFlow.Service.Services.Orders
 
         public async ValueTask<OrderResultDto> RetrieveAsync(long id)
         {
-            Order order = await orderRepository.SelectAsync(order => !order.IsDeleted && order.Id == id, new string[] { "Address", "User" });
+            var order = await orderRepository.SelectAsync(order => !order.IsDeleted && order.Id == id);
             if (order is null)
                 throw new FleetFlowException(404, "Order is not found");
 

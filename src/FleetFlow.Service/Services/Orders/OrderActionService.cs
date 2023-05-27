@@ -4,96 +4,107 @@ using FleetFlow.Domain.Entities;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Domain.Enums;
+using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Interfaces.Orders;
+using FleetFlow.Service.Interfaces.Warehouses;
 using MailKit.Search;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetFlow.Service.Services.Orders;
 
 public class OrderActionService : IOrderActionService
 {
-    protected readonly IRepository<Order> orderRepository;
-    public OrderActionService(IRepository<Order> orderRepository)
+    protected readonly IOrderService orderService;
+    protected readonly IRepository<OrderItem> orderItemRepository;
+    protected readonly IRepository<OrderAction> actionRepository;
+    protected readonly IProductInventoryAssignmentService productInventoryAssignmentService;
+    public OrderActionService(IRepository<OrderAction> actionRepository, IOrderService orderService, IProductInventoryAssignmentService productInventoryAssignmentService, IRepository<OrderItem> orderItemRepository)
     {
-        this.orderRepository = orderRepository;
+        this.actionRepository = actionRepository;
+        this.orderService = orderService;
+        this.productInventoryAssignmentService = productInventoryAssignmentService;
+        this.orderItemRepository = orderItemRepository;
     }
 
-    public async ValueTask<Order> CancelledAsync(int id)
+    public async ValueTask<OrderResultDto> CancelledAsync(int orderId)
     {
-        var order = await this.orderRepository.SelectAsync(x => x.Id == id);
+        var order = await this.orderService.RetrieveAsync(orderId);
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
 
-        order.Id = id;
+        var orderItems = await this.orderItemRepository.SelectAll(x => x.OrderId == orderId).ToListAsync();
+
+        order.Id = orderId;
         order.Status = OrderStatus.Cancelled;
 
-        order.Actions.Add(new OrderAction() { Status = OrderStatus.Cancelled });
+        await this.actionRepository.InsertAsync(new OrderAction() { OrderId = orderId, Status = OrderStatus.Cancelled });
 
-        await orderRepository.SaveAsync();
-
-        return order;
-    }
-
-    public async ValueTask<Order> FinishDelivery(int id)
-    {
-        var order = await this.orderRepository.SelectAsync(x => x.Id == id);
-        if (order is null)
-            throw new FleetFlowException(404, "Order is not found");
-
-        order.Id = id;
-        order.Status = OrderStatus.Shipped;
-
-        order.Actions.Add(new OrderAction() { Status = OrderStatus.Shipped });
-
-        await orderRepository.SaveAsync();
+        await this.actionRepository.SaveAsync();
 
         return order;
     }
 
-    public async ValueTask<Order> StartPendingAsync(int id)
+    public async ValueTask<OrderResultDto> FinishDelivery(int orderId)
     {
-        var order = await this.orderRepository.SelectAsync(x => x.Id == id);
+        var order = await this.orderService.RetrieveAsync(orderId);
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
 
-        order.Id = id;
-        order.Status = OrderStatus.Pending;
+        order.Id = orderId;
+        order.Status = OrderStatus.Cancelled;
 
-        order.Actions.Add(new OrderAction() { Status = OrderStatus.Pending });
+        await this.actionRepository.InsertAsync(new OrderAction() { OrderId = orderId, Status = OrderStatus.Shipped });
 
-        await orderRepository.SaveAsync();
+        await this.actionRepository.SaveAsync();
 
         return order;
     }
 
-    public async ValueTask<Order> StartPreparingAsync(int id)
+    public async ValueTask<OrderResultDto> StartPendingAsync(int orderId)
     {
-        var order = await this.orderRepository.SelectAsync(x => x.Id == id);
+        var order = await this.orderService.RetrieveAsync(orderId);
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
 
-        order.Id = id;
-        order.Status = OrderStatus.Process;
+        order.Id = orderId;
+        order.Status = OrderStatus.Cancelled;
 
-        order.Actions.Add(new OrderAction() { Status = OrderStatus.Process });
+        await this.actionRepository.InsertAsync(new OrderAction() { OrderId = orderId, Status = OrderStatus.Pending });
 
-        await orderRepository.SaveAsync();
+        await this.actionRepository.SaveAsync();
 
-        return order; ;
+        return order;
     }
 
-    public async ValueTask<Order> StartShippingAsync(int id)
+    public async ValueTask<OrderResultDto> StartPreparingAsync(int orderId)
     {
-        var order = await this.orderRepository.SelectAsync(x => x.Id == id);
+        var order = await this.orderService.RetrieveAsync(orderId);
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
 
-        order.Id = id;
-        order.Status = OrderStatus.Shipping;
+        order.Id = orderId;
+        order.Status = OrderStatus.Cancelled;
 
-        order.Actions.Add(new OrderAction() { Status = OrderStatus.Shipping});
+        await this.actionRepository.InsertAsync(new OrderAction() { OrderId = orderId, Status = OrderStatus.Process });
 
-        await orderRepository.SaveAsync();
+        await this.actionRepository.SaveAsync();
+
+        return order;
+    }
+
+    public async ValueTask<OrderResultDto> StartShippingAsync(int orderId)
+    {
+        var order = await this.orderService.RetrieveAsync(orderId);
+        if (order is null)
+            throw new FleetFlowException(404, "Order is not found");
+
+        order.Id = orderId;
+        order.Status = OrderStatus.Cancelled;
+
+        await this.actionRepository.InsertAsync(new OrderAction() { OrderId = orderId, Status = OrderStatus.Shipping });
+
+        await this.actionRepository.SaveAsync();
 
         return order;
     }

@@ -16,8 +16,5 @@ namespace FleetFlow.Domain.Entities.Warehouses
 
         public long InventoryId { get; set; }
         public Inventory Inventory { get; set; }
-
-
-
     }
 }

@@ -33,7 +33,7 @@ public class InsightsService : IInsightsService
         IRepository<Product> productRepository,
         IProductService productService,
         IUserService userService,
-        IRepository<User> userRepository = null)
+        IRepository<User> userRepository)
     {
         this.userService = userService;
         this.productService = productService;

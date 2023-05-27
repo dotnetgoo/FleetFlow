@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using FleetFlow.DAL.Repositories;
+using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Configurations;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities.Warehouses;
@@ -12,10 +12,10 @@ namespace FleetFlow.Service.Services.Warehouses
 {
     public class InventoryLogService : IInventoryLogService
     {
-        private readonly Repository<InventoryLog> inventoryRepository;
+        private readonly IRepository<InventoryLog> inventoryRepository;
         private readonly IMapper mapper;
 
-        public InventoryLogService(Repository<InventoryLog> inventoryRepository, IMapper mapper)
+        public InventoryLogService(IRepository<InventoryLog> inventoryRepository, IMapper mapper)
         {
             this.inventoryRepository = inventoryRepository;
             this.mapper = mapper;
@@ -24,7 +24,7 @@ namespace FleetFlow.Service.Services.Warehouses
         public async Task<InventoryLogForResultDto> AddAsync(InventoryLogForCreationDto dto)
         {
             var mapped = this.mapper.Map<InventoryLog>(dto);
-
+            mapped.CreatedAt = DateTime.UtcNow;
             await this.inventoryRepository.InsertAsync(mapped);
             await this.inventoryRepository.SaveAsync();
 

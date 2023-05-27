@@ -101,6 +101,7 @@ public class UserService : IUserService
         var accessor = HttpContextHelper.Accessor;
 
         user.DeletedBy = HttpContextHelper.UserId;
+        
 
         await userRepository.DeleteAsync(u => u.Id == id);
 

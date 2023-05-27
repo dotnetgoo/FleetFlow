@@ -1,0 +1,1 @@
+dotnet ef database update --project src\FleetFlow.DAL --startup-project src\FleetFlow.Api

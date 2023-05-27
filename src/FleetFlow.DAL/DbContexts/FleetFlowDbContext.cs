@@ -5,6 +5,7 @@ using FleetFlow.Domain.Entities.Authorizations;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Orders.Feedbacks;
 using FleetFlow.Domain.Entities.Products;
+using FleetFlow.Domain.Entities.UserQuestions;
 using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Domain.Entities.Warehouses;
 using FleetFlow.Domain.Enums;
@@ -19,7 +20,6 @@ namespace FleetFlow.DAL.DbContexts
             : base(options)
         {
         }
-
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<Location> Locations { get; set; }
@@ -39,10 +39,35 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<Role> Roles { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<Payment> Payments { get; set; }
-
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Fluent API relations
+
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.ProductInventoryAssignment)
+                .WithMany()
+                .HasForeignKey(oi => oi.ProductInventoryAssignmentId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProductInventoryAssignment>()
+                .HasOne(pia => pia.Product)
+                .WithMany()
+                .HasForeignKey(pia => pia.ProductId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProductInventoryAssignment>()
+                .HasOne(pia => pia.Location)
+                .WithMany()
+                .HasForeignKey(pia => pia.LocationId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProductInventoryAssignment>()
+                .HasOne(pia => pia.Inventory)
+                .WithMany()
+                .HasForeignKey(pia => pia.InventoryId)
+                .OnDelete(DeleteBehavior.NoAction);
+
 
             modelBuilder.Entity<Inventory>()
                 .HasOne(i => i.Address)
@@ -58,8 +83,14 @@ namespace FleetFlow.DAL.DbContexts
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Address)
-                .WithMany(a => a.Orders)
+                .WithMany()
                 .HasForeignKey(o => o.AddressId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Payment)
+                .WithOne(p => p.Order)
+                .HasForeignKey<Order>(o => o.PaymentId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<OrderItem>()
@@ -169,12 +200,13 @@ namespace FleetFlow.DAL.DbContexts
                 );
 
             modelBuilder.Entity<Inventory>().HasData(
-                new Inventory() { Id = 1, Name = "Shayxon", Description = "Eng katta va asosiy filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 2, Name = "Chilonzor", Description = "Chilonzor filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() {Id = 3, Name = "Xadra", Description = "Xadra filial", AddressId = 2, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null },
-                new Inventory() {Id = 4, Name = "Shodlik", Description = "Eng shinam filial", AddressId = 3, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null },
-                new Inventory() {Id = 5, Name = "Charxiy", Description = "Eng kichik filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null }
+                new Inventory() { Id = 1, Name = "Shayxon", Description = "Eng katta va asosiy filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new Inventory() { Id = 2, Name = "Chilonzor", Description = "Chilonzor filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new Inventory() {Id = 3, Name = "Xadra", Description = "Xadra filial", AddressId = 2, OwnerId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Inventory() {Id = 4, Name = "Shodlik", Description = "Eng shinam filial", AddressId = 3, OwnerId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Inventory() {Id = 5, Name = "Charxiy", Description = "Eng kichik filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
+
             modelBuilder.Entity<Order>().HasData(
                 new Order() { Id = 1, UserId = 1, AddressId = 1, Status = OrderStatus.Shipped, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
                 new Order() { Id = 2, UserId = 3, AddressId = 2, PaymentStatus = PaymentStatus.Paid, Status = OrderStatus.Shipped, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
@@ -203,6 +235,12 @@ namespace FleetFlow.DAL.DbContexts
 
                 new OrderItem() { Id = 16, OrderId = 6, ProductId = 2, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
 
+            modelBuilder.Entity<ProductInventoryAssignment>().HasData(
+                new ProductInventoryAssignment() { Id = 1, ProductId = 1, Amount = 1, InventoryId = 1, LocationId = 1, CreatedAt = DateTime.UtcNow },
+                new ProductInventoryAssignment() { Id = 2, ProductId = 2, Amount = 2, InventoryId = 2, LocationId = 2, CreatedAt = DateTime.UtcNow },
+                new ProductInventoryAssignment() { Id = 3, ProductId = 3, Amount = 3, InventoryId = 3, LocationId = 3, CreatedAt = DateTime.UtcNow },
+                new ProductInventoryAssignment() { Id = 4, ProductId = 4, Amount = 4, InventoryId = 4, LocationId = 4, CreatedAt = DateTime.UtcNow },
+                new ProductInventoryAssignment() { Id = 5, ProductId = 5, Amount = 5, InventoryId = 5, LocationId = 5, CreatedAt = DateTime.UtcNow }
                 );
             modelBuilder.Entity<Attachment>().HasData(
                 new Attachment() { Id = 1, CreatedAt = DateTime.UtcNow, FileName = "s", FilePath = "s" });
@@ -213,6 +251,9 @@ namespace FleetFlow.DAL.DbContexts
                 new Payment() { UserId = 2, Id = 4, Amount = 7260, OrderId = 5, CreatedAt = DateTime.UtcNow, Status = PaymentStatus.Paid, FileId = 1 },
                 new Payment() { UserId = 4, Id = 5, Amount = 2000, OrderId = 6, CreatedAt = DateTime.UtcNow, Status = PaymentStatus.Paid, FileId = 1 });
 
+            modelBuilder.Entity<Question>().HasData(
+                new Question() { Id = 1, IsDeleted = false, CreatedAt = DateTime.UtcNow, IsAnswered = true, Message = "Hello .NET N6 group", UserId = 1 ,UpdatedAt = null}
+                );
             #endregion
         }
     }

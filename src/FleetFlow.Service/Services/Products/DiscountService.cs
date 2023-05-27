@@ -28,9 +28,18 @@ public class DiscountService : IDiscountService
 
     public async Task<DiscountResultDto> AddAsync(DiscountCreationDto dto)
     {
+        if (dto.PercentageToCheapen < 1 || dto.PercentageToCheapen > 100)
+            throw new FleetFlowException(401, "PercentageToCheapen must be between 1 and 100.");
+
         var product = await this.productRepository.SelectAsync(t => t.Id == dto.ProductId && !t.IsDeleted);
         if (product is null)
             throw new FleetFlowException(404, "Product is not found.");
+
+        var discounts = await this.discountRepository.SelectAll(t => t.ProductId == dto.ProductId)
+            .Where(d => d.State == DiscountState.Active || d.FinishedAt > DateTime.UtcNow)
+            .ToListAsync();
+        if (discounts.Any())
+            throw new FleetFlowException(403, "Discount already exist in this product.");
 
         var mappedDiscount = this.mapper.Map<Discount>(dto);
         var insertedDiscount = await this.discountRepository.InsertAsync(mappedDiscount);
@@ -38,13 +47,16 @@ public class DiscountService : IDiscountService
         return this.mapper.Map<DiscountResultDto>(insertedDiscount);
     }
 
-    public async Task<DiscountResultDto> ModifyAsync(DiscountUpdateDto dto)
+    public async Task<DiscountResultDto> ModifyAsync(long id, DiscountUpdateDto dto)
     {
+        if (dto.PercentageToCheapen < 1 || dto.PercentageToCheapen > 100)
+            throw new FleetFlowException(401, "PercentageToCheapen must be between 1 and 100.");
+
         var product = await this.productRepository.SelectAsync(t => t.Id == dto.ProductId && !t.IsDeleted);
         if (product is null)
             throw new FleetFlowException(404, "Product not found");
 
-        var discount = await this.discountRepository.SelectAsync(t => t.Id == dto.Id && !t.IsDeleted);
+        var discount = await this.discountRepository.SelectAsync(t => t.Id == id && !t.IsDeleted);
         if (discount is null)
             throw new FleetFlowException(404, "Discount not found");
 
@@ -56,19 +68,21 @@ public class DiscountService : IDiscountService
         return this.mapper.Map<DiscountResultDto>(modifiedDiscount);
     }
 
-    public async Task<IEnumerable<DiscountResultDto>> RetrieveAllAsync(PaginationParams @params)
+    public async Task<IEnumerable<DiscountResultDto>> RetrieveAllAsync(PaginationParams @params, DiscountState? state = null)
     {
-        var discounts  = await this.discountRepository.SelectAll(t => !t.IsDeleted)
-            .ToPagedList(@params)
-            .ToListAsync();
-        
+        var discountsQuery = this.discountRepository.SelectAll(t => !t.IsDeleted);
+
+        if (state is not null)
+            discountsQuery = discountsQuery.Where(d => d.State == state);
+
+        var discounts = await discountsQuery.ToPagedList(@params).ToListAsync();
         return this.mapper.Map<IEnumerable<DiscountResultDto>>(discounts);
     }
 
     public async Task<DiscountResultDto> RetrieveAsync(long id)
     {
         var discount = await this.discountRepository
-            .SelectAsync(t => t.Id == id && !t.IsDeleted, new string[] { "Product" });
+            .SelectAsync(t => t.Id == id && !t.IsDeleted && t.State == DiscountState.Active, new string[] { "Product" });
         if (discount is null)
             throw new FleetFlowException(404, "Discount not found");
 
@@ -82,6 +96,7 @@ public class DiscountService : IDiscountService
             throw new FleetFlowException(404, "Discount not found");
 
         discount.State = DiscountState.UnexpectedlyFinished;
+        discount.FinishedAt = DateTime.UtcNow;
         discount.UpdatedAt = DateTime.UtcNow;
         discount.UpdatedBy = HttpContextHelper.UserId;
         await this.discountRepository.SaveAsync();
@@ -91,11 +106,14 @@ public class DiscountService : IDiscountService
 
     public async Task<bool> StopByProductIdAsync(long productId)
     {
-        var discount = await this.discountRepository.SelectAsync(d => !d.IsDeleted && d.ProductId == productId);
+        var discount = await this.discountRepository.SelectAll(d => !d.IsDeleted && d.ProductId == productId)
+            .OrderBy(t => t.Id)
+            .LastOrDefaultAsync();
         if (discount is null)
             throw new FleetFlowException(404, "Discount not found");
 
         discount.State = DiscountState.UnexpectedlyFinished;
+        discount.FinishedAt = DateTime.UtcNow;
         discount.UpdatedAt = DateTime.UtcNow;
         discount.UpdatedBy = HttpContextHelper.UserId;
         await this.discountRepository.SaveAsync();

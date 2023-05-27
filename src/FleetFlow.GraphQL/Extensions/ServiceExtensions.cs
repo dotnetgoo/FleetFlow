@@ -6,12 +6,16 @@ using FleetFlow.GraphQL.Types;
 using FleetFlow.GraphQL.Types.EnumTypes;
 using FleetFlow.Service.Interfaces.Addresses;
 using FleetFlow.Service.Interfaces.Insights;
+using FleetFlow.Service.Interfaces.Attachments;
+using FleetFlow.Service.Interfaces.Authorizations;
 using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Service.Interfaces.Products;
 using FleetFlow.Service.Interfaces.Users;
 using FleetFlow.Service.Interfaces.Warehouses;
 using FleetFlow.Service.Services.Addresses;
 using FleetFlow.Service.Services.Insights;
+using FleetFlow.Service.Services.Attachments;
+using FleetFlow.Service.Services.Authorizations;
 using FleetFlow.Service.Services.Orders;
 using FleetFlow.Service.Services.Products;
 using FleetFlow.Service.Services.Users;
@@ -41,6 +45,17 @@ namespace FleetFlow.GraphQL.Extensions
             services.AddScoped<ICheckoutService, CheckoutService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IInsightsService, InsightsService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+            services.AddScoped<IAttachmentService, AttachmentService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
+            services.AddScoped<IPermissionService, PermissionService>();
+            services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IOrderActionService, OrderActionService>();
+            services.AddScoped<IDiscountService, DiscountService>();
+            services.AddScoped<IRolePermissionService, RolePermissionService>();
+            services.AddScoped<IInventoryLogService, InventoryLogService>();
+            services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<IProductInventoryAssignmentService, ProductInventoryAssignmentService>();
         }
 
         public static void AddGraphQLService(this IServiceCollection services)
