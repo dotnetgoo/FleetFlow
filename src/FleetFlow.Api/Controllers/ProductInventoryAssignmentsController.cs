@@ -20,7 +20,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPost("product-inventory-assignment")]
+        [HttpPost("add-product")]
         public async ValueTask<ActionResult<ProductInventoryAssignmentForResultDto>> PostAsync([FromBody] ProductInventoryAssignmentForCreationDto dto)
             => Ok(new Response
             {
@@ -47,7 +47,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <param name="dto"></param>
         /// <returns></returns>
-        [HttpPut("{id:long}")]
+        [HttpPut("id")]
         public async ValueTask<ActionResult<ProductInventoryAssignment>> PutAsync([FromRoute] long id, [FromBody] ProductInventoryAssignmentForUpdateDto dto)
            => Ok(new Response
            {
@@ -60,7 +60,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="params"></param>
         /// <returns></returns>
-        [HttpGet("get-list")]
+        [HttpGet("get-all")]
         public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
             => Ok(new Response
             {
@@ -74,7 +74,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("{id:long}")]
+        [HttpGet("get-by-id")]
         public async ValueTask<IActionResult> GetByIdAsync([FromRoute] long id)
             => Ok(new Response
             {
@@ -87,7 +87,7 @@ namespace FleetFlow.Api.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpGet("product-id")]
+        [HttpGet("get-product-by-id")]
         public async ValueTask<IActionResult> GetProductByIdAsync(long productId)
             => Ok(new Response
             {
@@ -102,7 +102,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="InventoryId"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        [HttpDelete("quantity")]
+        [HttpPost("decrement-quantity")]
         public async ValueTask<IActionResult> DeleteQuantityAsync(long productId, long inventoryId, int amount)
             => Ok(new Response
             {
@@ -117,7 +117,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="InventoryId"></param>
         /// <param name="amount"></param>
         /// <returns></returns>
-        [HttpPost("quantity")]
+        [HttpPost("increase-quantity")]
         public async ValueTask<IActionResult> PostQuantityAsync(long productId, long inventoryId, int amount)
             => Ok(new Response
             {

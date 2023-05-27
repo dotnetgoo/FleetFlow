@@ -207,11 +207,11 @@ namespace FleetFlow.DAL.DbContexts
                 );
 
             modelBuilder.Entity<ProductInventoryAssignment>().HasData(
-                new ProductInventoryAssignment() { Id = 1, ProductId = 1, Amount = 1, InventoryId = 1, LocationId = 1, CreatedAt = DateTime.UtcNow },
-                new ProductInventoryAssignment() { Id = 2, ProductId = 2, Amount = 2, InventoryId = 2, LocationId = 2, CreatedAt = DateTime.UtcNow },
-                new ProductInventoryAssignment() { Id = 3, ProductId = 3, Amount = 3, InventoryId = 3, LocationId = 3, CreatedAt = DateTime.UtcNow },
-                new ProductInventoryAssignment() { Id = 4, ProductId = 4, Amount = 4, InventoryId = 4, LocationId = 4, CreatedAt = DateTime.UtcNow },
-                new ProductInventoryAssignment() { Id = 5, ProductId = 5, Amount = 5, InventoryId = 5, LocationId = 5, CreatedAt = DateTime.UtcNow }
+                new ProductInventoryAssignment() { Id = 1, ProductId = 1, Amount = 1, InventoryId = 1, LocationId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new ProductInventoryAssignment() { Id = 2, ProductId = 2, Amount = 2, InventoryId = 2, LocationId = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new ProductInventoryAssignment() { Id = 3, ProductId = 3, Amount = 3, InventoryId = 3, LocationId = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new ProductInventoryAssignment() { Id = 4, ProductId = 4, Amount = 4, InventoryId = 4, LocationId = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new ProductInventoryAssignment() { Id = 5, ProductId = 5, Amount = 5, InventoryId = 5, LocationId = 5, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
 
             //modelBuilder.Entity<OrderItem>().HasData(
