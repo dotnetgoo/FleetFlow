@@ -16,20 +16,20 @@ namespace FleetFlow.GraphQL.Mutations
         public async ValueTask<bool> DeleteAsnwerAsync([Service] IAnswerService answerService,
             long id)
         {
-            return await answerService.DeleteByIdAsync(id);
+            return await answerService.RemoveByIdAsync(id);
         }
 
         public async ValueTask<Answer> UpdateAddressAsync([Service] IAnswerService answerService,
             long id,
-            AnswerForCreationDto answer)
+            string message)
         {
-            return await answerService.UpdateByIdAsync(id, answer);
+            return await answerService.ModifyByIdAsync(id, message);
         }
 
         public async ValueTask<Answer> GetAnswerByIdAsync([Service] IAnswerService answerService,
             long id)
         {
-            return await answerService.GetByIdAsync(id);
+            return await answerService.RetrieveByIdAsync(id);
         }
     }
 }

@@ -20,6 +20,7 @@ using FleetFlow.Service.DTOs.Location;
 using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Service.DTOs.Permissions;
 using FleetFlow.Service.DTOs.Product;
+using FleetFlow.Service.DTOs.Questions;
 using FleetFlow.Service.DTOs.User;
 using Location = FleetFlow.Domain.Entities.Warehouses.Location;
 
@@ -46,6 +47,8 @@ namespace FleetFlow.Service.Mappers
             CreateMap<Order, OrderResultDto>().ReverseMap();
             CreateMap<OrderItem, OrderItemForResultDto>().ReverseMap();
 
+            CreateMap<Answer, AnswerForCreationDto>().ReverseMap();
+            CreateMap<Question, QuestionForCreationDto>().ReverseMap();
         }
     }
 }

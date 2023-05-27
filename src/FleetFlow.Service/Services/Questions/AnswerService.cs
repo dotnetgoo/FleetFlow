@@ -1,38 +1,31 @@
 ﻿using AutoMapper;
+using FleetFlow.Shared.Helpers;
 using FleetFlow.DAL.IRepositories;
-using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities;
-using FleetFlow.Domain.Entities.UserQuestions;
-using FleetFlow.Domain.Entities.Users;
-using FleetFlow.Service.DTOs.Questions;
-using FleetFlow.Service.DTOs.User;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
-using FleetFlow.Service.Interfaces.UserQuestions;
-using FleetFlow.Shared.Helpers;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics.CodeAnalysis;
+using FleetFlow.Domain.Congirations;
+using FleetFlow.Domain.Entities.Users;
+using FleetFlow.Service.DTOs.Questions;
+using FleetFlow.Domain.Entities.UserQuestions;
+using FleetFlow.Service.Interfaces.UserQuestions;
 
 namespace FleetFlow.Service.Services.UserQuestions;
 
 public class AnswerService : IAnswerService
 {
+    private readonly IMapper mapper;
+    private readonly IRepository<User> userRepository;
     private readonly IRepository<Answer> answerRepository;
     private readonly IRepository<Question> questionRepository;
-    private readonly IQuestionService questionService;
-    private readonly IRepository<User> userRepository;
-    private readonly IMapper mapper;
 
     public AnswerService(
-        IRepository<Answer> answerRepository,
         IRepository<Question> questionRepository,
-        IQuestionService questionService,
+        IRepository<Answer> answerRepository,
         IMapper mapper)
     {
-        this.answerRepository = answerRepository;
         this.questionRepository = questionRepository;
-        this.questionService = questionService;
+        this.answerRepository = answerRepository;
         this.mapper = mapper;
     }
 
@@ -47,21 +40,19 @@ public class AnswerService : IAnswerService
         {
             long questionId = (long)dto.AnsweredQuestionId;
 
-            var question = await questionService.RetrieveByIdAsync(questionId);
+            var question = await questionRepository.SelectAsync(q => q.Id == dto.AnsweredQuestionId && !q.IsDeleted);
             if (question is null)
-                throw new FleetFlowException(404, "Question Not Found");
+                throw new FleetFlowException(404, "Question is not found");
 
-            var mapped = mapper.Map<QuestionForCreationDto>(question);
             question.IsAnswered = true;
-            await questionService.ModifyAsync(questionId, mapped);
         }
-        else if ((await this.userRepository.SelectAsync(u => u.Id == dto.AnsweredUserId)) is null)
+        else if ((await this.userRepository.SelectAsync(u => u.Id == dto.AnsweredUserId && !u.IsDeleted)) is null)
             throw new FleetFlowException(404, "User is not found");
 
+        var mappedAnswer = mapper.Map<Answer>(dto);
+        mappedAnswer.AdminId = (long)HttpContextHelper.UserId;
 
-        var mapped2 = mapper.Map<Answer>(dto);
-
-        var insertedAnswer = await answerRepository.InsertAsync(mapped2);
+        var insertedAnswer = await answerRepository.InsertAsync(mappedAnswer);
 
         await answerRepository.SaveAsync();
 
@@ -75,20 +66,16 @@ public class AnswerService : IAnswerService
     /// <returns></returns>
     /// <exception cref="FleetFlowException"></exception>
 
-    public async Task<bool> DeleteByIdAsync(long id)
+    public async Task<bool> RemoveByIdAsync(long id)
     {
-        var answer = await answerRepository.SelectAsync(a => a.Id == id);
+        var answer = await answerRepository.SelectAsync(a => a.Id == id && !a.IsDeleted);
         if (answer is null)
-            throw new FleetFlowException(404, "Couldn't find answer for this given Id");
-
-        var accessor = HttpContextHelper.Accessor;
+            throw new FleetFlowException(404, "Answer is not found");
 
         answer.DeletedBy = HttpContextHelper.UserId;
 
         await answerRepository.DeleteAsync(a => a.Id == id);
-
         await answerRepository.SaveAsync();
-
         return true;
     }
 
@@ -97,15 +84,11 @@ public class AnswerService : IAnswerService
     /// </summary>
     /// <param name="params"></param>
     /// <returns></returns>
-    public async Task<IEnumerable<Answer>> GetAllAsync(PaginationParams @params)
-    {
-        var answers = await answerRepository.SelectAll()
-            .Where(u => u.IsDeleted == false)
+    public async Task<IEnumerable<Answer>> RetrieveAllAsync(PaginationParams @params)
+        => await answerRepository
+            .SelectAll(u => !u.IsDeleted)
             .ToPagedList(@params)
             .ToListAsync();
-
-        return mapper.Map<IEnumerable<Answer>>(answers);
-    }
 
     /// <summary>
     /// Gets All Asnwer with pagination by AdminId
@@ -113,15 +96,11 @@ public class AnswerService : IAnswerService
     /// <param name="params"></param>
     /// <param name="adminId"></param>
     /// <returns></returns>
-    public async Task<IEnumerable<Answer>> GetAllByAdminIdAsync(PaginationParams @params, long adminId)
-    {
-        var adminsAnswer = await answerRepository.SelectAll()
-            .Where(a => a.AdminId == adminId)
+    public async Task<IEnumerable<Answer>> RetrieveAllByAdminIdAsync(PaginationParams @params, long adminId)
+        => await answerRepository
+            .SelectAll(a => a.AdminId == adminId && !a.IsDeleted)
             .ToPagedList(@params)
             .ToListAsync();
-
-        return mapper.Map<IEnumerable<Answer>>(adminsAnswer);
-    }
 
     /// <summary>
     /// Gets All Answers with pagination by UserId
@@ -129,15 +108,11 @@ public class AnswerService : IAnswerService
     /// <param name="params"></param>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public async Task<IEnumerable<Answer>> GetAllByUserIdAsync(PaginationParams @params, long userId)
-    {
-        var userAnswers = await answerRepository.SelectAll()
-            .Where(a => a.AnsweredUserId == userId)
+    public async Task<IEnumerable<Answer>> RetrieveAllByUserIdAsync(PaginationParams @params, long userId)
+        => await answerRepository
+            .SelectAll(a => a.AnsweredUserId == userId && !a.IsDeleted)
             .ToPagedList(@params)
             .ToListAsync();
-
-        return mapper.Map<IEnumerable<Answer>>(userAnswers);
-    }
 
     /// <summary>
     /// Gets Answer by id 
@@ -145,13 +120,13 @@ public class AnswerService : IAnswerService
     /// <param name="id"></param>
     /// <returns></returns>
     /// <exception cref="FleetFlowException"></exception>
-    public async Task<Answer> GetByIdAsync(long id)
+    public async Task<Answer> RetrieveByIdAsync(long id)
     {
-        var answer = await answerRepository.SelectAsync(a => a.Id == id);
+        var answer = await answerRepository.SelectAsync(a => a.Id == id && !a.IsDeleted);
         if (answer is null)
-            throw new FleetFlowException(404, "Answer Not Found");
+            throw new FleetFlowException(404, "Answer is not found");
 
-        return mapper.Map<Answer>(answer);
+        return answer;
     }
 
     /// <summary>
@@ -161,18 +136,18 @@ public class AnswerService : IAnswerService
     /// <param name="dto"></param>
     /// <returns></returns>
     /// <exception cref="FleetFlowException"></exception>
-    public async Task<Answer> UpdateByIdAsync(long id, AnswerForCreationDto dto)
+    public async Task<Answer> ModifyByIdAsync(long id, string message)
     {
-        var answer = await answerRepository.SelectAsync(a => a.Id == id);
+        var answer = await answerRepository.SelectAsync(a => a.Id == id && !a.IsDeleted);
         if (answer is null)
             throw new FleetFlowException(404, "Couldn't found answer for given Id");
 
-        var updatedAsnwer = mapper.Map(dto, answer);
-        updatedAsnwer.UpdatedAt = DateTime.UtcNow;
-        updatedAsnwer.UpdatedBy = HttpContextHelper.UserId;
+        answer.UpdatedAt = DateTime.UtcNow;
+        answer.Message = message;
+        answer.UpdatedBy = HttpContextHelper.UserId;
 
         await answerRepository.SaveAsync();
 
-        return mapper.Map<Answer>(answer);
+        return answer;
     }
 }
