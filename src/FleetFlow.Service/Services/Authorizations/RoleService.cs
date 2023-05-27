@@ -72,9 +72,13 @@ namespace FleetFlow.Service.Services.Authorizations
             return true;
         }
 
-        public async Task<Role> RetrieveByIdAsync(long id)
+        public async Task<Role> RetrieveByIdForAuthAsync(long id)
             => await this.roleRepository.SelectAsync(u => u.Id == id && u.IsDeleted == false);
 
-
+        public async Task<RoleResultDto> RetrieveByIdAsync(long id)
+        {
+            var role = await this.roleRepository.SelectAsync(u => u.Id == id && u.IsDeleted == false);
+            return this.mapper.Map<RoleResultDto>(role);
+        }
     }
 }

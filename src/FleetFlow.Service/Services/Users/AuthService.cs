@@ -31,7 +31,7 @@ public class AuthService : IAuthService
         if (user == null || !PasswordHelper.Verify(password, user.Password))
             throw new FleetFlowException(400, "Email or password is incorrect");
 
-        var role = await this.roleService.RetrieveByIdAsync(user.RoleId);
+        var role = await this.roleService.RetrieveByIdForAuthAsync(user.RoleId);
         user.Role = role;
         return new LoginResultDto
         {
