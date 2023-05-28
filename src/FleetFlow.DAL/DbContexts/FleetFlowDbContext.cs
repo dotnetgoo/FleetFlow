@@ -41,6 +41,7 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<Role> Roles { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<Payment> Payments { get; set; }
+        public DbSet<Answer>  Answers { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

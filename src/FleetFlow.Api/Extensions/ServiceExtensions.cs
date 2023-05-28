@@ -16,6 +16,7 @@ using FleetFlow.Service.Services.Insights;
 using FleetFlow.Service.Services.Orders;
 using FleetFlow.Service.Services.Products;
 using FleetFlow.Service.Services.Questions;
+using FleetFlow.Service.Services.UserQuestions;
 using FleetFlow.Service.Services.Users;
 using FleetFlow.Service.Services.Warehouses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -64,6 +65,7 @@ namespace FleetFlow.Api.Extensions
 
             // Questions
             services.AddScoped<IQuestionService, QuestionService>();
+            services.AddScoped<IAnswerService, AnswerService>();
 
             // Users
             services.AddScoped<IAuthService, AuthService>();

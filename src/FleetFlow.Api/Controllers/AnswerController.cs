@@ -17,23 +17,22 @@ namespace FleetFlow.Api.Controllers
         /// <summary>
         /// Add Asnwer for the given question
         /// </summary>
-        /// <param name="dto"></param>
-        /// <returns></returns>
-        //[HttpPost("answer")]
-        //public async ValueTask<IActionResult> AddAsnwerAsync([FromBody] AnswerForCreationDto dto,
-        //    long questionId)
-        //    => Ok(new Response
-        //    {
-        //        Code = 200,
-        //        Message = "OK",
-        //        Data = await this.answerService.AddAsync(questionId, dto)
-        //    });
+        /// <param name = "dto" ></ param >
+        /// < returns ></ returns >
+        [HttpPost("answer")]
+        public async ValueTask<IActionResult> AddAsnwerAsync([FromBody] AnswerForCreationDto dto)
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await this.answerService.AddAsync(dto)
+            });
 
         /// <summary>
         /// Delete Answer by id from database
         /// </summary>
-        /// <param name="answerId"></param>
-        /// <returns></returns>
+        /// <param name = "answerId" ></ param >
+        /// < returns ></ returns >
         [HttpDelete("{id:long}")]
         public async ValueTask<IActionResult> DeleteAnswerAsync([FromRoute(Name = "id")] long answerId)
             => Ok(new Response
