@@ -39,7 +39,7 @@ namespace FleetFlow.Service.Services.Warehouses
                 p.InventoryId == dto.InventoryId &&
                 p.LocationId == dto.LocationId);
 
-            if (entity is not null || entity.IsDeleted == false)
+            if (entity is not null && entity.IsDeleted == false)
                 throw new FleetFlowException(403, "Already exist");
 
             var product = await this.productService.RetrieveByIdAsync(dto.ProductId);
