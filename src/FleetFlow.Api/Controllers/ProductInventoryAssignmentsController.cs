@@ -75,7 +75,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("get-by-id")]
-        public async ValueTask<IActionResult> GetByIdAsync([FromRoute] long id)
+        public async ValueTask<IActionResult> GetByIdAsync(long id)
             => Ok(new Response
             {
                 Code = 200,
