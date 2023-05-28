@@ -1,4 +1,5 @@
-﻿using FleetFlow.Domain.Configurations;
+﻿using FleetFlow.Api.Models;
+using FleetFlow.Domain.Configurations;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.InventoryLogs;
 using FleetFlow.Service.Interfaces.Warehouses;
@@ -15,13 +16,29 @@ namespace FleetFlow.Api.Controllers
             _inventoryLogService = inventoryLogService;
         }
         [HttpPost]
-        public async ValueTask<IActionResult> PostAsync(InventoryLogForCreationDto dto) =>
-            Ok(await this._inventoryLogService.AddAsync(dto));
+        public async ValueTask<IActionResult> PostAsync(InventoryLogForCreationDto dto) 
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "Ok",
+                Data = await this._inventoryLogService.AddAsync(dto)
+            });
+
         [HttpGet("id")]
         public async ValueTask<IActionResult> GetByIdAsync(long id) =>
-            Ok(await this._inventoryLogService.RetrieveById(id));
+            Ok(new Response
+            {
+                Code = 200,
+                Message = "Ok",
+                Data = await this._inventoryLogService.RetrieveById(id)
+            });
         [HttpGet]
         public async ValueTask<IActionResult> GetAllByFilteringAsync([FromQuery] Filter filter, [FromQuery] PaginationParams @params = null) =>
-            Ok(await this._inventoryLogService.RetrieveAllByFiltering(filter, @params));
+            Ok(new Response
+            {
+                Code = 200,
+                Message = "Ok",
+                Data = await this._inventoryLogService.RetrieveAllByFiltering(filter, @params)
+            });
     }
 }
