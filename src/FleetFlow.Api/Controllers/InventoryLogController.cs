@@ -16,7 +16,7 @@ namespace FleetFlow.Api.Controllers
             _inventoryLogService = inventoryLogService;
         }
         [HttpPost]
-        public async ValueTask<IActionResult> PostAsync(InventoryLogForCreationDto dto) 
+        public async ValueTask<ActionResult<InventoryLogForResultDto>> PostAsync(InventoryLogForCreationDto dto) 
             => Ok(new Response
             {
                 Code = 200,

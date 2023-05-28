@@ -4,6 +4,7 @@ using FleetFlow.Domain.Configurations;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities.Warehouses;
 using FleetFlow.Service.DTOs.InventoryLogs;
+using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces.Warehouses;
 using Microsoft.EntityFrameworkCore;
@@ -56,7 +57,9 @@ namespace FleetFlow.Service.Services.Warehouses
 
         public async Task<InventoryLogForResultDto> RetrieveById(long id)
         {
-            var log = await this.inventoryRepository.SelectAsync(x => x.Id == id && x.IsDeleted == false);
+            InventoryLog log = await this.inventoryRepository.SelectAsync(x => x.Id == id);
+            if (log is null || log.IsDeleted == true)
+                throw new FleetFlowException(404, "Log not found");
             return this.mapper.Map<InventoryLogForResultDto>(log);
         }
     }
