@@ -80,6 +80,8 @@ namespace FleetFlow.Service.Services.Warehouses
 
             if (model is null || model.IsDeleted == true)
                 throw new FleetFlowException(404, "Product not found");
+            if (model.Amount < amount)
+                throw new FleetFlowException(400, $"There are {model.Amount} products in the warehouse");
             model.Amount -= amount;
             await this.repository.SaveAsync();
             return this.mapper.Map<ProductInventoryAssignmentForResultDto>(model);
