@@ -22,6 +22,9 @@ using FleetFlow.Service.Services.Users;
 using FleetFlow.Service.Services.Warehouses;
 using HotChocolate.Execution.Options;
 using HotChocolate.Types.Pagination;
+using FleetFlow.Service.Interfaces.UserQuestions;
+using FleetFlow.Service.Services.Questions;
+using FleetFlow.Service.Services.UserQuestions;
 
 namespace FleetFlow.GraphQL.Extensions
 {
@@ -56,6 +59,8 @@ namespace FleetFlow.GraphQL.Extensions
             services.AddScoped<IInventoryLogService, InventoryLogService>();
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<IProductInventoryAssignmentService, ProductInventoryAssignmentService>();
+            services.AddScoped<IQuestionService, QuestionService>();
+            services.AddScoped<IAnswerService, AnswerService>();
         }
 
         public static void AddGraphQLService(this IServiceCollection services)
