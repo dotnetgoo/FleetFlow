@@ -6,13 +6,14 @@ namespace FleetFlow.Service.Interfaces.Staffs
     public interface IStaffService
     {
         Task<StaffForResultDto> AddAsync(StaffForCreationDto dto);
-        Task<StaffForResultDto> GetByIdAsync(long staffId);
-        Task<IEnumerable<StaffForResultDto>> GetAllAsync(PaginationParams @params);
-        Task<IEnumerable<StaffForResultDto>> GetAllByRoleAsync(PaginationParams @params, long RoleId);
-        Task<bool> RemoveAsync(long staffId);
-        Task<StaffForResultDto> ModifyByRoleAsync(StaffForUpdateRoleDto roleId);
-        Task<StaffForResultDto> ModifyByPermissionAsync(StaffForUpdatePermissionDto permissionDto);
-        Task<StaffForResultDto> ModifyAsync(StaffForUpdateDto dto);
+        Task<StaffForResultDto> RetrieveByIdAsync(long id);
+        Task<StaffForResultDto> RetrieveByUserIdAsync(long UserId);
+        Task<IEnumerable<StaffForResultDto>> RetrieveAllAsync(PaginationParams @params);
+        Task<IEnumerable<StaffForResultDto>> RetrieveAllByRoleAsync(PaginationParams @params, long RoleId);
+        Task<bool> RemoveAsync(long Id);
+        //Task<StaffForResultDto> AddPermissionAsync(long staffId, long permissionId);
+        //Task<StaffForResultDto> RemovePermissionAsync(long staffId, long permissionId);
+        Task<StaffForResultDto> ModifyAsync(long id, StaffForUpdateDto dto);
 
     }
 }
