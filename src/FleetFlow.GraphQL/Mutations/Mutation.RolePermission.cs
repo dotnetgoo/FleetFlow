@@ -10,13 +10,13 @@ namespace FleetFlow.GraphQL.Mutations
             return await rolePermissionService.CreateAsync(dto);
         }
 
-        public async ValueTask<bool> DeleteRolePermissionAsync([Service] IRolePermissionService rolePermissionService, long id)
-        {
-            var result = await rolePermissionService.DeleteAsync(id);
-            if (result)
-                return true;
-            return false;
-        }
+        //public async ValueTask<bool> DeleteRolePermissionAsync([Service] IRolePermissionService rolePermissionService, long id)
+        //{
+        //    var result = await rolePermissionService.DeleteAsync(id);
+        //    if (result)
+        //        return true;
+        //    return false;
+        //}
 
         public async ValueTask<RolePermissionForResultDto> UpdateRolePermissionAsync([Service] IRolePermissionService rolePermissionService, RolePermissionForUpdateDto dto)
         {
