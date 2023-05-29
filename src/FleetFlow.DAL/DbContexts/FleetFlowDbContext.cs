@@ -5,6 +5,7 @@ using FleetFlow.Domain.Entities.Authorizations;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Orders.Feedbacks;
 using FleetFlow.Domain.Entities.Products;
+using FleetFlow.Domain.Entities.Staffs;
 using FleetFlow.Domain.Entities.UserQuestions;
 using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Domain.Entities.Warehouses;
@@ -42,6 +43,7 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Answer>  Answers { get; set; }
+        public DbSet<Staff> Staffs { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -269,6 +271,14 @@ namespace FleetFlow.DAL.DbContexts
 
             modelBuilder.Entity<Question>().HasData(
                 new Question() { Id = 1, IsDeleted = false, CreatedAt = DateTime.UtcNow, IsAnswered = true, Message = "Hello .NET N6 group", UserId = 1 ,UpdatedAt = null}
+                );
+
+            modelBuilder.Entity<Staff>().HasData(
+                new Staff() { Id = 1, UserId = 1, RoleId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new Staff() { Id = 2, UserId = 2, RoleId = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new Staff() { Id = 3, UserId = 3, RoleId = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new Staff() { Id = 4, UserId = 4, RoleId = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new Staff() { Id = 5, UserId = 5, RoleId = 5, CreatedAt = DateTime.UtcNow, UpdatedAt = null}
                 );
             #endregion
         }
