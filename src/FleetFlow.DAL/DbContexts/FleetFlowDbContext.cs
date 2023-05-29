@@ -5,6 +5,7 @@ using FleetFlow.Domain.Entities.Authorizations;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Orders.Feedbacks;
 using FleetFlow.Domain.Entities.Products;
+using FleetFlow.Domain.Entities.StaffPermissions;
 using FleetFlow.Domain.Entities.Staffs;
 using FleetFlow.Domain.Entities.UserQuestions;
 using FleetFlow.Domain.Entities.Users;
@@ -44,6 +45,7 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<Payment> Payments { get; set; }
         public DbSet<Answer>  Answers { get; set; }
         public DbSet<Staff> Staffs { get; set; }
+        public DbSet<StaffPermission> StaffPermissions { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
