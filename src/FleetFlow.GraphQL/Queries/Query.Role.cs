@@ -8,10 +8,10 @@ namespace FleetFlow.GraphQL.Queries
 {
     public partial class Query
     {
-        //public async ValueTask<Role> GetRoleByIdAsync([Service] IRoleService roleService, long id)
-        //{
-        //    return await roleService.RetrieveByIdAsync(id);
-        //}
+        public async ValueTask<RoleResultDto> GetRoleByIdAsync([Service] IRoleService roleService, long id)
+        {
+            return await roleService.RetrieveByIdAsync(id);
+        }
 
         public async ValueTask<IEnumerable<RoleResultDto>> GetAllRolesAsync([Service] IRoleService roleService,
             PaginationParams @params)

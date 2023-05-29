@@ -29,6 +29,10 @@ using ProdInvenForUpdateDto = FleetFlow.Service.DTOs.Inventories.ProductInventor
 using Location = FleetFlow.Domain.Entities.Warehouses.Location;
 using FleetFlow.Service.DTOs.Roles;
 using FleetFlow.Service.DTOs.RolePermissions;
+using FleetFlow.Domain.Entities.Staffs;
+using FleetFlow.Service.DTOs.Staffs;
+using FleetFlow.Domain.Entities.StaffPermissions;
+using FleetFlow.Service.DTOs.StaffPermissions;
 
 namespace FleetFlow.Service.Mappers
 {
@@ -81,6 +85,13 @@ namespace FleetFlow.Service.Mappers
             CreateMap<Permission, PermissionForResultDto>().ReverseMap();
             CreateMap<Permission, PermissionForCreationDto>().ReverseMap();
             CreateMap<Permission, PermissionForUpdateDto>().ReverseMap();
+
+            CreateMap<Staff, StaffForCreationDto>().ReverseMap();
+            CreateMap<Staff, StaffForUpdateDto>().ReverseMap();
+            CreateMap<Staff, StaffForResultDto>().ReverseMap();
+
+            CreateMap<StaffPermission, StaffPermissionsForCreationDto>().ReverseMap();
+            CreateMap<StaffPermission, StaffPermissionForResultDto>().ReverseMap();
 
         }
     }
