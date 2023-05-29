@@ -8,7 +8,7 @@ namespace FleetFlow.GraphQL.Queries
 {
     public partial class Query
     {
-        public async ValueTask<Role> GetRoleByIdAsync([Service] IRoleService roleService, long id)
+        public async ValueTask<RoleResultDto> GetRoleByIdAsync([Service] IRoleService roleService, long id)
         {
             return await roleService.RetrieveByIdAsync(id);
         }
