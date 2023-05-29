@@ -6,6 +6,7 @@ using FleetFlow.Service.Interfaces.Authorizations;
 using FleetFlow.Service.Interfaces.Insights;
 using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Service.Interfaces.Products;
+using FleetFlow.Service.Interfaces.Staffs;
 using FleetFlow.Service.Interfaces.UserQuestions;
 using FleetFlow.Service.Interfaces.Users;
 using FleetFlow.Service.Interfaces.Warehouses;
@@ -16,6 +17,7 @@ using FleetFlow.Service.Services.Insights;
 using FleetFlow.Service.Services.Orders;
 using FleetFlow.Service.Services.Products;
 using FleetFlow.Service.Services.Questions;
+using FleetFlow.Service.Services.Staffs;
 using FleetFlow.Service.Services.UserQuestions;
 using FleetFlow.Service.Services.Users;
 using FleetFlow.Service.Services.Warehouses;
@@ -77,6 +79,10 @@ namespace FleetFlow.Api.Extensions
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<ILocationService, LocationService>();
             services.AddScoped<IProductInventoryAssignmentService, ProductInventoryAssignmentService>();
+
+            //Staff
+            services.AddScoped<IStaffService, StaffService>();
+
         }
 
         /// <summary>

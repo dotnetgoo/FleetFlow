@@ -59,8 +59,8 @@ namespace FleetFlow.Service.Services.Staffs
             if (await this.userService.RetrieveByIdAsync(dto.UserId) is null)
                 throw new FleetFlowException(404, "User not found");
 
-            if (await this.roleService.RetrieveByIdAsync(dto.RoleId) is null)
-                throw new FleetFlowException(404, "Role not found");
+            //if (await this.roleService.RetrieveByIdAsync(dto.RoleId) is null)
+            //    throw new FleetFlowException(404, "Role not found");
 
             var modified = this.mapper.Map(dto, entity);
             modified.UpdatedAt = DateTime.UtcNow;
