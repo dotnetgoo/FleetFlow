@@ -6,26 +6,26 @@ namespace FleetFlow.GraphQL.Queries
 {
     public partial class Query
     {
-        public async ValueTask<Answer> GetByIdAsync([Service] IAnswerService answerService,
+        public async ValueTask<Answer> GetAnswerByIdAsync([Service] IAnswerService answerService,
             long id)
         {
             return await answerService.RetrieveByIdAsync(id);
         }
 
-        public async ValueTask<IEnumerable<Answer>> GetAllAsync([Service] IAnswerService answerService,
+        public async ValueTask<IEnumerable<Answer>> GetAllAnswersAsync([Service] IAnswerService answerService,
             PaginationParams @params)
         {
             return await answerService.RetrieveAllAsync(@params);
         }
 
-        public async ValueTask<IEnumerable<Answer>> GetAllByUserIdAsync([Service] IAnswerService answerService,
+        public async ValueTask<IEnumerable<Answer>> GetAllAnswersByUserIdAsync([Service] IAnswerService answerService,
             PaginationParams @params,
             long userId)
         {
             return await answerService.RetrieveAllByUserIdAsync(@params, userId);
         }
 
-        public async ValueTask<IEnumerable<Answer>> GetAllByAdminIdAsync([Service] IAnswerService answerService,
+        public async ValueTask<IEnumerable<Answer>> GetAllAnswersByAdminIdAsync([Service] IAnswerService answerService,
             PaginationParams @params,
             long adminId)
         {

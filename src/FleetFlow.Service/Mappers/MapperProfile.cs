@@ -31,6 +31,8 @@ using FleetFlow.Service.DTOs.Roles;
 using FleetFlow.Service.DTOs.RolePermissions;
 using FleetFlow.Domain.Entities.Staffs;
 using FleetFlow.Service.DTOs.Staffs;
+using FleetFlow.Domain.Entities.StaffPermissions;
+using FleetFlow.Service.DTOs.StaffPermissions;
 
 namespace FleetFlow.Service.Mappers
 {
@@ -87,6 +89,9 @@ namespace FleetFlow.Service.Mappers
             CreateMap<Staff, StaffForCreationDto>().ReverseMap();
             CreateMap<Staff, StaffForUpdateDto>().ReverseMap();
             CreateMap<Staff, StaffForResultDto>().ReverseMap();
+
+            CreateMap<StaffPermission, StaffPermissionsForCreationDto>().ReverseMap();
+            CreateMap<StaffPermission, StaffPermissionForResultDto>().ReverseMap();
 
         }
     }

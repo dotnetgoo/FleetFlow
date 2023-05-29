@@ -69,7 +69,7 @@ namespace FleetFlow.Service.Services.Authorizations
 
 		public async Task<RolePermissionForResultDto> RetrieveByIdAsync(long id)
 		{
-			var rolePermission = await this.rolePermissionRepository.SelectAll(rp => rp.Id == id && rp.IsDeleted == false && rp.Permisson.IsDeleted ==false && rp.Role.IsDeleted ==false,new string[] {"Permission","Role"})
+			var rolePermission = await this.rolePermissionRepository.SelectAll(rp => rp.Id == id && rp.IsDeleted == false && rp.Permisson.IsDeleted ==false && rp.Role.IsDeleted ==false,new string[] {"Permisson","Role"})
 				.FirstOrDefaultAsync();
 			if (rolePermission is null)
 				throw new FleetFlowException(404, "RolePermission is not found");
