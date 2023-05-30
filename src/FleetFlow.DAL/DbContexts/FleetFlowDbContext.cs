@@ -232,13 +232,13 @@ namespace FleetFlow.DAL.DbContexts
                 );
 
             modelBuilder.Entity<InventoryLog>().HasData(
-                new InventoryLog() { Id = 1, ProductId = 1, Amount = 1, OwnerId = 1, Type = InventoryLogType.Added, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new InventoryLog() { Id = 2, ProductId = 2, Amount = 2, OwnerId = 1, Type = InventoryLogType.Added, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new InventoryLog() { Id = 3, ProductId = 3, Amount = 3, OwnerId = 1, Type = InventoryLogType.Added, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new InventoryLog() { Id = 1, ProductId = 1, Amount = 1, InventoryId = 1, Type = InventoryLogType.Added, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new InventoryLog() { Id = 2, ProductId = 2, Amount = 2, InventoryId = 1, Type = InventoryLogType.Added, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new InventoryLog() { Id = 3, ProductId = 3, Amount = 3, InventoryId = 1, Type = InventoryLogType.Added, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
                 
-                new InventoryLog() { Id = 4, ProductId = 4, Amount = 4, OwnerId = 1, Type = InventoryLogType.Removed, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new InventoryLog() { Id = 5, ProductId = 5, Amount = 5, OwnerId = 1, Type = InventoryLogType.Removed, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
-                new InventoryLog() { Id = 6, ProductId = 6, Amount = 6, OwnerId = 1, Type = InventoryLogType.Removed, CreatedAt = DateTime.UtcNow, UpdatedAt = null}
+                new InventoryLog() { Id = 4, ProductId = 4, Amount = 4, InventoryId = 1, Type = InventoryLogType.Removed, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new InventoryLog() { Id = 5, ProductId = 5, Amount = 5, InventoryId = 2, Type = InventoryLogType.Removed, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new InventoryLog() { Id = 6, ProductId = 6, Amount = 6, InventoryId = 1, Type = InventoryLogType.Removed, CreatedAt = DateTime.UtcNow, UpdatedAt = null}
                 );
 
             modelBuilder.Entity<Attachment>().HasData(

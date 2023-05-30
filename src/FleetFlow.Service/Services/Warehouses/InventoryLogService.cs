@@ -36,8 +36,8 @@ namespace FleetFlow.Service.Services.Warehouses
         {
             var logsQuery = this.inventoryRepository.SelectAll(x => x.Type == filter.Type);
 
-            if (filter.OwnerId != null)
-                logsQuery = logsQuery.Where(x => x.OwnerId == filter.OwnerId);
+            if (filter.InventoryId != null)
+                logsQuery = logsQuery.Where(x => x.InventoryId == filter.InventoryId);
 
             if (filter.ProductId != null)
                 logsQuery = logsQuery.Where(x => x.ProductId == filter.ProductId);
