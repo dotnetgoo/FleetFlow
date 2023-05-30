@@ -33,6 +33,7 @@ using FleetFlow.Domain.Entities.Staffs;
 using FleetFlow.Service.DTOs.Staffs;
 using FleetFlow.Domain.Entities.StaffPermissions;
 using FleetFlow.Service.DTOs.StaffPermissions;
+using FleetFlow.Service.DTOs.Payments;
 
 namespace FleetFlow.Service.Mappers
 {
@@ -93,6 +94,10 @@ namespace FleetFlow.Service.Mappers
             CreateMap<StaffPermission, StaffPermissionsForCreationDto>().ReverseMap();
             CreateMap<StaffPermission, StaffPermissionForResultDto>().ReverseMap();
 
+            CreateMap<Payment, PaymentResultDto>().ReverseMap();
+            CreateMap<Payment, PaymentCreationDto>().ReverseMap();
+
+            CreateMap<OrderAction, OrderActionCreationDto>().ReverseMap();
         }
     }
 }

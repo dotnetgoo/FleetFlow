@@ -8,5 +8,6 @@ namespace FleetFlow.Domain.Entities.Orders
         public long OrderId { get; set; }
         public Order Order { get; set; }
         public OrderStatus Status { get; set; }
+        public DateTime? ApproximateFinishTime { get; set; }
     }
 }

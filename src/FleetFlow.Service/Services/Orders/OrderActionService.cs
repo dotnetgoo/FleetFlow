@@ -45,7 +45,7 @@ public class OrderActionService : IOrderActionService
         return order;
     }
 
-    public async ValueTask<OrderResultDto> FinishDelivery(int orderId)
+    public async ValueTask<OrderResultDto> FinishDeliveryAsync(int orderId)
     {
         var order = await this.orderService.RetrieveAsync(orderId);
         if (order is null)
@@ -61,48 +61,45 @@ public class OrderActionService : IOrderActionService
         return order;
     }
 
-    public async ValueTask<OrderResultDto> StartPendingAsync(int orderId)
+    public async ValueTask<OrderResultDto> StartPendingAsync(OrderActionCreationDto action)
     {
-        var order = await this.orderService.RetrieveAsync(orderId);
+        var order = await this.orderService.RetrieveAsync(action.OrderId);
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
 
-        order.Id = orderId;
-        order.Status = OrderStatus.Cancelled;
+        order.Status = OrderStatus.Pending;
 
-        await this.actionRepository.InsertAsync(new OrderAction() { OrderId = orderId, Status = OrderStatus.Pending });
+        await this.actionRepository.InsertAsync(new OrderAction() { OrderId = order.Id, Status = OrderStatus.Pending });
 
         await this.actionRepository.SaveAsync();
 
         return order;
     }
 
-    public async ValueTask<OrderResultDto> StartPreparingAsync(int orderId)
+    public async ValueTask<OrderResultDto> StartPreparingAsync(OrderActionCreationDto action)
     {
-        var order = await this.orderService.RetrieveAsync(orderId);
+        var order = await this.orderService.RetrieveAsync(action.OrderId);
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
 
-        order.Id = orderId;
         order.Status = OrderStatus.Cancelled;
 
-        await this.actionRepository.InsertAsync(new OrderAction() { OrderId = orderId, Status = OrderStatus.Process });
+        await this.actionRepository.InsertAsync(new OrderAction() { OrderId = order.Id, Status = OrderStatus.Process });
 
         await this.actionRepository.SaveAsync();
 
         return order;
     }
 
-    public async ValueTask<OrderResultDto> StartShippingAsync(int orderId)
+    public async ValueTask<OrderResultDto> StartShippingAsync(OrderActionCreationDto action)
     {
-        var order = await this.orderService.RetrieveAsync(orderId);
+        var order = await this.orderService.RetrieveAsync(action.OrderId);
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
 
-        order.Id = orderId;
         order.Status = OrderStatus.Cancelled;
 
-        await this.actionRepository.InsertAsync(new OrderAction() { OrderId = orderId, Status = OrderStatus.Shipping });
+        await this.actionRepository.InsertAsync(new OrderAction() { OrderId = order.Id, Status = OrderStatus.Shipping });
 
         await this.actionRepository.SaveAsync();
 
