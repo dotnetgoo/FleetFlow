@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FleetFlow.Domain.Entities;
-using FleetFlow.Domain.Enums;
+﻿using FleetFlow.Domain.Enums;
 using FleetFlow.Service.DTOs.Address;
 using FleetFlow.Service.DTOs.User;
 
@@ -19,7 +13,7 @@ namespace FleetFlow.Service.DTOs.Orders
         public AddressForResultDto Address { get; set; }
         public OrderStatus Status { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
-        
+
         public ICollection<OrderItemForResultDto> OrderItems { get; set; }
     }
 }
