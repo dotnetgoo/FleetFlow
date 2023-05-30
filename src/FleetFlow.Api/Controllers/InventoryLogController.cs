@@ -1,4 +1,5 @@
-﻿using FleetFlow.Api.Models;
+﻿using FleetFlow.Api.Attributes;
+using FleetFlow.Api.Models;
 using FleetFlow.Domain.Configurations;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.InventoryLogs;
@@ -16,7 +17,7 @@ namespace FleetFlow.Api.Controllers
             _inventoryLogService = inventoryLogService;
         }
         [HttpPost]
-        public async ValueTask<ActionResult<InventoryLogForResultDto>> PostAsync(InventoryLogForCreationDto dto) 
+        public async ValueTask<ActionResult<InventoryLogForResultDto>> PostAsync([FromQuery]InventoryLogForCreationDto dto) 
             => Ok(new Response
             {
                 Code = 200,
