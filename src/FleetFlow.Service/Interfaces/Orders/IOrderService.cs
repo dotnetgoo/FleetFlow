@@ -13,5 +13,7 @@ namespace FleetFlow.Service.Interfaces.Orders
         ValueTask<bool> RemoveAsync(long id);
         ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByClientIdAsync(long clientId);
         ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByPhoneAsync(PaginationParams @params, string phone, OrderStatus? status = null);
+        ValueTask<bool> ChangeStatusAsync(long orderId, OrderStatus status);
+
     }
 }

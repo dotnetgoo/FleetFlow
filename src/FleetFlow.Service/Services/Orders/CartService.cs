@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FleetFlow.DAL.IRepositories;
+using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities;
 using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Domain.Entities.Warehouses;
@@ -82,6 +83,16 @@ namespace FleetFlow.Service.Services.Orders
             await cartItemRepository.SaveAsync();
 
             return true;
+        }
+
+        public ValueTask<IEnumerable<CartItemResultDto>> RetrieveAllAsync(PaginationParams @params, long clientId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ValueTask<CartResultDto> RetrieveByClientIdAsync(long clientId)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
