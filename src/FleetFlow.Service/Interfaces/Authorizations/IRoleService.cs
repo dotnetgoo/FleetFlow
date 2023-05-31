@@ -1,12 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using FleetFlow.Domain.Congirations;
+using FleetFlow.Domain.Entities.Authorizations;
+using FleetFlow.Service.DTOs.Roles;
 
 namespace FleetFlow.Service.Interfaces.Authorizations
 {
-	internal class IRoleService
-	{
-	}
+    public interface IRoleService
+    {
+        Task<RoleResultDto> AddAsync(RoleCreationDto dto);
+        Task<bool> ModifyAsync(RoleUpdateDto dto);
+        Task<bool> RemoveAsync(long id);
+        Task<IEnumerable<RoleResultDto>> RetrieveAllAsync(PaginationParams @params);
+        Task<Role> RetrieveByIdForAuthAsync(long id);
+        Task<RoleResultDto> RetrieveByIdAsync(long id);
+    }
 }

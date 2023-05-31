@@ -1,15 +1,13 @@
 ﻿using FleetFlow.Service.DTOs.Address;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using FleetFlow.Service.DTOs.Carts;
 
-namespace FleetFlow.Service.Interfaces.Orders
+namespace FleetFlow.Service.Interfaces.Orders;
+
+public interface ICheckoutService
 {
-    public interface ICheckoutService
-    {
-        ValueTask<AddressForResultDto> RetrieveLastAddressAsync();
-        ValueTask<AddressForResultDto> AssignAddressAsync(AddressForCreationDto addressDto);
-    }
+    // 1st step: working with addresses to deliver order
+    ValueTask<AddressForResultDto> RetrieveLastAddressAsync();
+    ValueTask<AddressForResultDto> AssignAddressAsync(AddressForCreationDto addressDto);
+
+
 }

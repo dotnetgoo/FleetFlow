@@ -1,6 +1,7 @@
 ﻿using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Entities.Attachments;
 using FleetFlow.Service.DTOs.Attachments;
+using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Interfaces.Attachments;
 using FleetFlow.Shared.Helpers;
 using Path = System.IO.Path;
@@ -15,15 +16,19 @@ public class AttachmentService : IAttachmentService
         this.attachmentRepository = attachmentRepository;
     }
 
-    public ValueTask<bool> DeleteAsync(long id)
+    public async ValueTask<bool> DeleteAsync(long id)
     {
-        throw new NotImplementedException();
+        var isDeleted = await this.attachmentRepository.DeleteAsync(a => a.Id == id);
+        if (!isDeleted)
+            throw new FleetFlowException(404, "Attachment not found");
+        
+        return isDeleted;
     }
 
     public async ValueTask<Attachment> UploadAsync(AttachmentCreationDto dto)
     {
         // combining paths and create if not exists
-        string path = Path.Combine(EnvironmentHelper.WebRootPath, "Files", "Payments");
+        string path = Path.Combine(EnvironmentHelper.WebRootPath, "Files");
         if (!Directory.Exists(path))
             Directory.CreateDirectory(path);
 
@@ -40,6 +45,9 @@ public class AttachmentService : IAttachmentService
             FilePath = fullPath,
             CreatedAt = DateTime.UtcNow,
         };
-        return await attachmentRepository.InsertAsync(attachment);
+        var insertedFile = await this.attachmentRepository.InsertAsync(attachment);
+        await this.attachmentRepository.SaveAsync();
+
+        return insertedFile;
     }
 }

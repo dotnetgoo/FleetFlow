@@ -5,6 +5,9 @@ using FleetFlow.Domain.Entities.Authorizations;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Orders.Feedbacks;
 using FleetFlow.Domain.Entities.Products;
+using FleetFlow.Domain.Entities.StaffPermissions;
+using FleetFlow.Domain.Entities.Staffs;
+using FleetFlow.Domain.Entities.UserQuestions;
 using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Domain.Entities.Warehouses;
 using FleetFlow.Domain.Enums;
@@ -19,9 +22,10 @@ namespace FleetFlow.DAL.DbContexts
             : base(options)
         {
         }
-
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
+        public DbSet<InventoryLog> InventoryLogs { get; set; }
+        public DbSet<ProductInventoryAssignment> ProductInventoryAssignments { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
@@ -35,15 +39,47 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<Feedback> Feedbacks { get; set; }
         public DbSet<FeedbackAttachment> FeedbackAttachments { get; set; }
         public DbSet<Discount> Discounts { get; set; }
-
+        public DbSet<Permission> Permissions { get; set; }
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<RolePermission> RolePermissions { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<Answer>  Answers { get; set; }
+        public DbSet<Staff> Staffs { get; set; }
+        public DbSet<StaffPermission> StaffPermissions { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Fluent API relations
 
-            modelBuilder.Entity<Inventory>()
-                .HasOne(i => i.Location)
+            modelBuilder.Entity<OrderItem>()
+                .HasOne(oi => oi.ProductInventoryAssignment)
                 .WithMany()
-                .HasForeignKey(i => i.LocationId)
+                .HasForeignKey(oi => oi.ProductInventoryAssignmentId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProductInventoryAssignment>()
+                .HasOne(pia => pia.Product)
+                .WithMany()
+                .HasForeignKey(pia => pia.ProductId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProductInventoryAssignment>()
+                .HasOne(pia => pia.Location)
+                .WithMany()
+                .HasForeignKey(pia => pia.LocationId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<ProductInventoryAssignment>()
+                .HasOne(pia => pia.Inventory)
+                .WithMany()
+                .HasForeignKey(pia => pia.InventoryId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+
+            modelBuilder.Entity<Inventory>()
+                .HasOne(i => i.Address)
+                .WithMany()
+                .HasForeignKey(i => i.AddressId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Order>()
@@ -54,8 +90,14 @@ namespace FleetFlow.DAL.DbContexts
 
             modelBuilder.Entity<Order>()
                 .HasOne(o => o.Address)
-                .WithMany(a => a.Orders)
+                .WithMany()
                 .HasForeignKey(o => o.AddressId)
+                .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Payment)
+                .WithOne(p => p.Order)
+                .HasForeignKey<Order>(o => o.PaymentId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<OrderItem>()
@@ -118,12 +160,12 @@ namespace FleetFlow.DAL.DbContexts
                 );
 
             modelBuilder.Entity<Location>().HasData(
-                new Location() {Id = 1, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() {Id = 2, Description = "In the beginning of entry", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() {Id = 3, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 4,  Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 5, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new Location() { Id = 6,  Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null }
+                new Location() {Id = 1, Code = 1, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() {Id = 2, Code = 2, Description = "In the beginning of entry", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() {Id = 3, Code = 3, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() { Id = 4,  Code = 4, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() { Id = 5, Code = 5, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Location() { Id = 6,  Code = 6, Description = "In the middle", CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
 
             modelBuilder.Entity<Role>().HasData(
@@ -165,22 +207,81 @@ namespace FleetFlow.DAL.DbContexts
                 );
 
             modelBuilder.Entity<Inventory>().HasData(
-                new Inventory() { Id = 1, ProductId = 6, Amount = 1000, LocationId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 2, ProductId = 1, Amount = 50, LocationId = 1, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 3, ProductId = 3, Amount = 100, LocationId = 2, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 4, ProductId = 5, Amount = 100000, LocationId = 3, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null},
-                new Inventory() { Id = 5, ProductId = 2, Amount = 100, LocationId = 3, CreatedAt = DateTime.UtcNow.Date, UpdatedAt = null}
+                new Inventory() { Id = 1, Name = "Shayxon", Description = "Eng katta va asosiy filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new Inventory() { Id = 2, Name = "Chilonzor", Description = "Chilonzor filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new Inventory() {Id = 3, Name = "Xadra", Description = "Xadra filial", AddressId = 2, OwnerId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Inventory() {Id = 4, Name = "Shodlik", Description = "Eng shinam filial", AddressId = 3, OwnerId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Inventory() {Id = 5, Name = "Charxiy", Description = "Eng kichik filial", AddressId = 1, OwnerId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
+
             modelBuilder.Entity<Order>().HasData(
-                new Order() { Id = 1, UserId = 1, AddressId = 2, Status = OrderStatus.Pending, CreatedAt = DateTime.UtcNow, UpdatedAt = null}
+                new Order() { Id = 1, UserId = 1, AddressId = 1, Status = OrderStatus.Shipped, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Order() { Id = 2, UserId = 3, AddressId = 2, PaymentStatus = PaymentStatus.Paid, Status = OrderStatus.Shipped, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Order() { Id = 3, UserId = 4, AddressId = 1, PaymentStatus = PaymentStatus.Paid, Status = OrderStatus.Shipped, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Order() { Id = 4, UserId = 3, AddressId = 2, PaymentStatus = PaymentStatus.Paid, Status = OrderStatus.Shipped, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Order() { Id = 5, UserId = 2, AddressId = 1, PaymentStatus = PaymentStatus.Paid, Status = OrderStatus.Shipped, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new Order() { Id = 6, UserId = 4, AddressId = 2, PaymentStatus = PaymentStatus.Paid, Status = OrderStatus.Shipped, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
+
+            modelBuilder.Entity<ProductInventoryAssignment>().HasData(
+                new ProductInventoryAssignment() { Id = 1, ProductId = 1, Amount = 1, InventoryId = 1, LocationId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new ProductInventoryAssignment() { Id = 2, ProductId = 2, Amount = 2, InventoryId = 2, LocationId = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new ProductInventoryAssignment() { Id = 3, ProductId = 3, Amount = 3, InventoryId = 3, LocationId = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new ProductInventoryAssignment() { Id = 4, ProductId = 4, Amount = 4, InventoryId = 4, LocationId = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new ProductInventoryAssignment() { Id = 5, ProductId = 5, Amount = 5, InventoryId = 5, LocationId = 5, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
+                );
+
+            modelBuilder.Entity<InventoryLog>().HasData(
+                new InventoryLog() { Id = 1, ProductId = 1, Amount = 1, OwnerId = 1, Type = InventoryLogType.Added, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new InventoryLog() { Id = 2, ProductId = 2, Amount = 2, OwnerId = 1, Type = InventoryLogType.Added, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new InventoryLog() { Id = 3, ProductId = 3, Amount = 3, OwnerId = 1, Type = InventoryLogType.Added, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                
+                new InventoryLog() { Id = 4, ProductId = 4, Amount = 4, OwnerId = 1, Type = InventoryLogType.Removed, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new InventoryLog() { Id = 5, ProductId = 5, Amount = 5, OwnerId = 1, Type = InventoryLogType.Removed, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new InventoryLog() { Id = 6, ProductId = 6, Amount = 6, OwnerId = 1, Type = InventoryLogType.Removed, CreatedAt = DateTime.UtcNow, UpdatedAt = null}
+                );
+
+            modelBuilder.Entity<Attachment>().HasData(
+                new Attachment() { Id = 1, CreatedAt = DateTime.UtcNow, FileName = "s", FilePath = "s" });
+
+            modelBuilder.Entity<Payment>().HasData(
+                new Payment() { UserId = 3, Id = 1, Amount = 6130, OrderId = 2,CreatedAt = DateTime.UtcNow, Status = PaymentStatus.Paid, FileId = 1 },
+                new Payment() { UserId = 4, Id = 2, Amount = 11620, OrderId = 3, CreatedAt = DateTime.UtcNow, Status = PaymentStatus.Paid, FileId = 1 },
+                new Payment() { UserId = 3, Id = 3, Amount = 9630, OrderId = 4, CreatedAt = DateTime.UtcNow, Status = PaymentStatus.Paid, FileId = 1 },
+                new Payment() { UserId = 2, Id = 4, Amount = 7260, OrderId = 5, CreatedAt = DateTime.UtcNow, Status = PaymentStatus.Paid, FileId = 1 },
+                new Payment() { UserId = 4, Id = 5, Amount = 2000, OrderId = 6, CreatedAt = DateTime.UtcNow, Status = PaymentStatus.Paid, FileId = 1 });
 
             modelBuilder.Entity<OrderItem>().HasData(
-                new OrderItem() { Id = 1, OrderId = 1, ProductId = 3, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new OrderItem() { Id = 2, OrderId = 1, ProductId = 6, Amount = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new OrderItem() { Id = 3, OrderId = 1, ProductId = 2, Amount = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
+                new OrderItem() { Id = 4, OrderId = 2, ProductId = 1, Amount = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = null, ProductInventoryAssignmentId = 1 },
+                new OrderItem() { Id = 5, OrderId = 2, ProductId = 2, Amount = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null, ProductInventoryAssignmentId = 1 },
+                new OrderItem() { Id = 6, OrderId = 2, ProductId = 3, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null, ProductInventoryAssignmentId = 1 },
+
+                new OrderItem() { Id = 7, OrderId = 3, ProductId = 4, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null, ProductInventoryAssignmentId = 1 },
+                new OrderItem() { Id = 8, OrderId = 3, ProductId = 3, Amount = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null, ProductInventoryAssignmentId = 1 },
+                new OrderItem() { Id = 9, OrderId = 3, ProductId = 2, Amount = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = null, ProductInventoryAssignmentId = 1 },
+                new OrderItem() { Id = 10, OrderId = 3, ProductId = 1, Amount = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null, ProductInventoryAssignmentId = 1 },
+
+                new OrderItem() { Id = 11, OrderId = 4, ProductId = 2, Amount = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = null, ProductInventoryAssignmentId = 1 },
+                new OrderItem() { Id = 12, OrderId = 4, ProductId = 1, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null, ProductInventoryAssignmentId = 1 },
+                new OrderItem() { Id = 13, OrderId = 4, ProductId = 3, Amount = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null, ProductInventoryAssignmentId = 1 },
+
+                new OrderItem() { Id = 14, OrderId = 5, ProductId = 3, Amount = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null, ProductInventoryAssignmentId = 1 },
+                new OrderItem() { Id = 15, OrderId = 5, ProductId = 1, Amount = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null, ProductInventoryAssignmentId = 1 },
+
+                new OrderItem() { Id = 16, OrderId = 6, ProductId = 2, Amount = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null, ProductInventoryAssignmentId = 1 }
+            );
+
+            modelBuilder.Entity<Question>().HasData(
+                new Question() { Id = 1, IsDeleted = false, CreatedAt = DateTime.UtcNow, IsAnswered = true, Message = "Hello .NET N6 group", UserId = 1 ,UpdatedAt = null}
                 );
 
+            modelBuilder.Entity<Staff>().HasData(
+                new Staff() { Id = 1, UserId = 1, RoleId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new Staff() { Id = 2, UserId = 2, RoleId = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new Staff() { Id = 3, UserId = 3, RoleId = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new Staff() { Id = 4, UserId = 4, RoleId = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null},
+                new Staff() { Id = 5, UserId = 5, RoleId = 5, CreatedAt = DateTime.UtcNow, UpdatedAt = null}
+                );
             #endregion
         }
     }

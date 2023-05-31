@@ -13,6 +13,5 @@ namespace FleetFlow.Domain.Entities.Addresses
         public double Latitude { get; set; }
         public double Longitude { get; set; }
 
-        public ICollection<Order> Orders { get; set; }
     }
 }

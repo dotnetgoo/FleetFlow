@@ -18,14 +18,17 @@ public class UserService : IUserService
 {
     private readonly IRepository<User> userRepository;
     private readonly IRepository<Cart> cartRepository;
+    private readonly IRepository<Role> roleRepository;
     private readonly IMapper mapper;
     public UserService(IMapper mapper,
         IRepository<User> userRepository,
-        IRepository<Cart> cartRepository)
+        IRepository<Cart> cartRepository,
+        IRepository<Role> roleRepository)
     {
         this.mapper = mapper;
         this.userRepository = userRepository;
         this.cartRepository = cartRepository;
+        this.roleRepository = roleRepository;
     }
 
     /// <summary>
@@ -44,6 +47,31 @@ public class UserService : IUserService
         var mapped = mapper.Map<User>(dto);
         mapped.CreatedAt = DateTime.UtcNow;
         mapped.Password = PasswordHelper.Hash(dto.Password);
+
+
+        #region Role code writen by komron
+
+        if (dto.RoleId == 0)
+        {
+            var UserRole = await this.roleRepository.SelectAsync(r => r.Name == "User");
+            if (UserRole is null)
+            {
+                var newRole = new Role()
+                {
+                    Name = "User"
+                };
+                var CreatedRole = await this.roleRepository.InsertAsync(newRole);
+                mapped.RoleId = CreatedRole.Id;
+            }
+            mapped.RoleId = UserRole.Id;
+        }
+        else
+        {
+            var role = await this.roleRepository.SelectAsync(r => r.Id == dto.RoleId);
+            mapped.RoleId = role.Id;
+        }
+
+        #endregion
 
         var addedModel = await userRepository.InsertAsync(mapped);
         await userRepository.SaveAsync();
@@ -73,6 +101,7 @@ public class UserService : IUserService
         var accessor = HttpContextHelper.Accessor;
 
         user.DeletedBy = HttpContextHelper.UserId;
+        
 
         await userRepository.DeleteAsync(u => u.Id == id);
 

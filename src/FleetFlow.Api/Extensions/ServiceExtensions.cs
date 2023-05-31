@@ -1,27 +1,31 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.DAL.Repositories;
 using FleetFlow.Service.Interfaces.Addresses;
 using FleetFlow.Service.Interfaces.Attachments;
 using FleetFlow.Service.Interfaces.Authorizations;
+using FleetFlow.Service.Interfaces.Insights;
 using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Service.Interfaces.Products;
+using FleetFlow.Service.Interfaces.Staffs;
+using FleetFlow.Service.Interfaces.UserQuestions;
 using FleetFlow.Service.Interfaces.Users;
 using FleetFlow.Service.Interfaces.Warehouses;
 using FleetFlow.Service.Services.Addresses;
 using FleetFlow.Service.Services.Attachments;
 using FleetFlow.Service.Services.Authorizations;
+using FleetFlow.Service.Services.Insights;
 using FleetFlow.Service.Services.Orders;
 using FleetFlow.Service.Services.Products;
+using FleetFlow.Service.Services.Questions;
+using FleetFlow.Service.Services.Staffs;
+using FleetFlow.Service.Services.UserQuestions;
 using FleetFlow.Service.Services.Users;
 using FleetFlow.Service.Services.Warehouses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
+
 
 namespace FleetFlow.Api.Extensions
 {
@@ -35,21 +39,52 @@ namespace FleetFlow.Api.Extensions
         {
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IAuthService, AuthService>();
+            // Addresses
             services.AddScoped<IAddressService, AddressService>();
-            services.AddScoped<IProductService, ProductService>();
-            services.AddScoped<ILocationService, LocationService>();
-            services.AddScoped<ICartService, CartService>();
-            services.AddScoped<IOrderService, OrderService>();
-            services.AddScoped<ICheckoutService, CheckoutService>();
-            services.AddScoped<IEmailService, EmailService>();
-            services.AddScoped<IPaymentService, PaymentService>();
+
+            // Attachments
             services.AddScoped<IAttachmentService, AttachmentService>();
-            services.AddScoped<IFeedbackService, FeedbackService>();
+
+            // Authorizations
             services.AddScoped<IPermissionService, PermissionService>();
+            services.AddScoped<IRolePermissionService, RolePermissionService>();
+            services.AddScoped<IRoleService, RoleService>();
+
+            // Insights
+            services.AddScoped<IInsightsService, InsightsService>();
+
+            // Orders
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<ICheckoutService, CheckoutService>();
+            services.AddScoped<IFeedbackService, FeedbackService>();
+            services.AddScoped<IOrderActionService, OrderActionService>();
+            services.AddScoped<IOrderService, OrderService>();
+            services.AddScoped<IPaymentService, PaymentService>();
+
+            // Products
+            services.AddScoped<IDiscountService, DiscountService>();
+            services.AddScoped<IProductService, ProductService>();
+
+            // Questions
+            services.AddScoped<IQuestionService, QuestionService>();
+            services.AddScoped<IAnswerService, AnswerService>();
+
+            // Users
+            services.AddScoped<IAuthService, AuthService>();
+            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IUserService, UserService>();
+
+            // Warehouses
+            services.AddScoped<IInventoryLogService, InventoryLogService>();
+            services.AddScoped<IInventoryService, InventoryService>();
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<IProductInventoryAssignmentService, ProductInventoryAssignmentService>();
+
+            //Staff
+            services.AddScoped<IStaffService, StaffService>();
+
         }
-        
+
         /// <summary>
         /// Add JWT credentials from appsettings.json and configure it
         /// </summary>

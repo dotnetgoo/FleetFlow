@@ -1,6 +1,7 @@
 ﻿using FleetFlow.Api.Models;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Enums;
+using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Service.Interfaces.Orders;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -16,24 +17,23 @@ namespace FleetFlow.Api.Controllers
             this.orderService = orderService;
         }
 
-        [HttpPost("order"), Authorize]
-        public async ValueTask<IActionResult> PostAsync()
+        [HttpPost("order")]
+        public async ValueTask<IActionResult> PostAsync([FromBody]OrderForCreationDto dto)
             => Ok(new Response()
             {
                 Code = 200,
                 Message = "OK",
-                Data = await this.orderService.AddAsync()
+                Data = await this.orderService.AddAsync(dto)
             });
 
-        [Authorize]
-        [HttpPost("cancel/{id:long}")]
-        public async ValueTask<IActionResult> CancelAsync(long id)
-            => Ok(new Response()
-            {
-                Code = 200,
-                Message = "OK",
-                Data = await this.orderService.CancelAsync(id)
-            });
+        //[HttpPost("cancel/{id:long}")]
+        //public async ValueTask<IActionResult> CancelAsync(long id)
+        //    => Ok(new Response()
+        //    {
+        //        Code = 200,
+        //        Message = "OK",
+        //        Data = await this.orderService.CancelAsync(id)
+        //    });
 
         [HttpDelete("id")]
         public async ValueTask<IActionResult> DeleteAsync(long id)
