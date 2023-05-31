@@ -48,7 +48,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPut("id")]
-        public async ValueTask<ActionResult<ProductInventoryAssignment>> PutAsync([FromRoute] long id, [FromBody] ProductInventoryAssignmentForUpdateDto dto)
+        public async ValueTask<ActionResult<ProductInventory>> PutAsync([FromRoute] long id, [FromBody] ProductInventoryAssignmentForUpdateDto dto)
            => Ok(new Response
            {
                Code = 200,

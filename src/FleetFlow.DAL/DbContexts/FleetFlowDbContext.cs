@@ -25,7 +25,7 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Inventory> Inventories { get; set; }
         public DbSet<InventoryLog> InventoryLogs { get; set; }
-        public DbSet<ProductInventoryAssignment> ProductInventoryAssignments { get; set; }
+        public DbSet<ProductInventory> ProductInventoryAssignments { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderItem> OrderItems { get; set; }
@@ -52,24 +52,24 @@ namespace FleetFlow.DAL.DbContexts
             #region Fluent API relations
 
             modelBuilder.Entity<OrderItem>()
-                .HasOne(oi => oi.ProductInventoryAssignment)
+                .HasOne(oi => oi.ProductInventory)
                 .WithMany()
                 .HasForeignKey(oi => oi.ProductInventoryAssignmentId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<ProductInventoryAssignment>()
+            modelBuilder.Entity<ProductInventory>()
                 .HasOne(pia => pia.Product)
                 .WithMany()
                 .HasForeignKey(pia => pia.ProductId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<ProductInventoryAssignment>()
+            modelBuilder.Entity<ProductInventory>()
                 .HasOne(pia => pia.Location)
                 .WithMany()
                 .HasForeignKey(pia => pia.LocationId)
                 .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<ProductInventoryAssignment>()
+            modelBuilder.Entity<ProductInventory>()
                 .HasOne(pia => pia.Inventory)
                 .WithMany()
                 .HasForeignKey(pia => pia.InventoryId)
@@ -223,12 +223,12 @@ namespace FleetFlow.DAL.DbContexts
                 new Order() { Id = 6, UserId = 4, AddressId = 2, PaymentStatus = PaymentStatus.Paid, Status = OrderStatus.Shipped, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
 
-            modelBuilder.Entity<ProductInventoryAssignment>().HasData(
-                new ProductInventoryAssignment() { Id = 1, ProductId = 1, Amount = 1, InventoryId = 1, LocationId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new ProductInventoryAssignment() { Id = 2, ProductId = 2, Amount = 2, InventoryId = 2, LocationId = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new ProductInventoryAssignment() { Id = 3, ProductId = 3, Amount = 3, InventoryId = 3, LocationId = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new ProductInventoryAssignment() { Id = 4, ProductId = 4, Amount = 4, InventoryId = 4, LocationId = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
-                new ProductInventoryAssignment() { Id = 5, ProductId = 5, Amount = 5, InventoryId = 5, LocationId = 5, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
+            modelBuilder.Entity<ProductInventory>().HasData(
+                new ProductInventory() { Id = 1, ProductId = 1, Amount = 1, InventoryId = 1, LocationId = 1, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new ProductInventory() { Id = 2, ProductId = 2, Amount = 2, InventoryId = 2, LocationId = 2, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new ProductInventory() { Id = 3, ProductId = 3, Amount = 3, InventoryId = 3, LocationId = 3, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new ProductInventory() { Id = 4, ProductId = 4, Amount = 4, InventoryId = 4, LocationId = 4, CreatedAt = DateTime.UtcNow, UpdatedAt = null },
+                new ProductInventory() { Id = 5, ProductId = 5, Amount = 5, InventoryId = 5, LocationId = 5, CreatedAt = DateTime.UtcNow, UpdatedAt = null }
                 );
 
             modelBuilder.Entity<InventoryLog>().HasData(
