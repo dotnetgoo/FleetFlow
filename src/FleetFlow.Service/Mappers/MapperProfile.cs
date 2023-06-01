@@ -98,6 +98,9 @@ namespace FleetFlow.Service.Mappers
             CreateMap<Payment, PaymentCreationDto>().ReverseMap();
 
             CreateMap<OrderAction, OrderActionCreationDto>().ReverseMap();
+
+            CreateMap<Region,  RegionResultDto>().ReverseMap();
+            CreateMap<District,  DistrictResultDto>().ReverseMap();
         }
     }
 }

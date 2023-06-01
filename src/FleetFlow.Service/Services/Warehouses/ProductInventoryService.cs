@@ -13,14 +13,14 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace FleetFlow.Service.Services.Warehouses
 {
-    public class ProductInventoryAssignmentService : IProductInventoryAssignmentService
+    public class ProductInventoryService : IProductInventoryService
     {
         private readonly IRepository<ProductInventory> repository;
         private readonly IProductService productService;
         private readonly ILocationService locationService;
         private readonly IInventoryService inventoryService;
         private readonly IMapper mapper;
-        public ProductInventoryAssignmentService(IRepository<ProductInventory> repository,
+        public ProductInventoryService(IRepository<ProductInventory> repository,
             IProductService productService,
             ILocationService locationService,
             IInventoryService inventoryService,
@@ -74,14 +74,13 @@ namespace FleetFlow.Service.Services.Warehouses
         }
         public async Task<ProductInventoryAssignmentForResultDto> RemoveQuantity(long ProductId, long InventoryId, int amount)
         {
-
-            var model = await this.repository.SelectAsync(x => x.ProductId == ProductId && x.InventoryId
-            == InventoryId);
-
+            var model = await this.repository.SelectAsync(x => x.ProductId == ProductId && x.InventoryId == InventoryId);
             if (model is null || model.IsDeleted == true)
                 throw new FleetFlowException(404, "Product not found");
+
             if (model.Amount < amount)
                 throw new FleetFlowException(400, $"There are {model.Amount} products in the warehouse");
+
             model.Amount -= amount;
             await this.repository.SaveAsync();
             return this.mapper.Map<ProductInventoryAssignmentForResultDto>(model);

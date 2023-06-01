@@ -5,5 +5,5 @@ namespace FleetFlow.Service.DTOs.Orders;
 public class OrderActionCreationDto
 {
     public long OrderId { get; set; }
-    public DateTime? ApproximateFinishTime { get; set; }
+    public DateTime? FinishTime { get; set; }
 }

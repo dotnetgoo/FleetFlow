@@ -11,7 +11,7 @@ using FleetFlow.Service.Interfaces.Staffs;
 using Microsoft.EntityFrameworkCore;
 using Org.BouncyCastle.Math.EC.Rfc7748;
 
-namespace FleetFlow.Service.Services
+namespace FleetFlow.Service.Services.StaffPermissions
 {
     public class StaffPermissionService : IStaffPermissionService
     {
@@ -33,40 +33,40 @@ namespace FleetFlow.Service.Services
 
         public async Task<StaffPermissionForResultDto> AddPermission(StaffPermissionsForCreationDto dto)
         {
-            var entity = await this.repository.SelectAsync(x => x.StaffId == dto.StaffId &&
+            var entity = await repository.SelectAsync(x => x.StaffId == dto.StaffId &&
                 x.PermissionId == dto.PermissionId);
             if (entity is not null && entity.IsDeleted == true)
                 throw new FleetFlowException(403, "Already exist");
-            if (await this.staffService.RetrieveByIdAsync(dto.StaffId) is null)
+            if (await staffService.RetrieveByIdAsync(dto.StaffId) is null)
                 throw new FleetFlowException(404, "Staff not found");
-            if (await this.permissionService.RetrieveByIdAsync(dto.PermissionId) is null)
+            if (await permissionService.RetrieveByIdAsync(dto.PermissionId) is null)
                 throw new FleetFlowException(404, "Permission not found");
-            var model = this.mapper.Map<StaffPermission>(dto);
-            await this.repository.InsertAsync(model);
-            return this.mapper.Map<StaffPermissionForResultDto>(dto);
+            var model = mapper.Map<StaffPermission>(dto);
+            await repository.InsertAsync(model);
+            return mapper.Map<StaffPermissionForResultDto>(dto);
         }
 
         public async Task<IEnumerable<StaffPermissionForResultDto>> GetStaffsAllPermissions(PaginationParams @params, long staffId)
         {
-            var entities = await this.repository.SelectAll()
+            var entities = await repository.SelectAll()
                 .Where(x => x.StaffId == staffId)
                 .ToPagedList(@params)
                 .ToListAsync();
-            return this.mapper.Map<IEnumerable<StaffPermissionForResultDto>>(entities);
+            return mapper.Map<IEnumerable<StaffPermissionForResultDto>>(entities);
         }
 
         public async Task<bool> RemovePermission(StaffPermissionsForCreationDto dto)
         {
-            var entity = await this.repository.SelectAsync(x => x.StaffId == dto.StaffId &&
+            var entity = await repository.SelectAsync(x => x.StaffId == dto.StaffId &&
                 x.PermissionId == dto.PermissionId);
             if (entity is not null && entity.IsDeleted == true)
                 throw new FleetFlowException(403, "Already exist");
-            if (await this.staffService.RetrieveByIdAsync(dto.StaffId) is null)
+            if (await staffService.RetrieveByIdAsync(dto.StaffId) is null)
                 throw new FleetFlowException(404, "Staff not found");
-            if (await this.permissionService.RetrieveByIdAsync(dto.PermissionId) is null)
+            if (await permissionService.RetrieveByIdAsync(dto.PermissionId) is null)
                 throw new FleetFlowException(404, "Permission not found");
-            
-            await this.repository.DeleteAsync(x => x.Id == entity.Id);
+
+            await repository.DeleteAsync(x => x.Id == entity.Id);
             return true;
         }
     }

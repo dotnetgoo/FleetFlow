@@ -26,8 +26,7 @@ namespace FleetFlow.Service.Services.Warehouses
 
         public async Task<InventoryForResultDto> AddAsync(InventoryForCreationDto dto)
         {
-            var existInventory = await this.repository.SelectAsync(i => i.Name.ToLower()
-            .Equals(dto.Name.ToLower()));
+            var existInventory = await this.repository.SelectAsync(i => i.Name.ToLower().Equals(dto.Name.ToLower()));
             if (existInventory is not null && existInventory.IsDeleted == false)
                 throw new FleetFlowException(409, "Inventory already exist");
 
@@ -75,17 +74,18 @@ namespace FleetFlow.Service.Services.Warehouses
 
         public async Task<IEnumerable<InventoryForResultDto>> RetrieveAllInventory(PaginationParams @params)
         {
-            var inventories = await this.repository.SelectAll()
-            .Where(u => u.IsDeleted == false)
-            .ToPagedList(@params)
-            .ToListAsync();
+            var inventories = await this.repository.SelectAll(includes: new string[] {"Region", "District", "Address"})
+                .Where(u => u.IsDeleted == false)
+                .ToPagedList(@params)
+                .ToListAsync();
 
             return mapper.Map<IEnumerable<InventoryForResultDto>>(inventories);
         }
 
         public async Task<InventoryForResultDto> RetrieveById(long id)
         {
-            var existInventory = await this.repository.SelectAsync(i => i.Id == id);
+            var existInventory = await this.repository.SelectAsync(i => i.Id == id, 
+                includes: new string[] { "Region", "District", "Address" });
             if (existInventory is null || existInventory.IsDeleted == true)
                 throw new FleetFlowException(404, "Inventory not found");
 
@@ -94,7 +94,8 @@ namespace FleetFlow.Service.Services.Warehouses
 
         public async Task<InventoryForResultDto> RetrieveByName(string name)
         {
-            var existInventory = await this.repository.SelectAsync(i => i.Name.ToLower().Equals(name.ToLower()));
+            var existInventory = await this.repository.SelectAsync(i => i.Name.ToLower().Equals(name.ToLower()),
+                includes: new string[] { "Region", "District", "Address" });
             if (existInventory is null || existInventory.IsDeleted == true)
                 throw new FleetFlowException(404, "Inventory not found");
 

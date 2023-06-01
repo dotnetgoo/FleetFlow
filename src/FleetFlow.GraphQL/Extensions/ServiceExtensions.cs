@@ -58,7 +58,7 @@ namespace FleetFlow.GraphQL.Extensions
             services.AddScoped<IRolePermissionService, RolePermissionService>();
             services.AddScoped<IInventoryLogService, InventoryLogService>();
             services.AddScoped<IInventoryService, InventoryService>();
-            services.AddScoped<IProductInventoryAssignmentService, ProductInventoryAssignmentService>();
+            services.AddScoped<IProductInventoryService, ProductInventoryService>();
             services.AddScoped<IQuestionService, QuestionService>();
             services.AddScoped<IAnswerService, AnswerService>();
         }

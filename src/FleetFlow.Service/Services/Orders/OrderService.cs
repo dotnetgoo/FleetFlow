@@ -1,18 +1,18 @@
 ﻿using AutoMapper;
-using FleetFlow.DAL.IRepositories;
-using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities;
-using FleetFlow.Domain.Entities.Addresses;
-using FleetFlow.Domain.Entities.Orders;
-using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Domain.Enums;
-using FleetFlow.Service.DTOs.Orders;
+using FleetFlow.Shared.Helpers;
+using FleetFlow.Domain.Entities;
+using FleetFlow.DAL.IRepositories;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
-using FleetFlow.Service.Interfaces.Addresses;
-using FleetFlow.Service.Interfaces.Orders;
-using FleetFlow.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;
+using FleetFlow.Domain.Congirations;
+using FleetFlow.Service.DTOs.Orders;
+using FleetFlow.Domain.Entities.Users;
+using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Domain.Entities.Addresses;
+using FleetFlow.Service.Interfaces.Orders;
+using FleetFlow.Service.Interfaces.Addresses;
 
 namespace FleetFlow.Service.Services.Orders;
 
@@ -26,7 +26,6 @@ public class OrderService : IOrderService
     private readonly IRepository<Order> orderRepository;
     private readonly IRepository<Region> regionRepository;
     private readonly IRepository<District> districtRepository;
-
     public OrderService(
         IMapper mapper,
         IAddressService addressService,
@@ -50,7 +49,7 @@ public class OrderService : IOrderService
     public async ValueTask<OrderResultDto> AddAsync(OrderForCreationDto orderForCreationDto)
     {
         // existance of address and payment
-        await this.addressService.GetByIdAsync(orderForCreationDto.AddressId);
+        var address = await this.addressService.GetByIdAsync(orderForCreationDto.AddressId);
         await this.paymentService.RetrieveByIdAsync(orderForCreationDto.PaymentId);
 
         Region region = await this.regionRepository.SelectAsync(t => t.Id == orderForCreationDto.RegionId);
@@ -85,13 +84,11 @@ public class OrderService : IOrderService
                 ProductId = cartItem.ProductId,
             });
         }
-
         var createdOrder = await orderRepository.InsertAsync(order);
         await orderRepository.SaveAsync();
+
         return mapper.Map<OrderResultDto>(createdOrder);
     }
-
-    //private async ValueTask<(long inventoryId, long orderId)> 
 
     public async ValueTask<bool> RemoveAsync(long id)
     {
@@ -104,12 +101,13 @@ public class OrderService : IOrderService
 
     public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllAsync(PaginationParams @params, OrderStatus? status = null)
     {
-        var orders = orderRepository.SelectAll(order => !order.IsDeleted, new string[] { "User", "Address" }).AsQueryable();
+        var orders = orderRepository.SelectAll(order => !order.IsDeleted,
+            new string[] { "User", "Address", "Region", "District" }).AsQueryable();
 
         // filter with status
-        if(status is not null)
+        if (status is not null)
             orders = orders.Where(order => order.Status == status);
-        
+
         // checking something exists or not
         if (!orders.Any())
             throw new FleetFlowException(400, "No orders found.");
@@ -121,7 +119,7 @@ public class OrderService : IOrderService
     public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByClientIdAsync(long clientId)
     {
         var orders = await orderRepository
-            .SelectAll(order => !order.IsDeleted && order.UserId == clientId)
+            .SelectAll(order => !order.IsDeleted && order.UserId == clientId, new string[] { "User", "Address", "Region", "District" })
             .ToListAsync();
         // checking something exists or not
         if (!orders.Any())
@@ -132,7 +130,8 @@ public class OrderService : IOrderService
 
     public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByPhoneAsync(PaginationParams @params, string phone, OrderStatus? status = null)
     {
-        var user = await userRepository.SelectAsync(user => !user.IsDeleted && user.Phone == phone);
+        var user = await userRepository.SelectAsync(user => !user.IsDeleted && user.Phone == phone, 
+            new string[] { "User", "Address", "Region", "District" });
         if (user is null)
             throw new FleetFlowException(404, "User is not found");
 
@@ -154,7 +153,8 @@ public class OrderService : IOrderService
 
     public async ValueTask<OrderResultDto> RetrieveAsync(long id)
     {
-        var order = await orderRepository.SelectAsync(order => !order.IsDeleted && order.Id == id);
+        var order = await orderRepository.SelectAsync(order => !order.IsDeleted && order.Id == id, 
+            new string[] { "User", "Address", "Region", "District" });
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
 
