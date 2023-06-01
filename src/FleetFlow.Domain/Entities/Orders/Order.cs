@@ -11,6 +11,12 @@ namespace FleetFlow.Domain.Entities.Orders
         public long UserId { get; set; }
         public User User { get; set; }
 
+        public long RegionId { get; set; }
+        public Region Region { get; set; }
+
+        public long DistrictId { get; set; }
+        public District District { get; set; }
+
         public long AddressId { get; set; }
         public Address Address { get; set; }
 

@@ -15,12 +15,12 @@ namespace FleetFlow.Service.Services.Warehouses
 {
     public class ProductInventoryAssignmentService : IProductInventoryAssignmentService
     {
-        private readonly IRepository<ProductInventoryAssignment> repository;
+        private readonly IRepository<ProductInventory> repository;
         private readonly IProductService productService;
         private readonly ILocationService locationService;
         private readonly IInventoryService inventoryService;
         private readonly IMapper mapper;
-        public ProductInventoryAssignmentService(IRepository<ProductInventoryAssignment> repository,
+        public ProductInventoryAssignmentService(IRepository<ProductInventory> repository,
             IProductService productService,
             ILocationService locationService,
             IInventoryService inventoryService,
@@ -54,7 +54,7 @@ namespace FleetFlow.Service.Services.Warehouses
             if (inventory is null)
                 throw new FleetFlowException(404, "There is not inventory with given id");
 
-            var mapped = this.mapper.Map<ProductInventoryAssignment>(dto);
+            var mapped = this.mapper.Map<ProductInventory>(dto);
             mapped.CreatedAt = DateTime.UtcNow;
             
             var added = await this.repository.InsertAsync(mapped);

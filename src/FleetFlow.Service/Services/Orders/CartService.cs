@@ -19,13 +19,13 @@ namespace FleetFlow.Service.Services.Orders
         private readonly IRepository<Cart> cartRepository;
         private readonly IRepository<Product> productRepository;
         private readonly IRepository<CartItem> cartItemRepository;
-        private readonly IRepository<ProductInventoryAssignment> productInventoryAssignmentRepository;
+        private readonly IRepository<ProductInventory> productInventoryAssignmentRepository;
 
         public CartService(IRepository<Product> productRepository,
             IRepository<Cart> cartRepository,
             IRepository<CartItem> cartItemRepository,
             IMapper mapper,
-            IRepository<ProductInventoryAssignment> productInventoryAssignment)
+            IRepository<ProductInventory> productInventoryAssignment)
         {
             this.mapper = mapper;
             this.cartRepository = cartRepository;

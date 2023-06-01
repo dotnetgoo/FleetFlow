@@ -22,7 +22,7 @@ using FleetFlow.Service.DTOs.Permissions;
 using FleetFlow.Service.DTOs.Product;
 using FleetFlow.Service.DTOs.Questions;
 using FleetFlow.Service.DTOs.User;
-using ProdInven = FleetFlow.Domain.Entities.Warehouses.ProductInventoryAssignment;
+using ProdInven = FleetFlow.Domain.Entities.Warehouses.ProductInventory;
 using ProdInvenForCreationDto = FleetFlow.Service.DTOs.Inventories.ProductInventoryAssignmentForCreationDto;
 using ProdInvenForResultDto = FleetFlow.Service.DTOs.Inventories.ProductInventoryAssignmentForResultDto;
 using ProdInvenForUpdateDto = FleetFlow.Service.DTOs.Inventories.ProductInventoryAssignmentForUpdateDto;

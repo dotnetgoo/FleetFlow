@@ -13,7 +13,7 @@ namespace FleetFlow.Service.DTOs.Orders
         public long ProductId { get; set; }
         public ProductForResultDto Product { get; set; }
         public long ProductInventoryAssignmentId { get; set; }
-        public ProductInventoryAssignment productInventoryAssignment { get; set; }
+        public ProductInventory productInventoryAssignment { get; set; }
         public int Amount { get; set; }
     }
 }
