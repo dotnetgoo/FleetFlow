@@ -50,7 +50,6 @@ public class OrderService : IOrderService
     {
         // existance of address and payment
         var address = await this.addressService.GetByIdAsync(orderForCreationDto.AddressId);
-        await this.paymentService.RetrieveByIdAsync(orderForCreationDto.PaymentId);
 
         Region region = await this.regionRepository.SelectAsync(t => t.Id == orderForCreationDto.RegionId);
         if (region is null)
@@ -69,7 +68,6 @@ public class OrderService : IOrderService
         {
             UserId = HttpContextHelper.UserId ?? 0,
             OrderItems = new List<OrderItem>(),
-            PaymentId = orderForCreationDto.PaymentId,
             AddressId = orderForCreationDto.AddressId,
             RegionId = orderForCreationDto.RegionId,
             DistrictId = orderForCreationDto.DistrictId
@@ -102,7 +100,7 @@ public class OrderService : IOrderService
     public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllAsync(PaginationParams @params, OrderStatus? status = null)
     {
         var orders = orderRepository.SelectAll(order => !order.IsDeleted,
-            new string[] { "User", "Address", "Region", "District" }).AsQueryable();
+            new string[] { "User", "Address", "Region", "District", "OrderItems" }).AsQueryable();
 
         // filter with status
         if (status is not null)
@@ -119,7 +117,7 @@ public class OrderService : IOrderService
     public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByClientIdAsync(long clientId)
     {
         var orders = await orderRepository
-            .SelectAll(order => !order.IsDeleted && order.UserId == clientId, new string[] { "User", "Address", "Region", "District" })
+            .SelectAll(order => !order.IsDeleted && order.UserId == clientId, new string[] { "User", "Address", "Region", "District", "OrderItems" })
             .ToListAsync();
         // checking something exists or not
         if (!orders.Any())
@@ -131,7 +129,7 @@ public class OrderService : IOrderService
     public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByPhoneAsync(PaginationParams @params, string phone, OrderStatus? status = null)
     {
         var user = await userRepository.SelectAsync(user => !user.IsDeleted && user.Phone == phone, 
-            new string[] { "User", "Address", "Region", "District" });
+            new string[] { "Orders.OrderItems" });
         if (user is null)
             throw new FleetFlowException(404, "User is not found");
 
@@ -154,7 +152,7 @@ public class OrderService : IOrderService
     public async ValueTask<OrderResultDto> RetrieveAsync(long id)
     {
         var order = await orderRepository.SelectAsync(order => !order.IsDeleted && order.Id == id, 
-            new string[] { "User", "Address", "Region", "District" });
+            new string[] { "User", "Address", "Region", "District" , "OrderItems" });
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
 

@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
 {
-    public class ProductInventoryAssignmentsController : RestfulSense
+    public class ProductInventorysController : RestfulSense
     {
         private readonly IProductInventoryService service;
 
-        public ProductInventoryAssignmentsController(IProductInventoryService service)
+        public ProductInventorysController(IProductInventoryService service)
         {
             this.service = service;
         }

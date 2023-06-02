@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using FleetFlow.DAL.IRepositories;
-using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Domain.Enums;
-using FleetFlow.Service.DTOs.Discounts;
+using FleetFlow.Shared.Helpers;
+using FleetFlow.DAL.IRepositories;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
-using FleetFlow.Service.Interfaces.Products;
-using FleetFlow.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;
+using FleetFlow.Domain.Congirations;
+using FleetFlow.Service.DTOs.Discounts;
+using FleetFlow.Domain.Entities.Products;
+using FleetFlow.Service.Interfaces.Products;
 
 namespace FleetFlow.Service.Services.Products;
 
@@ -28,7 +28,7 @@ public class DiscountService : IDiscountService
 
     public async Task<DiscountResultDto> AddAsync(DiscountCreationDto dto)
     {
-        if (dto.PercentageToCheapen < 1 || dto.PercentageToCheapen > 100)
+        if (dto.Amount < 1 || dto.Amount > 100)
             throw new FleetFlowException(401, "PercentageToCheapen must be between 1 and 100.");
 
         var product = await this.productRepository.SelectAsync(t => t.Id == dto.ProductId && !t.IsDeleted);

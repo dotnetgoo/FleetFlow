@@ -9,4 +9,5 @@ public class PaymentCreationDto
     public string Description { get; set; }
     public long UserId { get; set; }
     public long OrderId { get; set; }
+    public bool IsAdmin { get; set; }
 }
