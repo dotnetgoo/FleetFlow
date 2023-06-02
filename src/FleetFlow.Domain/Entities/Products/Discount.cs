@@ -9,6 +9,6 @@ public class Discount : Auditable
     public Product Product { get; set; }
     public DateTime StartedAt { get; set; } = DateTime.UtcNow;
     public DateTime? FinishedAt { get; set; }
-    public decimal PercentageToCheapen { get; set; }
+    public decimal Amount { get; set; }
     public DiscountState State { get; set; } = DiscountState.Active;
 }

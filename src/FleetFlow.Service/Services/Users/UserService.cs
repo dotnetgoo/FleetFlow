@@ -1,26 +1,26 @@
 ﻿using AutoMapper;
-using FleetFlow.DAL.IRepositories;
-using FleetFlow.Domain.Congirations;
+using FleetFlow.Shared.Helpers;
 using FleetFlow.Domain.Entities;
-using FleetFlow.Domain.Entities.Authorizations;
-using FleetFlow.Domain.Entities.Users;
-using FleetFlow.Domain.Enums;
+using FleetFlow.DAL.IRepositories;
 using FleetFlow.Service.DTOs.User;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
-using FleetFlow.Service.Interfaces.Users;
-using FleetFlow.Shared.Helpers;
+using FleetFlow.Domain.Congirations;
 using Microsoft.EntityFrameworkCore;
+using FleetFlow.Domain.Entities.Users;
+using FleetFlow.Service.Interfaces.Users;
+using FleetFlow.Domain.Entities.Authorizations;
 
 namespace FleetFlow.Service.Services.Users;
 
 public class UserService : IUserService
 {
+    private readonly IMapper mapper;
     private readonly IRepository<User> userRepository;
     private readonly IRepository<Cart> cartRepository;
     private readonly IRepository<Role> roleRepository;
-    private readonly IMapper mapper;
-    public UserService(IMapper mapper,
+    public UserService(
+        IMapper mapper,
         IRepository<User> userRepository,
         IRepository<Cart> cartRepository,
         IRepository<Role> roleRepository)
@@ -44,42 +44,18 @@ public class UserService : IUserService
         if (existUser != null && !existUser.IsDeleted)
             throw new FleetFlowException(409, "User already exist");
 
+        var userRole = await this.roleRepository.SelectAsync(t => t.Name.ToLower() == "user");
+
         var mapped = mapper.Map<User>(dto);
+        mapped.RoleId = userRole.Id;
         mapped.CreatedAt = DateTime.UtcNow;
         mapped.Password = PasswordHelper.Hash(dto.Password);
-
-
-        #region Role code writen by komron
-
-        if (dto.RoleId == 0)
-        {
-            var UserRole = await this.roleRepository.SelectAsync(r => r.Name == "User");
-            if (UserRole is null)
-            {
-                var newRole = new Role()
-                {
-                    Name = "User"
-                };
-                var CreatedRole = await this.roleRepository.InsertAsync(newRole);
-                mapped.RoleId = CreatedRole.Id;
-            }
-            mapped.RoleId = UserRole.Id;
-        }
-        else
-        {
-            var role = await this.roleRepository.SelectAsync(r => r.Id == dto.RoleId);
-            mapped.RoleId = role.Id;
-        }
-
-        #endregion
-
         var addedModel = await userRepository.InsertAsync(mapped);
         await userRepository.SaveAsync();
 
         var newCart = new Cart();
         newCart.UserId = addedModel.Id;
         await cartRepository.InsertAsync(newCart);
-
         await cartRepository.SaveAsync();
 
         return mapper.Map<UserForResultDto>(addedModel);
@@ -99,17 +75,13 @@ public class UserService : IUserService
 
         // init deleter id
         var accessor = HttpContextHelper.Accessor;
-
         user.DeletedBy = HttpContextHelper.UserId;
-        
 
         await userRepository.DeleteAsync(u => u.Id == id);
 
         var cart = await cartRepository.SelectAsync(c => c.UserId.Equals(id));
         if (cart is not null)
-        {
             await cartRepository.DeleteAsync(c => c.Id == cart.Id);
-        }
 
         await cartRepository.SaveAsync();
         await userRepository.SaveAsync();
@@ -213,7 +185,6 @@ public class UserService : IUserService
 
         user.Password = PasswordHelper.Hash(dto.NewPassword);
         user.UpdatedBy = HttpContextHelper.UserId;
-
         await userRepository.SaveAsync();
 
         return mapper.Map<UserForResultDto>(user);

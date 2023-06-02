@@ -11,6 +11,7 @@ public class Payment : Auditable
     public decimal? Amount { get; set; }
     public string Description { get; set; }
     public PaymentStatus Status { get; set; }
+    public bool IsAdmin { get; set; }
 
     public long UserId { get; set; }
     public User User { get; set; }
@@ -18,6 +19,6 @@ public class Payment : Auditable
     public long OrderId { get; set; }
     public Order Order { get; set; }
 
-    public long FileId { get; set; }
-    public Attachment File { get; set; }
+    public long AttachmentId { get; set; }
+    public Attachment Attachment { get; set; }
 }

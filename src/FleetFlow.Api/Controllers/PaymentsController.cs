@@ -1,11 +1,10 @@
-﻿using FleetFlow.Api.Extensions;
-using FleetFlow.Api.Models;
-using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.DTOs.Attachments;
-using FleetFlow.Service.DTOs.Payments;
-using FleetFlow.Service.Interfaces.Orders;
+﻿using FleetFlow.Api.Models;
+using FleetFlow.Api.Extensions;
 using Microsoft.AspNetCore.Mvc;
-using System.Xml;
+using FleetFlow.Domain.Congirations;
+using FleetFlow.Service.DTOs.Payments;
+using FleetFlow.Service.DTOs.Attachments;
+using FleetFlow.Service.Interfaces.Orders;
 
 namespace FleetFlow.Api.Controllers;
 
@@ -28,7 +27,7 @@ public class PaymentsController : RestfulSense
         });
     }
 
-    [HttpPut("id:long")]
+    [HttpPut("{id:long}")]
     public async ValueTask<IActionResult> PutAsync(long id, PaymentCreationDto dto)
         => Ok(new Response
         {
@@ -38,7 +37,7 @@ public class PaymentsController : RestfulSense
         });
 
 
-    [HttpDelete("id:long")]
+    [HttpDelete("{id:long}")]
     public async ValueTask<IActionResult> DeleteAsync(long id)
         => Ok(new Response
         {
@@ -48,7 +47,7 @@ public class PaymentsController : RestfulSense
         });
 
 
-    [HttpGet("id:long")]
+    [HttpGet("{id:long}")]
     public async ValueTask<IActionResult> GetAsync(long id)
         => Ok(new Response
         {

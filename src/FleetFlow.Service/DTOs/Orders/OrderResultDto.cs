@@ -11,9 +11,12 @@ namespace FleetFlow.Service.DTOs.Orders
         public UserForResultDto User { get; set; }
         public long AddressId { get; set; }
         public AddressForResultDto Address { get; set; }
+        public long RegionId { get; set; }
+        public RegionResultDto Region { get; set; }
+        public long DistrictId { get; set; }
+        public DistrictResultDto District { get; set; }
         public OrderStatus Status { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
-
         public ICollection<OrderItemForResultDto> OrderItems { get; set; }
     }
 }

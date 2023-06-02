@@ -8,12 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Service.DTOs.Payments;
-using FleetFlow.Service.DTOs.Attachments;
 using FleetFlow.Domain.Entities.Orders;
-using FleetFlow.Domain.Entities.Attachments;
 using FleetFlow.Service.Interfaces.Users;
+using FleetFlow.Service.DTOs.Attachments;
 using FleetFlow.Service.Interfaces.Orders;
+using FleetFlow.Domain.Entities.Attachments;
 using FleetFlow.Service.Interfaces.Attachments;
+using FleetFlow.Shared.Helpers;
 
 namespace FleetFlow.Service.Services.Orders;
 
@@ -44,16 +45,22 @@ public class PaymentService : IPaymentService
         Order order = await orderRepository.SelectAsync(t => t.Id == dto.OrderId);
         Attachment file = await attachmantService.UploadAsync(attachment);
 
-        PaymentResultDto result = new PaymentResultDto
+        Payment payment = new Payment
         {
             Amount = dto.Amount,
             Description = dto.Description,
-            FilePath = file.FilePath,
-            Order = mapper.Map<OrderResultDto>(order),
-            User = user,
-            Status = PaymentStatus.Pending
+            Status = PaymentStatus.Pending,
+            IsAdmin = dto.IsAdmin
         };
-        return result;
+        payment.Attachment.FilePath = file.FilePath;
+        payment.Attachment.FileName = file.FileName;
+        payment.UserId = (long)HttpContextHelper.UserId;
+        payment.Order = order;
+
+        var result = paymentRepository.InsertAsync(payment);
+        await paymentRepository.SaveAsync();
+
+        return mapper.Map<PaymentResultDto>(payment);
     }
 
     public async Task<PaymentResultDto> ChangeStatusAsync(long id, PaymentStatus status)
