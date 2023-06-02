@@ -9,9 +9,9 @@ namespace FleetFlow.Api.Controllers
 {
     public class ProductInventoryAssignmentsController : RestfulSense
     {
-        private readonly IProductInventoryAssignmentService service;
+        private readonly IProductInventoryService service;
 
-        public ProductInventoryAssignmentsController(IProductInventoryAssignmentService service)
+        public ProductInventoryAssignmentsController(IProductInventoryService service)
         {
             this.service = service;
         }

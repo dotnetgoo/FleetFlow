@@ -3,6 +3,7 @@ using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Commons;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using System.Collections;
 using System.Linq.Expressions;
 
 namespace FleetFlow.DAL.Repositories
@@ -63,6 +64,12 @@ namespace FleetFlow.DAL.Repositories
             EntityEntry<TEntity> entry = await this.dbSet.AddAsync(entity);
 
             return entry.Entity;
+        }
+
+        public async ValueTask<bool> InsertAsync(IEnumerable<TEntity> entity)
+        {
+            await this.dbSet.AddRangeAsync(entity);
+            return true;
         }
 
         /// <summary>
