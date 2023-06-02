@@ -3,7 +3,7 @@ using FleetFlow.Domain.Entities.Products;
 
 namespace FleetFlow.Domain.Entities.Warehouses
 {
-    public class ProductInventoryAssignment : Auditable
+    public class ProductInventory : Auditable
     {
         public long ProductId { get; set; }
         public Product Product { get; set; }
@@ -16,8 +16,5 @@ namespace FleetFlow.Domain.Entities.Warehouses
 
         public long InventoryId { get; set; }
         public Inventory Inventory { get; set; }
-
-
-
     }
 }

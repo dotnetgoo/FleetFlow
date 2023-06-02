@@ -13,14 +13,14 @@ using Microsoft.EntityFrameworkCore.Storage;
 
 namespace FleetFlow.Service.Services.Warehouses
 {
-    public class ProductInventoryAssignmentService : IProductInventoryAssignmentService
+    public class ProductInventoryService : IProductInventoryService
     {
-        private readonly IRepository<ProductInventoryAssignment> repository;
+        private readonly IRepository<ProductInventory> repository;
         private readonly IProductService productService;
         private readonly ILocationService locationService;
         private readonly IInventoryService inventoryService;
         private readonly IMapper mapper;
-        public ProductInventoryAssignmentService(IRepository<ProductInventoryAssignment> repository,
+        public ProductInventoryService(IRepository<ProductInventory> repository,
             IProductService productService,
             ILocationService locationService,
             IInventoryService inventoryService,
@@ -39,7 +39,7 @@ namespace FleetFlow.Service.Services.Warehouses
                 p.InventoryId == dto.InventoryId &&
                 p.LocationId == dto.LocationId);
 
-            if (entity is not null || entity.IsDeleted == false)
+            if (entity is not null && entity.IsDeleted == false)
                 throw new FleetFlowException(403, "Already exist");
 
             var product = await this.productService.RetrieveByIdAsync(dto.ProductId);
@@ -54,7 +54,7 @@ namespace FleetFlow.Service.Services.Warehouses
             if (inventory is null)
                 throw new FleetFlowException(404, "There is not inventory with given id");
 
-            var mapped = this.mapper.Map<ProductInventoryAssignment>(dto);
+            var mapped = this.mapper.Map<ProductInventory>(dto);
             mapped.CreatedAt = DateTime.UtcNow;
             
             var added = await this.repository.InsertAsync(mapped);
@@ -63,20 +63,24 @@ namespace FleetFlow.Service.Services.Warehouses
             return this.mapper.Map<ProductInventoryAssignmentForResultDto>(added);
                 
         }
-        public async Task<ProductInventoryAssignmentForResultDto> AddQuantity(long id, int amount)
+        public async Task<ProductInventoryAssignmentForResultDto> AddQuantity(long ProductId, long InventoryId, int amount)
         {
-            var model = await this.repository.SelectAsync(x => x.Id == id);
+            var model = await this.repository.SelectAsync(x => x.ProductId == ProductId && x.InventoryId == InventoryId);
             if (model is null || model.IsDeleted == true)
                 throw new FleetFlowException(404, "Product not found");
             model.Amount += amount;
             await this.repository.SaveAsync();
             return this.mapper.Map<ProductInventoryAssignmentForResultDto>(model);
         }
-        public async Task<ProductInventoryAssignmentForResultDto> RemoveQuantity(long id, int amount)
+        public async Task<ProductInventoryAssignmentForResultDto> RemoveQuantity(long ProductId, long InventoryId, int amount)
         {
-            var model = await this.repository.SelectAsync(x => x.Id == id);
+            var model = await this.repository.SelectAsync(x => x.ProductId == ProductId && x.InventoryId == InventoryId);
             if (model is null || model.IsDeleted == true)
                 throw new FleetFlowException(404, "Product not found");
+
+            if (model.Amount < amount)
+                throw new FleetFlowException(400, $"There are {model.Amount} products in the warehouse");
+
             model.Amount -= amount;
             await this.repository.SaveAsync();
             return this.mapper.Map<ProductInventoryAssignmentForResultDto>(model);
@@ -125,6 +129,7 @@ namespace FleetFlow.Service.Services.Warehouses
             return this.mapper.Map<ProductInventoryAssignmentForResultDto>(entity);
             
         }
+
         public async Task<bool> RemoveAsync(long id)
         {
             var entity = await this.repository.SelectAsync(x => x.Id == id);
@@ -140,5 +145,13 @@ namespace FleetFlow.Service.Services.Warehouses
             return true;
         }
 
+        public async Task<IEnumerable<ProductInventoryAssignmentForResultDto>> RetrieveProductById(long ProductId)
+        {
+            var products = await this.repository.SelectAll(x => x.ProductId == ProductId)
+            .Where(u => u.IsDeleted == false)
+            .ToListAsync();
+
+            return mapper.Map<IEnumerable<ProductInventoryAssignmentForResultDto>>(products);
+        }
     }
 }

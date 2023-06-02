@@ -5,28 +5,29 @@ namespace FleetFlow.GraphQL.Mutations
 {
     public partial class Mutation
     {
-        public ValueTask<DiscountResultDto> AddDiscountAsync([Service] IDiscountService discountService, 
+        public async ValueTask<DiscountResultDto> AddDiscountAsync([Service] IDiscountService discountService, 
             DiscountCreationDto discount)
         {
-            throw new NotImplementedException();
+            return await discountService.AddAsync(discount);
         }
 
-        public ValueTask<DiscountResultDto> UpdateDiscountAsync([Service] IDiscountService discountService, 
-            DiscountUpdateDto discountUpdateDto) 
+        public async ValueTask<DiscountResultDto> UpdateDiscountAsync([Service] IDiscountService discountService, 
+            long id,
+            DiscountUpdateDto discount) 
         {
-            throw new NotImplementedException(); 
+            return await discountService.ModifyAsync(id, discount);
         }
 
-        public ValueTask<bool> StopDiscountAsync([Service] IDiscountService discountService, 
+        public async ValueTask<bool> StopDiscountAsync([Service] IDiscountService discountService, 
             long id)
         {
-            throw new NotImplementedException();
+            return await discountService.StopAsync(id);
         }
 
-        public ValueTask<bool> StopDiscountByClientIdAsync([Service] IDiscountService discountService,
-            long clientId)
+        public async ValueTask<bool> StopDiscountByProductIdAsync([Service] IDiscountService discountService,
+            long productId)
         {
-            throw new NotImplementedException();
+            return await discountService.StopByProductIdAsync(productId);
         }
     }
 }

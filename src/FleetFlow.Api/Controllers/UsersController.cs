@@ -51,6 +51,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
+        [CustomAuthorize]
         public async ValueTask<ActionResult<UserForResultDto>> PostAsync(UserForCreationDto dto)
             => Ok(new Response
             {

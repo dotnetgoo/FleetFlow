@@ -4,173 +4,160 @@ using FleetFlow.Shared.Helpers;
 using FleetFlow.Domain.Entities;
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Service.Exceptions;
-using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Service.Extentions;
 using Microsoft.EntityFrameworkCore;
-using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Domain.Congirations;
+using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Domain.Entities.Users;
+using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Domain.Entities.Addresses;
 using FleetFlow.Service.Interfaces.Orders;
-using FleetFlow.Domain.Entities.Authorizations;
+using FleetFlow.Service.Interfaces.Addresses;
 
-namespace FleetFlow.Service.Services.Orders
+namespace FleetFlow.Service.Services.Orders;
+
+public class OrderService : IOrderService
 {
-    public class OrderService : IOrderService
+    private readonly IMapper mapper;
+    private readonly IPaymentService paymentService;
+    private readonly IAddressService addressService;
+    private readonly IRepository<Cart> cartRepository;
+    private readonly IRepository<User> userRepository;
+    private readonly IRepository<Order> orderRepository;
+    private readonly IRepository<Region> regionRepository;
+    private readonly IRepository<District> districtRepository;
+    public OrderService(
+        IMapper mapper,
+        IAddressService addressService,
+        IPaymentService paymentService,
+        IRepository<Cart> cartRepository,
+        IRepository<User> userRepository,
+        IRepository<Order> orderRepository,
+        IRepository<Region> regionRepository,
+        IRepository<District> districtRepository)
     {
-        private readonly IMapper mapper;
-        private readonly IRepository<Cart> cartRepository;
-        private readonly IRepository<Order> orderRepository;
-        private readonly IRepository<User> userRepository;
-        private readonly IOrderActionService orderActionService;
-        public OrderService(IRepository<Order> orderRepository,
-            IRepository<Cart> cartRepository,
-            IRepository<User> userRepository,
-            IMapper mapper,
-            IOrderActionService orderActionService)
-        {
-            this.orderRepository = orderRepository;
-            this.cartRepository = cartRepository;
-            this.mapper = mapper;
-            this.userRepository = userRepository;
-            this.orderActionService = orderActionService;
-        }
+        this.mapper = mapper;
+        this.addressService = addressService;
+        this.paymentService = paymentService;
+        this.cartRepository = cartRepository;
+        this.userRepository = userRepository;
+        this.orderRepository = orderRepository;
+        this.regionRepository = regionRepository;
+        this.districtRepository = districtRepository;
+    }
 
-        public async ValueTask<OrderResultDto> AddAsync()
-        {
-            var httpContext = HttpContextHelper.HttpContext;
-            string role = HttpContextHelper.UserRole;
-            var cart = await cartRepository.SelectAsync(c => c.UserId == HttpContextHelper.UserId, new string[] { "Items" });
-            if (cart == null)
-                throw new FleetFlowException(404, "Cart not found");
+    public async ValueTask<OrderResultDto> AddAsync(OrderForCreationDto orderForCreationDto)
+    {
+        // existance of address and payment
+        var address = await this.addressService.GetByIdAsync(orderForCreationDto.AddressId);
+        await this.paymentService.RetrieveByIdAsync(orderForCreationDto.PaymentId);
 
-            // create new order
-            var order = new Order()
+        Region region = await this.regionRepository.SelectAsync(t => t.Id == orderForCreationDto.RegionId);
+        if (region is null)
+            throw new FleetFlowException(404, "Region is not found");
+
+        District district = await this.districtRepository.SelectAsync(t => t.Id == orderForCreationDto.DistrictId);
+        if (district is null)
+            throw new FleetFlowException(404, "District is not found");
+
+        Cart cart = await cartRepository.SelectAsync(c => c.UserId == HttpContextHelper.UserId, new string[] { "Items" });
+        if (cart == null)
+            throw new FleetFlowException(404, "Cart not found");
+
+        // create new order
+        var order = new Order()
+        {
+            UserId = HttpContextHelper.UserId ?? 0,
+            OrderItems = new List<OrderItem>(),
+            PaymentId = orderForCreationDto.PaymentId,
+            AddressId = orderForCreationDto.AddressId,
+            RegionId = orderForCreationDto.RegionId,
+            DistrictId = orderForCreationDto.DistrictId
+        };
+
+        // create order items using cart
+        foreach (var cartItem in cart.Items)
+        {
+            order.OrderItems.Add(new OrderItem
             {
-                UserId = HttpContextHelper.UserId ?? 0,
-                OrderItems = new List<OrderItem>()
-            };
-
-            // create order items using cart
-            foreach (var cartItem in cart.Items)
-            {
-                order.OrderItems.Add(new OrderItem
-                {
-                    Amount = cartItem.Amount,
-                    ProductId = cartItem.ProductId
-                });
-            }
-            order.Actions = new List<OrderAction>();
-            var createdOrder = await orderRepository.InsertAsync(order);
-            await orderRepository.SaveAsync();
-
-            return mapper.Map<OrderResultDto>(createdOrder);
+                Amount = cartItem.Amount,
+                ProductId = cartItem.ProductId,
+            });
         }
+        var createdOrder = await orderRepository.InsertAsync(order);
+        await orderRepository.SaveAsync();
 
-        public async ValueTask<OrderResultDto> CancelAsync(long id)
-        {
-            var order = await orderRepository.SelectAsync(order => !order.IsDeleted && order.Id == id, new string[] { "User", "Actions" });
-            if (order is null)
-                throw new FleetFlowException(404, "Order is not found");
+        return mapper.Map<OrderResultDto>(createdOrder);
+    }
 
+    public async ValueTask<bool> RemoveAsync(long id)
+    {
+        var isDeleted = await orderRepository.DeleteAsync(order => order.Id == id);
+        if (!isDeleted)
+            throw new FleetFlowException(404, "Order is not found");
 
-            //var role = await this.roleRepository.SelectAsync(r => r.Name == "Admin");
-            //if (order.User.Role != role && order.UserId != HttpContextHelper.UserId)
-            //    throw new FleetFlowException(400, "Invalid operation.");
+        return isDeleted;
+    }
 
-            // TODO: Add business logic for canceled order.
-            // Returning products to warehouse, assignments to workers 
+    public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllAsync(PaginationParams @params, OrderStatus? status = null)
+    {
+        var orders = orderRepository.SelectAll(order => !order.IsDeleted,
+            new string[] { "User", "Address", "Region", "District" }).AsQueryable();
 
-            /* order.Status = OrderStatus.Cancelled;
+        // filter with status
+        if (status is not null)
+            orders = orders.Where(order => order.Status == status);
 
-             // Creating new order action
-             order.Actions.Add(new OrderAction() { Status = OrderStatus.Cancelled });
+        // checking something exists or not
+        if (!orders.Any())
+            throw new FleetFlowException(400, "No orders found.");
 
-             await orderRepository.SaveAsync();*/
+        var pagedOrders = await orders.ToPagedList(@params).ToListAsync();
+        return mapper.Map<IEnumerable<OrderResultDto>>(pagedOrders);
+    }
 
-            var result = mapper.Map<OrderResultDto>(await this.orderActionService.CancelledAsync((int)order.Id));
-            // is this best practice to avoid object cycle?
-            result.User.Orders = null;
+    public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByClientIdAsync(long clientId)
+    {
+        var orders = await orderRepository
+            .SelectAll(order => !order.IsDeleted && order.UserId == clientId, new string[] { "User", "Address", "Region", "District" })
+            .ToListAsync();
+        // checking something exists or not
+        if (!orders.Any())
+            throw new FleetFlowException(400, "No orders found.");
 
-            return result;
+        return mapper.Map<IEnumerable<OrderResultDto>>(orders);
+    }
 
-        }
+    public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByPhoneAsync(PaginationParams @params, string phone, OrderStatus? status = null)
+    {
+        var user = await userRepository.SelectAsync(user => !user.IsDeleted && user.Phone == phone, 
+            new string[] { "User", "Address", "Region", "District" });
+        if (user is null)
+            throw new FleetFlowException(404, "User is not found");
 
-    /*    public async Task ChangeStatus(long orderId, OrderStatus status)
-        {
-            var order = await this.orderRepository.SelectAsync(t => t.Id == orderId);
-            if (order is null)
-                throw new FleetFlowException(404, "");
+        var ordersQuery = orderRepository
+            .SelectAll(order => !order.IsDeleted && order.UserId == user.Id);
+        if (status is not null)
+            ordersQuery = ordersQuery.Where(order => order.Status == status);
 
-            order.Id = orderId;
-            order.Status = status;
-            await orderRepository.SaveAsync();
+        ordersQuery = ordersQuery.ToPagedList(@params);
 
-        }*/
+        var orders = await ordersQuery.ToListAsync();
 
+        // checking something exists or not
+        if (!orders.Any())
+            throw new FleetFlowException(400, "No orders found.");
 
-        public async ValueTask<bool> RemoveAsync(long id)
-        {
-            var isDeleted = await orderRepository.DeleteAsync(order => order.Id == id);
-            if (!isDeleted)
-                throw new FleetFlowException(404, "Order is not found");
+        return mapper.Map<IEnumerable<OrderResultDto>>(orders);
+    }
 
-            return isDeleted;
-        }
+    public async ValueTask<OrderResultDto> RetrieveAsync(long id)
+    {
+        var order = await orderRepository.SelectAsync(order => !order.IsDeleted && order.Id == id, 
+            new string[] { "User", "Address", "Region", "District" });
+        if (order is null)
+            throw new FleetFlowException(404, "Order is not found");
 
-        public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllAsync(PaginationParams @params, OrderStatus status = OrderStatus.Pending)
-        {
-            var orders = await orderRepository
-                .SelectAll(order => !order.IsDeleted && order.Status == status)
-                .ToPagedList(@params)
-                .ToListAsync();
-            // checking something exists or not
-            if (!orders.Any())
-                throw new FleetFlowException(400, "No orders found.");
-
-            return mapper.Map<IEnumerable<OrderResultDto>>(orders);
-        }
-
-        public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByClientIdAsync(long clientId)
-        {
-            var orders = await orderRepository
-                .SelectAll(order => !order.IsDeleted && order.UserId == clientId)
-                .ToListAsync();
-            // checking something exists or not
-            if (!orders.Any())
-                throw new FleetFlowException(400, "No orders found.");
-
-            return mapper.Map<IEnumerable<OrderResultDto>>(orders);
-        }
-
-        public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByPhoneAsync(PaginationParams @params, string phone, OrderStatus? status = null)
-        {
-            var user = await userRepository.SelectAsync(user => !user.IsDeleted && user.Phone == phone);
-            if (user is null)
-                throw new FleetFlowException(404, "User is not found");
-
-            var ordersQuery = orderRepository
-                .SelectAll(order => !order.IsDeleted && order.UserId == user.Id);
-            if (status is not null)
-                ordersQuery = ordersQuery.Where(order => order.Status == status);
-
-            ordersQuery = ordersQuery.ToPagedList(@params);
-
-            var orders = await ordersQuery.ToListAsync();
-
-            // checking something exists or not
-            if (!orders.Any())
-                throw new FleetFlowException(400, "No orders found.");
-
-            return mapper.Map<IEnumerable<OrderResultDto>>(orders);
-        }
-
-        public async ValueTask<OrderResultDto> RetrieveAsync(long id)
-        {
-            Order order = await orderRepository.SelectAsync(order => !order.IsDeleted && order.Id == id, new string[] { "Address", "User" });
-            if (order is null)
-                throw new FleetFlowException(404, "Order is not found");
-
-            return mapper.Map<OrderResultDto>(order);
-        }
+        return mapper.Map<OrderResultDto>(order);
     }
 }

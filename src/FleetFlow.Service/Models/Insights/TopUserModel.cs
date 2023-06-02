@@ -11,4 +11,5 @@ public class TopUserModel
 
     public DateTime From { get; set; }
     public DateTime To { get; set; }
+    public int Top { get; set; }
 }

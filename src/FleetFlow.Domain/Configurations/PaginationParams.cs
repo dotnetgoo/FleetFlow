@@ -8,8 +8,8 @@ public class PaginationParams
     private int _pageSize;
     public int PageSize
     {
-        get => _pageSize;
+        get => _pageSize == 0 ? 10 : _pageSize;
         set => _pageSize = value > _maxPageSize ? _maxPageSize : value;
     }
-    public int PageIndex { get; set; }
+    public int PageIndex { get; set; } = 1;
 }

@@ -1,5 +1,6 @@
 ﻿using FleetFlow.Domain.Commons;
 using FleetFlow.Domain.Entities.Products;
+using FleetFlow.Domain.Entities.Warehouses;
 
 namespace FleetFlow.Domain.Entities;
 
@@ -10,6 +11,9 @@ public class CartItem : Auditable
 
     public long ProductId { get; set; }
     public Product Product { get; set; }
+
+    public long ProductInventoryAssignmentId { get; set; }
+    public ProductInventory productInventoryAssignment { get; set; }
 
     public int Amount { get; set; }
 }
