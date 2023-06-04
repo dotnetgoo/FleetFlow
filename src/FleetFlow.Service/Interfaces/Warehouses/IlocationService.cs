@@ -9,6 +9,6 @@ namespace FleetFlow.Service.Interfaces.Warehouses
         Task<bool> RemoveAsync(long id);
         Task<LocationForResultDto> ModifyAsync(long id, LocationForCreationDto dto);
         Task<LocationForResultDto> RetrieveByIdAsync(long id);
-        Task<IEnumerable<LocationForResultDto>> RetrieveAllAsync(PaginationParams @params);
+        Task<IEnumerable<LocationForResultDto>> RetrieveAllAsync(PaginationParams @params = null);
     }
 }

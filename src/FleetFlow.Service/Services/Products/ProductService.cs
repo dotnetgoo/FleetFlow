@@ -49,7 +49,7 @@ public class ProductService : IProductService
 
         return true;
     }
-    public async Task<IEnumerable<ProductForResultDto>> RetrieveAllAsync(PaginationParams @params)
+    public async Task<IEnumerable<ProductForResultDto>> RetrieveAllAsync(PaginationParams @params = null)
     {
         var products = await productRepository.SelectAll()
             .Where(p => !p.IsDeleted)

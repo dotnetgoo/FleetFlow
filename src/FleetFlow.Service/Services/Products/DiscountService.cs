@@ -68,7 +68,7 @@ public class DiscountService : IDiscountService
         return this.mapper.Map<DiscountResultDto>(modifiedDiscount);
     }
 
-    public async Task<IEnumerable<DiscountResultDto>> RetrieveAllAsync(PaginationParams @params, DiscountState? state = null)
+    public async Task<IEnumerable<DiscountResultDto>> RetrieveAllAsync(PaginationParams @params = null, DiscountState? state = null)
     {
         var discountsQuery = this.discountRepository.SelectAll(t => !t.IsDeleted);
 

@@ -15,8 +15,8 @@ namespace FleetFlow.Service.Interfaces.Users
     public interface IUserService
     {
         Task<UserForResultDto> AddAsync(UserForCreationDto dto);
-        Task<IEnumerable<UserForResultDto>> RetrieveAllAsync(PaginationParams @params);
-        Task<IEnumerable<UserForResultDto>> RetrieveAllByRoleAsync(PaginationParams @params, long roleId);
+        Task<IEnumerable<UserForResultDto>> RetrieveAllAsync(PaginationParams @params = null);
+        Task<IEnumerable<UserForResultDto>> RetrieveAllByRoleAsync(long roleId, PaginationParams @params = null);
         Task<User> RetrieveByEmailAsync(string email);
         Task<bool> RemoveAsync(long id);
         Task<UserForResultDto> RetrieveByIdAsync(long id);

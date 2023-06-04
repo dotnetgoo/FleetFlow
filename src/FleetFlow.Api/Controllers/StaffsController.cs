@@ -95,7 +95,7 @@ namespace FleetFlow.Api.Controllers
             {
                 Code = 200,
                 Message = "Ok",
-                Data = await staffService.RetrieveAllByRoleAsync(@params, roleId)
+                Data = await staffService.RetrieveAllByRoleAsync(roleId, @params)
             });
         /// <summary>
         /// Get by UserId

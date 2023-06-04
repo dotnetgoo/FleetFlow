@@ -7,6 +7,6 @@ namespace FleetFlow.Service.Interfaces.StaffPermissions
     {
         Task<StaffPermissionForResultDto> AddPermission(StaffPermissionsForCreationDto dto);
         Task<bool> RemovePermission(StaffPermissionsForCreationDto dto);
-        Task<IEnumerable<StaffPermissionForResultDto>> GetStaffsAllPermissions(PaginationParams @params, long staffId);
+        Task<IEnumerable<StaffPermissionForResultDto>> GetStaffsAllPermissions(long staffId, PaginationParams @params = null);
     }
 }

@@ -10,7 +10,7 @@ public interface IQuestionService
     Task<Question> RetrieveByIdAsync(long id);
     Task<Question> AddAsync(QuestionForCreationDto dto);
     Task<Question> ModifyAsync(long id, string message);
-    Task<IEnumerable<Question>> RetrieveAllAsync(PaginationParams @params);
-    Task<IEnumerable<Question>> RetrieveAllNotAnsweredQuestionsAsync(PaginationParams @params);
-    Task<IEnumerable<Question>> RetrieveAllByUserIdAsync(long userId, PaginationParams @params);
+    Task<IEnumerable<Question>> RetrieveAllAsync(PaginationParams @params = null);
+    Task<IEnumerable<Question>> RetrieveAllNotAnsweredQuestionsAsync(PaginationParams @params = null);
+    Task<IEnumerable<Question>> RetrieveAllByUserIdAsync(long userId, PaginationParams @params = null);
 }

@@ -94,7 +94,7 @@ public class UserService : IUserService
     /// </summary>
     /// <param name="params"></param>
     /// <returns></returns>
-    public async Task<IEnumerable<UserForResultDto>> RetrieveAllAsync(PaginationParams @params)
+    public async Task<IEnumerable<UserForResultDto>> RetrieveAllAsync(PaginationParams @params = null)
     {
         var users = await userRepository.SelectAll()
             .Where(u => u.IsDeleted == false)
@@ -110,7 +110,7 @@ public class UserService : IUserService
     /// <param name="params"></param>
     /// <param name="role"></param>
     /// <returns></returns>
-    public async Task<IEnumerable<UserForResultDto>> RetrieveAllByRoleAsync(PaginationParams @params, long roleId)
+    public async Task<IEnumerable<UserForResultDto>> RetrieveAllByRoleAsync(long roleId, PaginationParams @params = null)
     {
         var users = await userRepository.SelectAll()
             .Where(u => u.RoleId == roleId && !u.IsDeleted)

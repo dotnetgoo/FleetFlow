@@ -111,7 +111,7 @@ namespace FleetFlow.Service.Services.Warehouses
             return this.mapper.Map<ProductInventoryAssignmentForResultDto>(mapped);
         }
 
-        public async Task<IEnumerable<ProductInventoryAssignmentForResultDto>> RetrieveAllAsync(PaginationParams @params)
+        public async Task<IEnumerable<ProductInventoryAssignmentForResultDto>> RetrieveAllAsync(PaginationParams @params = null)
         {
             var products = await this.repository.SelectAll()
             .Where(u => u.IsDeleted == false)

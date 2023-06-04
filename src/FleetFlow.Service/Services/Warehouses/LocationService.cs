@@ -52,7 +52,7 @@ namespace FleetFlow.Service.Services.Warehouses
             return true;
         }
 
-        public async Task<IEnumerable<LocationForResultDto>> RetrieveAllAsync(PaginationParams @params)
+        public async Task<IEnumerable<LocationForResultDto>> RetrieveAllAsync(PaginationParams @params = null)
         {
             var locations = await locationRepository.SelectAll()
                 .Where(l => !l.IsDeleted)

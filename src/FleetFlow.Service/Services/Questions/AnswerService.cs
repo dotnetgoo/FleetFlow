@@ -84,7 +84,7 @@ public class AnswerService : IAnswerService
     /// </summary>
     /// <param name="params"></param>
     /// <returns></returns>
-    public async Task<IEnumerable<Answer>> RetrieveAllAsync(PaginationParams @params)
+    public async Task<IEnumerable<Answer>> RetrieveAllAsync(PaginationParams @params = null)
         => await answerRepository
             .SelectAll(u => !u.IsDeleted)
             .ToPagedList(@params)
@@ -96,7 +96,7 @@ public class AnswerService : IAnswerService
     /// <param name="params"></param>
     /// <param name="adminId"></param>
     /// <returns></returns>
-    public async Task<IEnumerable<Answer>> RetrieveAllByAdminIdAsync(PaginationParams @params, long adminId)
+    public async Task<IEnumerable<Answer>> RetrieveAllByAdminIdAsync(long adminId, PaginationParams @params = null)
         => await answerRepository
             .SelectAll(a => a.AdminId == adminId && !a.IsDeleted)
             .ToPagedList(@params)
@@ -108,7 +108,7 @@ public class AnswerService : IAnswerService
     /// <param name="params"></param>
     /// <param name="userId"></param>
     /// <returns></returns>
-    public async Task<IEnumerable<Answer>> RetrieveAllByUserIdAsync(PaginationParams @params, long userId)
+    public async Task<IEnumerable<Answer>> RetrieveAllByUserIdAsync(long userId, PaginationParams @params = null)
         => await answerRepository
             .SelectAll(a => a.AnsweredUserId == userId && !a.IsDeleted)
             .ToPagedList(@params)

@@ -25,7 +25,7 @@ public class DistrictService : IDistrictService
         this.regionRepository = regionRepository;
     }
 
-    public async ValueTask<IEnumerable<DistrictResultDto>> RetrieveAllAsync(PaginationParams @params)
+    public async ValueTask<IEnumerable<DistrictResultDto>> RetrieveAllAsync(PaginationParams @params = null)
     {
         var districts = await districtRepository.SelectAll()
             .ToPagedList(@params)

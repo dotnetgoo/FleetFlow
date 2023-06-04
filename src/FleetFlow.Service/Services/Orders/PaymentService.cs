@@ -103,7 +103,7 @@ public class PaymentService : IPaymentService
         return true;
     }
 
-    public async Task<IEnumerable<PaymentResultDto>> RetrieveAllAsync(PaginationParams @params)
+    public async Task<IEnumerable<PaymentResultDto>> RetrieveAllAsync(PaginationParams @params = null)
     {
         var payments = await paymentRepository.SelectAll().ToPagedList(@params).ToListAsync();
         return mapper.Map<IEnumerable<PaymentResultDto>>(payments);

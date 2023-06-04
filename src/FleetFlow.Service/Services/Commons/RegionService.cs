@@ -23,7 +23,7 @@ public class RegionService : IRegionService
         this.mapper = mapper;
     }
 
-    public async Task<IEnumerable<RegionResultDto>> RetrieveAllAsync(PaginationParams @params)
+    public async Task<IEnumerable<RegionResultDto>> RetrieveAllAsync(PaginationParams @params = null)
     {
         var regions = await regionRepository.SelectAll()
             .ToPagedList(@params)

@@ -82,7 +82,7 @@ namespace FleetFlow.Api.Controllers
             {
                 Code = 200,
                 Message = "OK",
-                Data = await this.answerService.RetrieveAllByAdminIdAsync(@params, adminId)
+                Data = await this.answerService.RetrieveAllByAdminIdAsync(adminId, @params)
             });
 
         /// <summary>
@@ -97,7 +97,7 @@ namespace FleetFlow.Api.Controllers
             {
                 Code = 200,
                 Message = "OK",
-                Data = await this.answerService.RetrieveAllByUserIdAsync(@params, userId)
+                Data = await this.answerService.RetrieveAllByUserIdAsync(userId, @params)
             });
 
         /// <summary>

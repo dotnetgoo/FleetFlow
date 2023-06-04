@@ -9,9 +9,13 @@ namespace FleetFlow.Service.Extentions
 {
     public static class CollectionExtensions
     {
-        public static IQueryable<TEntity> ToPagedList<TEntity>(this IQueryable<TEntity> entities, PaginationParams @params)
+        public static IQueryable<TEntity> ToPagedList<TEntity>(this IQueryable<TEntity> entities, PaginationParams @params = null)
             where TEntity : Auditable
         {
+            if(@params == null)
+            {
+                return entities;
+            }
             var metaData = new PaginationMetaData(entities.Count(), @params);
 
             var json = JsonConvert.SerializeObject(metaData);

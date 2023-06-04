@@ -82,7 +82,7 @@ namespace FleetFlow.Service.Services.Staffs
             return true;
         }
 
-        public async Task<IEnumerable<StaffForResultDto>> RetrieveAllAsync(PaginationParams @params)
+        public async Task<IEnumerable<StaffForResultDto>> RetrieveAllAsync(PaginationParams @params = null)
         {
             var entities = await this.repository.SelectAll()
                 .Where(u => u.IsDeleted == false)
@@ -92,7 +92,7 @@ namespace FleetFlow.Service.Services.Staffs
             return this.mapper.Map<IEnumerable<StaffForResultDto>>(entities);
         }
 
-        public async Task<IEnumerable<StaffForResultDto>> RetrieveAllByRoleAsync(PaginationParams @params, long RoleId)
+        public async Task<IEnumerable<StaffForResultDto>> RetrieveAllByRoleAsync(long RoleId, PaginationParams @params = null)
         {
             var entities = await repository.SelectAll()
             .Where(u => u.RoleId == RoleId && !u.IsDeleted)

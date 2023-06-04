@@ -36,7 +36,7 @@ namespace FleetFlow.Service.Services.Authorizations
 			return this.mapper.Map<PermissionForResultDto>(result);
 		}
 
-		public async Task<List<PermissionForResultDto>> RetrieveAllAsync(PaginationParams @params)
+		public async Task<List<PermissionForResultDto>> RetrieveAllAsync(PaginationParams @params = null)
 		{
 			var permissions = await permissionRepository.SelectAll()
 		  .Where(p => p.IsDeleted == false)

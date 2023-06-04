@@ -12,8 +12,8 @@ namespace FleetFlow.Service.Interfaces.Orders
         ValueTask<OrderResultDto> RetrieveAsync(long id);
         ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByClientIdAsync(long clientId);
         ValueTask<IEnumerable<OrderResultDto>> RetrieveAllAsync(
-            PaginationParams @params, OrderStatus? status = null);
+            PaginationParams @params = null, OrderStatus? status = null);
         ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByPhoneAsync(
-            PaginationParams @params, string phone, OrderStatus? status = null);
+            string phone, PaginationParams @params = null, OrderStatus? status = null);
     }
 }

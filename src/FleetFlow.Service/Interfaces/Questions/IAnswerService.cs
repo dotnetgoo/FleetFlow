@@ -12,7 +12,7 @@ public interface IAnswerService
     Task<Answer> RetrieveByIdAsync(long id);
     Task<Answer> AddAsync(AnswerForCreationDto dto);
     Task<Answer> ModifyByIdAsync(long id, string message);
-    Task<IEnumerable<Answer>> RetrieveAllAsync(PaginationParams @params);
-    Task<IEnumerable<Answer>> RetrieveAllByUserIdAsync(PaginationParams @params, long userId);
-    Task<IEnumerable<Answer>> RetrieveAllByAdminIdAsync(PaginationParams @params, long adminId);
+    Task<IEnumerable<Answer>> RetrieveAllAsync(PaginationParams @params = null);
+    Task<IEnumerable<Answer>> RetrieveAllByUserIdAsync(long userId, PaginationParams @params = null);
+    Task<IEnumerable<Answer>> RetrieveAllByAdminIdAsync(long adminId, PaginationParams @params = null);
 }

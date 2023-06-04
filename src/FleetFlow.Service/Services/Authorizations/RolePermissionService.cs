@@ -45,7 +45,7 @@ namespace FleetFlow.Service.Services.Authorizations
 			return result;
 		}
 
-		public async Task<List<RolePermissionForResultDto>> RetrieveAllAsync(PaginationParams @params)
+		public async Task<List<RolePermissionForResultDto>> RetrieveAllAsync(PaginationParams @params = null)
 		{
 			var permissions = await rolePermissionRepository.SelectAll(p => p.IsDeleted == false && p.Permisson.IsDeleted == false && p.Role.IsDeleted == false, new string[] { "Permisson","Role" })
 		  .Where(p => p.IsDeleted == false)

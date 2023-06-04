@@ -69,17 +69,17 @@ namespace FleetFlow.Service.Services.Questions
             return question;
         }
 
-        public async Task<IEnumerable<Question>> RetrieveAllAsync(PaginationParams @params)
+        public async Task<IEnumerable<Question>> RetrieveAllAsync(PaginationParams @params = null)
             => await questionRepository.SelectAll(q => !q.IsDeleted)
                 .ToPagedList(@params)
                 .ToListAsync();
 
-        public async Task<IEnumerable<Question>> RetrieveAllNotAnsweredQuestionsAsync(PaginationParams @params)
+        public async Task<IEnumerable<Question>> RetrieveAllNotAnsweredQuestionsAsync(PaginationParams @params = null)
             => await questionRepository.SelectAll(q => !q.IsAnswered && !q.IsDeleted)
                 .ToPagedList(@params)
                 .ToListAsync();
 
-        public async Task<IEnumerable<Question>> RetrieveAllByUserIdAsync(long userId, PaginationParams @params)
+        public async Task<IEnumerable<Question>> RetrieveAllByUserIdAsync(long userId, PaginationParams @params = null)
             => await questionRepository.SelectAll(q => q.UserId == userId && !q.IsDeleted)
                 .ToPagedList(@params)
                 .ToListAsync();

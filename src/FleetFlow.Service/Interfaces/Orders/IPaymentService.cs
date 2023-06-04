@@ -10,7 +10,7 @@ public interface IPaymentService
     Task<PaymentResultDto> AddAsync(PaymentCreationDto dto, AttachmentCreationDto attachment);
     Task<bool> RemoveAsync(long id);
     Task<PaymentResultDto> ModifyAsync(long id, PaymentCreationDto dto);
-    Task<IEnumerable<PaymentResultDto>> RetrieveAllAsync(PaginationParams @params);
+    Task<IEnumerable<PaymentResultDto>> RetrieveAllAsync(PaginationParams @params = null);
     Task<PaymentResultDto> RetrieveByIdAsync(long id);
     Task<PaymentResultDto> ChangeStatusAsync(long id, PaymentStatus status);
 }

@@ -43,7 +43,7 @@ public class AddressService : IAddressService
         return IsDeleted;
     }
 
-    public async Task<IEnumerable<AddressForResultDto>> GetAllAsync(PaginationParams @params)
+    public async Task<IEnumerable<AddressForResultDto>> GetAllAsync(PaginationParams @params = null)
     {
         var addressQuery = addressRepository.SelectAll();
 

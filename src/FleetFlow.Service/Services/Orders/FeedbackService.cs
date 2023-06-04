@@ -124,7 +124,7 @@ public class FeedbackService : IFeedbackService
         return Array.ConvertAll<Feedback, FeedbackResultDto>(feedbacks, x => x.ToFeedbackResultDto());
     }
 
-    public async Task<IEnumerable<FeedbackResultDto>> RetriveAllByStatusAsync(PaginationParams @params, FeedbackStatus? status = null)
+    public async Task<IEnumerable<FeedbackResultDto>> RetriveAllByStatusAsync(PaginationParams @params = null, FeedbackStatus? status = null)
     {
         var feedbacksQuery = this.feedbackRepository.SelectAll(f => !f.IsDeleted, new string[] { "Attachments.Attachment" });
         if (status is not null)

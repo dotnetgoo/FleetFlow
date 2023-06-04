@@ -67,7 +67,7 @@ public class OrdersController : RestfulSense
         {
             Code = 200,
             Message = "OK",
-            Data = await this.orderService.RetrieveAllByPhoneAsync(@params, phone, status)
+            Data = await this.orderService.RetrieveAllByPhoneAsync(phone, @params, status)
         });
 
 

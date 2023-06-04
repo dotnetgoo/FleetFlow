@@ -97,7 +97,7 @@ public class OrderService : IOrderService
         return isDeleted;
     }
 
-    public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllAsync(PaginationParams @params, OrderStatus? status = null)
+    public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllAsync(PaginationParams @params = null, OrderStatus? status = null)
     {
         var orders = orderRepository.SelectAll(order => !order.IsDeleted,
             new string[] { "User", "Address", "Region", "District", "OrderItems" }).AsQueryable();
@@ -126,7 +126,7 @@ public class OrderService : IOrderService
         return mapper.Map<IEnumerable<OrderResultDto>>(orders);
     }
 
-    public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByPhoneAsync(PaginationParams @params, string phone, OrderStatus? status = null)
+    public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByPhoneAsync(string phone, PaginationParams @params = null, OrderStatus? status = null)
     {
         var user = await userRepository.SelectAsync(user => !user.IsDeleted && user.Phone == phone, 
             new string[] { "Orders.OrderItems" });

@@ -22,14 +22,14 @@ namespace FleetFlow.GraphQL.Queries
             PaginationParams @params,
             long userId)
         {
-            return await answerService.RetrieveAllByUserIdAsync(@params, userId);
+            return await answerService.RetrieveAllByUserIdAsync(userId, @params);
         }
 
         public async ValueTask<IEnumerable<Answer>> GetAllAnswersByAdminIdAsync([Service] IAnswerService answerService,
             PaginationParams @params,
             long adminId)
         {
-            return await answerService.RetrieveAllByAdminIdAsync(@params, adminId);
+            return await answerService.RetrieveAllByAdminIdAsync(adminId, @params);
         }
     }
 }

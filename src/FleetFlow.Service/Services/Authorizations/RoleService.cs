@@ -35,7 +35,7 @@ namespace FleetFlow.Service.Services.Authorizations
             return mapper.Map<RoleResultDto>(mappedDto);
         }
 
-        public async Task<IEnumerable<RoleResultDto>> RetrieveAllAsync(PaginationParams @params)
+        public async Task<IEnumerable<RoleResultDto>> RetrieveAllAsync(PaginationParams @params = null)
         {
             var roles = await roleRepository.SelectAll()
             .Where(u => u.IsDeleted == false)

@@ -22,7 +22,7 @@ namespace FleetFlow.GraphQL.Queries
         public async ValueTask<IEnumerable<StaffForResultDto>> GetStaffByRoleId([Service] IStaffService service,
             PaginationParams @params,long roleId)
         {
-            return await service.RetrieveAllByRoleAsync(@params,roleId);
+            return await service.RetrieveAllByRoleAsync(roleId, @params);
         }
     }
 }

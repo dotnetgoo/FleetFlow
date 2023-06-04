@@ -11,6 +11,6 @@ public interface IPermissionService
 	Task<bool> RemoveAsync(long id);
 	Task<PermissionForResultDto> ModifyAsync(PermissionForUpdateDto dto);
 	Task<PermissionForResultDto> RetrieveByIdAsync(long id);
-	Task<List<PermissionForResultDto>> RetrieveAllAsync(PaginationParams @params);
+	Task<List<PermissionForResultDto>> RetrieveAllAsync(PaginationParams @params = null);
 	
 }

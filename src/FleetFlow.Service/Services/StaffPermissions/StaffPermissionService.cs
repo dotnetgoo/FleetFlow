@@ -46,7 +46,7 @@ namespace FleetFlow.Service.Services.StaffPermissions
             return mapper.Map<StaffPermissionForResultDto>(dto);
         }
 
-        public async Task<IEnumerable<StaffPermissionForResultDto>> GetStaffsAllPermissions(PaginationParams @params, long staffId)
+        public async Task<IEnumerable<StaffPermissionForResultDto>> GetStaffsAllPermissions(long staffId, PaginationParams @params = null)
         {
             var entities = await repository.SelectAll()
                 .Where(x => x.StaffId == staffId)
