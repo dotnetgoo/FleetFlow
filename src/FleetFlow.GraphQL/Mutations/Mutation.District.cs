@@ -1,6 +1,13 @@
-﻿namespace FleetFlow.GraphQL.Mutations
+﻿using FleetFlow.Service.DTOs.Address;
+using FleetFlow.Service.Interfaces.Commons;
+
+namespace FleetFlow.GraphQL.Mutations
 {
-    public class Mutation
+    public partial class Mutation
     {
+        public async ValueTask CreateDistrictAsync([Service] IDistrictService service)
+        {
+            await service.SaveToDatabase();
+        }
     }
 }

@@ -1,6 +1,12 @@
-﻿namespace FleetFlow.GraphQL.Mutations
+﻿using FleetFlow.Service.Interfaces.Commons;
+
+namespace FleetFlow.GraphQL.Mutations
 {
-    public class Mutation
+    public partial class Mutation
     {
+        public async ValueTask CreateRegionAsync([Service] IRegionService service)
+        {
+            await service.SaveToDatabase();
+        }
     }
 }
