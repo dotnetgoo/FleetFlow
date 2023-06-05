@@ -87,7 +87,7 @@ namespace FleetFlow.Service.Services.Warehouses
             return true;
         }
 
-        public async Task<IEnumerable<InventoryForResultDto>> RetrieveAllInventory(PaginationParams @params)
+        public async Task<IEnumerable<InventoryForResultDto>> RetrieveAllInventory(PaginationParams @params = null)
         {
             var inventories = await this.repository.SelectAll(includes: new string[] {"Region", "District", "Address"})
                 .Where(u => u.IsDeleted == false)
