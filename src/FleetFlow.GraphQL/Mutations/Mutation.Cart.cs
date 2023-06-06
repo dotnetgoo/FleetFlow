@@ -16,12 +16,5 @@ namespace FleetFlow.GraphQL.Mutations
         {
             return await cartService.RemoveItemAsync(cartItemId);
         }
-
-        public async ValueTask<object> UpdateItemAsync([Service] ICartService cartService, 
-            long itemId, 
-            int amount)
-        {
-            return await cartService.UpdateItemAsync(itemId, amount);
-        }
     }
 }

@@ -58,6 +58,7 @@ public class DistrictService : IDistrictService
             district.Id = long.Parse(item.Id);
             district.NameUz = item.NameUz;
             district.NameRu = item.NameRu;
+            district.RegionId = long.Parse(item.RegionId);
 
             await districtRepository.InsertAsync(district);
         }
