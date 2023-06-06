@@ -12,6 +12,7 @@ using FleetFlow.Service.Interfaces.Warehouses;
 using FleetFlow.Domain.Entities.Google;
 using FleetFlow.Service.DTOs.Inventories;
 using Newtonsoft.Json;
+using FleetFlow.Domain.Congirations;
 
 namespace FleetFlow.Service.Services.Orders;
 
@@ -114,12 +115,12 @@ public class OrderActionService : IOrderActionService
         order.Status = OrderStatus.Shipping;
         await this.actionRepository.InsertAsync(new OrderAction() { OrderId = order.Id, Status = OrderStatus.Shipping });
 
-        long inventoryId = await SearchNearestInventory(address.Latitude, address.Longitude);
+        var inventory = await SearchNearestInventory(address.Latitude, address.Longitude);
 
         // create order items using cart
         foreach (var cartItem in order.OrderItems)
         {
-            await this.productInventoryService.RemoveQuantity(cartItem.ProductId, inventoryId, cartItem.Amount);
+            await this.productInventoryService.RemoveQuantity(cartItem.ProductId, inventory.Id, cartItem.Amount);
 
             var inventoryLog = new InventoryLogForCreationDto()
             {
@@ -127,7 +128,7 @@ public class OrderActionService : IOrderActionService
                 Amount = cartItem.Amount,
                 Type = InventoryLogType.Minus,
                 OwnerId = (long)HttpContextHelper.UserId,
-                InventoryId = inventoryId
+                InventoryId = inventory.Id
             };
 
             await this.inventoryLogService.AddAsync(inventoryLog);
@@ -137,10 +138,9 @@ public class OrderActionService : IOrderActionService
         return order;
     }
 
-    private async ValueTask<long> SearchNearestInventory(double lat, double lon)
+    private async ValueTask<InventoryForResultDto> SearchNearestInventory(double lat, double lon)
     {
-        var destinations = await this.inventoryService.RetrieveAllInventory();
-
+        var destinations = await this.inventoryService.RetrieveAllInventory(new PaginationParams());
 
         long nearestDestination = 0;
         double minDistance = double.PositiveInfinity;
@@ -155,17 +155,18 @@ public class OrderActionService : IOrderActionService
                 nearestDestination = destination.Id;
             }
         }
-
-        return nearestDestination;
+        var inventory = await this.inventoryService.RetrieveById(nearestDestination);
+        return inventory;
     }
+
     private async Task<double> CalculateDistance(double lat, double lon, InventoryForResultDto destination)
     {
         string GoogleMapsApiUrl = "https://maps.googleapis.com/maps/api/directions/json";
         string GoogleMapsApiKey = "AIzaSyBLHCo7zVzMZwcvzSnmva_lVV4_lfFHeeI";
 
-        var address = await this.addressService.GetByIdAsync(destination.AddressId);
+       /// var address = await this.addressService.GetByIdAsync(destination.AddressId);
 
-        string requestUrl = $"{GoogleMapsApiUrl}?origin={lat},{lon}&destination={address.Latitude},{address.Longitude}&key={GoogleMapsApiKey}";
+        string requestUrl = $"{GoogleMapsApiUrl}?origin={lat},{lon}&destination={destination.Address.Latitude},{destination.Address.Longitude}&key={GoogleMapsApiKey}";
 
         using (HttpClient client = new HttpClient())
         {
