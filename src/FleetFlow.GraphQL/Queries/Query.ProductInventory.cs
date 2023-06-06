@@ -6,12 +6,12 @@ namespace FleetFlow.GraphQL.Queries
 {
     public partial class Query
     {
-        public async ValueTask<ProductInventoryAssignmentForResultDto> GetProductInventoryAssignmentById([Service]
+        public async ValueTask<ProductInventoryAssignmentForResultDto> GetProductInventoryByIdAsync([Service]
         IProductInventoryService service,long id)
         {
             return await service.RetrieveByIdAsync(id);
         }
-        public async ValueTask<IEnumerable<ProductInventoryAssignmentForResultDto>> GetAllProductInventoryAssignment(
+        public async ValueTask<IEnumerable<ProductInventoryAssignmentForResultDto>> GetAllProductInventoryAsync(
             [Service]IProductInventoryService service,PaginationParams @params)
         {
             return await service.RetrieveAllAsync(@params);
