@@ -9,4 +9,5 @@ public class CartItemResultDto
     public long CartId { get; set; }
     public ProductForResultDto Product { get; set; }
     public int Amount { get; set; }
+    public decimal AmountTotal { get; set; }
 }

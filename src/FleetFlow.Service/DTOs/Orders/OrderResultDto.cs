@@ -15,6 +15,7 @@ namespace FleetFlow.Service.DTOs.Orders
         public RegionResultDto Region { get; set; }
         public long DistrictId { get; set; }
         public DistrictResultDto District { get; set; }
+        public bool IsSaved { get; set; }
         public OrderStatus Status { get; set; }
         public PaymentStatus PaymentStatus { get; set; }
         public ICollection<OrderItemForResultDto> OrderItems { get; set; }

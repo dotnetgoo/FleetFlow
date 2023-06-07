@@ -6,7 +6,7 @@ namespace FleetFlow.GraphQL.Mutations
     public partial class Mutation
     {
         public async ValueTask<AddressForResultDto> AssignAddressAsync([Service] ICheckoutService checkoutService,
-            AddressForCreationDto address)
+            AddressAddDto address)
         {
             return await checkoutService.AssignAddressAsync(address);
         }

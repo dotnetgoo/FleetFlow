@@ -8,6 +8,7 @@ using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.DTOs.Orders;
 using Microsoft.EntityFrameworkCore;
 using FleetFlow.Service.DTOs.Address;
+using FleetFlow.Service.DTOs.Bonuses;
 using FleetFlow.Service.DTOs.Payments;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Bonuses;
@@ -85,10 +86,21 @@ public class CheckoutService : ICheckoutService
     public async ValueTask<OrderResultDto> SaveOrderAsync(OrderForCreationDto orderDto, string promoCode = null)
     {
         var createdOrder = await this.orderService.AddAsync(orderDto);
+        if (createdOrder.IsSaved)
+            throw new FleetFlowException(400, "This order is already saved");
+
+        await CheckBonusAsync(createdOrder, promoCode);
+        createdOrder.IsSaved = true;
+        await this.orderRepository.SaveAsync();
+        return this.mapper.Map<OrderResultDto>(createdOrder);
+    }
+
+    private async Task<BonusResultDto> CheckBonusAsync(OrderResultDto createdOrder, string promoCode = null)
+    {
         var order = await this.orderRepository.SelectAsync(o => o.Id == createdOrder.Id);
 
         decimal sumOfOrder = 0.0m;
-        foreach(var item in createdOrder.OrderItems)
+        foreach (var item in createdOrder.OrderItems)
             sumOfOrder += item.AmountTotal;
 
         var oldBonus = await this.bonusRepository
@@ -100,12 +112,13 @@ public class CheckoutService : ICheckoutService
 
         var bonusSettings = await this.bonusSettingRepository.SelectAll().ToListAsync();
 
-        if (!string.IsNullOrEmpty(promoCode))
-        {
-            var bonusSettingWithPromoCode = bonusSettings
-                .FirstOrDefault(b => b.PromoCode.Equals(promoCode) &&
-                b.StartTime <= DateTime.UtcNow && b.EndTime >= DateTime.UtcNow);
 
+        BonusSetting bonusSettingWithPromoCode = bonusSettings
+            .FirstOrDefault(b => b.PromoCode.Equals(promoCode) &&
+            b.StartTime <= DateTime.UtcNow && b.EndTime >= DateTime.UtcNow);
+
+        if (!string.IsNullOrEmpty(promoCode) && bonusSettingWithPromoCode.IsPromoCodeUsed)
+        {
             string validPromoCode = bonusSettingWithPromoCode.PromoCode;
 
             if (string.IsNullOrEmpty(validPromoCode))
@@ -114,12 +127,37 @@ public class CheckoutService : ICheckoutService
             switch (bonusSettingWithPromoCode.Type)
             {
                 case BonusType.Amount:
+                    bonus.Amount = oldBonus.Amount + bonusSettingWithPromoCode.Amount;
+                    bonus.OrderDate = order.CreatedAt;
+                    bonus.OrderId = order.Id;
+                    bonus.UserId = (long)HttpContextHelper.UserId;
+                    bonus.Type = BonusType.Amount;
+                    bonus.IsPromoCodeUsed = true;
+                    bonus.UsedPromoCode = validPromoCode;
                     break;
                 case BonusType.Percentage:
+                    bonus.Amount = oldBonus.Amount + (bonusSettingWithPromoCode.Amount / 100) * sumOfOrder;
+                    bonus.OrderDate = order.CreatedAt;
+                    bonus.OrderId = order.Id;
+                    bonus.UserId = (long)HttpContextHelper.UserId;
+                    bonus.Type = BonusType.Amount;
+                    bonus.IsPromoCodeUsed = true;
+                    bonus.UsedPromoCode = validPromoCode;
                     break;
                 case BonusType.Gift:
+                    bonus.Amount = oldBonus.Amount;
+                    bonus.ProductId = bonusSettingWithPromoCode.ProductId;
+                    bonus.OrderDate = order.CreatedAt;
+                    bonus.OrderId = order.Id;
+                    bonus.UserId = (long)HttpContextHelper.UserId;
+                    bonus.OrderCashBack = bonusSettingWithPromoCode.Amount;
+                    bonus.Type = BonusType.Gift;
+                    bonus.IsPromoCodeUsed = true;
+                    bonus.UsedPromoCode = validPromoCode;
                     break;
             }
+            bonus = await this.bonusRepository.InsertAsync(bonus);
+            await this.bonusRepository.SaveAsync();
         }
 
         var bonusSetting = new BonusSetting();
@@ -129,14 +167,15 @@ public class CheckoutService : ICheckoutService
                 bonusSetting = item;
         }
 
+        // for amount
         if (bonusSetting is not null)
         {
-            if(bonusSetting.StartTime <= DateTime.UtcNow && bonusSetting.EndTime >= DateTime.UtcNow)
+            if (bonusSetting.StartTime <= DateTime.UtcNow && bonusSetting.EndTime >= DateTime.UtcNow)
             {
                 switch (bonusSetting.Type)
                 {
                     case BonusType.Amount:
-                        bonus.Amount = oldBonus.Amount + bonusSetting.Amount;
+                        bonus.Amount = oldBonus?.Amount ?? 0.0m + bonusSetting.Amount;
                         bonus.OrderDate = order.CreatedAt;
                         bonus.OrderId = order.Id;
                         bonus.UserId = (long)HttpContextHelper.UserId;
@@ -162,11 +201,13 @@ public class CheckoutService : ICheckoutService
                         break;
                 }
             }
-            
+            bonus = await this.bonusRepository.InsertAsync(bonus);
+            await this.bonusRepository.SaveAsync();
         }
 
-        throw new NotImplementedException();
+        return this.mapper.Map<BonusResultDto>(bonus);
     }
+
 
     public async ValueTask<PaymentResultDto> PayAsync(PaymentCreationDto dto, AttachmentCreationDto attachment)
     {
