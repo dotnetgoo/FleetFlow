@@ -2,6 +2,7 @@ using FleetFlow.Domain.Entities;
 using FleetFlow.Domain.Entities.Addresses;
 using FleetFlow.Domain.Entities.Attachments;
 using FleetFlow.Domain.Entities.Authorizations;
+using FleetFlow.Domain.Entities.Bonuses;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Orders.Feedbacks;
 using FleetFlow.Domain.Entities.Products;
@@ -46,6 +47,8 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<Answer>  Answers { get; set; }
         public DbSet<Staff> Staffs { get; set; }
         public DbSet<StaffPermission> StaffPermissions { get; set; }
+        public DbSet<Bonus> Bonuses { get; set; }
+        public DbSet<BonusSetting> BonusSettings { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
