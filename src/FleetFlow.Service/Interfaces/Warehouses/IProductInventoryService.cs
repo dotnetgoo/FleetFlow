@@ -3,7 +3,7 @@ using FleetFlow.Service.DTOs.Inventories;
 
 namespace FleetFlow.Service.Interfaces.Warehouses
 {
-    public interface IProductInventoryAssignmentService
+    public interface IProductInventoryService
     {
         Task<ProductInventoryAssignmentForResultDto> AddAsync(ProductInventoryAssignmentForCreationDto dto);
         Task<ProductInventoryAssignmentForResultDto> RetrieveByIdAsync(long id);

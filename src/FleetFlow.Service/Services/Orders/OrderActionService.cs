@@ -1,30 +1,47 @@
-﻿using AutoMapper;
+﻿using FleetFlow.Domain.Enums;
+using FleetFlow.Shared.Helpers;
 using FleetFlow.DAL.IRepositories;
-using FleetFlow.Domain.Entities;
-using FleetFlow.Domain.Entities.Orders;
-using FleetFlow.Domain.Entities.Users;
-using FleetFlow.Domain.Enums;
-using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Service.Exceptions;
-using FleetFlow.Service.Interfaces.Orders;
-using FleetFlow.Service.Interfaces.Warehouses;
-using MailKit.Search;
 using Microsoft.EntityFrameworkCore;
+using FleetFlow.Service.DTOs.Orders;
+using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Service.Interfaces.Orders;
+using FleetFlow.Service.DTOs.InventoryLogs;
+using FleetFlow.Service.Interfaces.Addresses;
+using FleetFlow.Service.Interfaces.Warehouses;
+using FleetFlow.Domain.Entities.Google;
+using FleetFlow.Service.DTOs.Inventories;
+using Newtonsoft.Json;
+using FleetFlow.Domain.Congirations;
 
 namespace FleetFlow.Service.Services.Orders;
 
 public class OrderActionService : IOrderActionService
 {
-    protected readonly IOrderService orderService;
-    protected readonly IRepository<OrderItem> orderItemRepository;
-    protected readonly IRepository<OrderAction> actionRepository;
-    protected readonly IProductInventoryAssignmentService productInventoryAssignmentService;
-    public OrderActionService(IRepository<OrderAction> actionRepository, IOrderService orderService, IProductInventoryAssignmentService productInventoryAssignmentService, IRepository<OrderItem> orderItemRepository)
+    private readonly ICartService cartService;
+    private readonly IOrderService orderService;
+    private readonly IAddressService addressService;
+    private readonly IInventoryLogService inventoryLogService;
+    private readonly IRepository<OrderAction> actionRepository;
+    private readonly IRepository<OrderItem> orderItemRepository;
+    private readonly IProductInventoryService productInventoryService;
+    private readonly IInventoryService inventoryService;
+    public OrderActionService(
+        IOrderService orderService,
+        IAddressService addressService,
+        IInventoryLogService inventoryLogService,
+        IRepository<OrderAction> actionRepository,
+        IRepository<OrderItem> orderItemRepository,
+        IProductInventoryService productInventoryAssignmentService,
+        IInventoryService inventoryService)
     {
-        this.actionRepository = actionRepository;
         this.orderService = orderService;
-        this.productInventoryAssignmentService = productInventoryAssignmentService;
+        this.addressService = addressService;
+        this.actionRepository = actionRepository;
+        this.inventoryLogService = inventoryLogService;
         this.orderItemRepository = orderItemRepository;
+        this.productInventoryService = productInventoryAssignmentService;
+        this.inventoryService = inventoryService;
     }
 
     public async ValueTask<OrderResultDto> CancelledAsync(int orderId)
@@ -39,7 +56,6 @@ public class OrderActionService : IOrderActionService
         order.Status = OrderStatus.Cancelled;
 
         await this.actionRepository.InsertAsync(new OrderAction() { OrderId = orderId, Status = OrderStatus.Cancelled });
-
         await this.actionRepository.SaveAsync();
 
         return order;
@@ -52,10 +68,9 @@ public class OrderActionService : IOrderActionService
             throw new FleetFlowException(404, "Order is not found");
 
         order.Id = orderId;
-        order.Status = OrderStatus.Cancelled;
+        order.Status = OrderStatus.Shipped;
 
         await this.actionRepository.InsertAsync(new OrderAction() { OrderId = orderId, Status = OrderStatus.Shipped });
-
         await this.actionRepository.SaveAsync();
 
         return order;
@@ -70,7 +85,6 @@ public class OrderActionService : IOrderActionService
         order.Status = OrderStatus.Pending;
 
         await this.actionRepository.InsertAsync(new OrderAction() { OrderId = order.Id, Status = OrderStatus.Pending });
-
         await this.actionRepository.SaveAsync();
 
         return order;
@@ -82,10 +96,9 @@ public class OrderActionService : IOrderActionService
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
 
-        order.Status = OrderStatus.Cancelled;
+        order.Status = OrderStatus.Process;
 
         await this.actionRepository.InsertAsync(new OrderAction() { OrderId = order.Id, Status = OrderStatus.Process });
-
         await this.actionRepository.SaveAsync();
 
         return order;
@@ -97,12 +110,89 @@ public class OrderActionService : IOrderActionService
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
 
-        order.Status = OrderStatus.Cancelled;
+        var address = await this.addressService.GetByIdAsync(order.AddressId);
 
+        order.Status = OrderStatus.Shipping;
         await this.actionRepository.InsertAsync(new OrderAction() { OrderId = order.Id, Status = OrderStatus.Shipping });
 
+        var inventory = await SearchNearestInventory(address.Latitude, address.Longitude);
+
+        // create order items using cart
+        foreach (var cartItem in order.OrderItems)
+        {
+            await this.productInventoryService.RemoveQuantity(cartItem.ProductId, inventory.Id, cartItem.Amount);
+
+            var inventoryLog = new InventoryLogForCreationDto()
+            {
+                ProductId = cartItem.ProductId,
+                Amount = cartItem.Amount,
+                Type = InventoryLogType.Minus,
+                OwnerId = (long)HttpContextHelper.UserId,
+                InventoryId = inventory.Id
+            };
+
+            await this.inventoryLogService.AddAsync(inventoryLog);
+        }
         await this.actionRepository.SaveAsync();
 
         return order;
+    }
+
+    private async ValueTask<InventoryForResultDto> SearchNearestInventory(double lat, double lon)
+    {
+        var destinations = await this.inventoryService.RetrieveAllInventory(new PaginationParams());
+
+        long nearestDestination = 0;
+        double minDistance = double.PositiveInfinity;
+
+        foreach (var destination in destinations)
+        {
+            double distance = await CalculateDistance(lat, lon, destination);
+
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearestDestination = destination.Id;
+            }
+        }
+        var inventory = await this.inventoryService.RetrieveById(nearestDestination);
+        return inventory;
+    }
+
+    private async Task<double> CalculateDistance(double lat, double lon, InventoryForResultDto destination)
+    {
+        string GoogleMapsApiUrl = "https://maps.googleapis.com/maps/api/directions/json";
+        string GoogleMapsApiKey = "AIzaSyBLHCo7zVzMZwcvzSnmva_lVV4_lfFHeeI";
+
+       /// var address = await this.addressService.GetByIdAsync(destination.AddressId);
+
+        string requestUrl = $"{GoogleMapsApiUrl}?origin={lat},{lon}&destination={destination.Address.Latitude},{destination.Address.Longitude}&key={GoogleMapsApiKey}";
+
+        using (HttpClient client = new HttpClient())
+        {
+            HttpResponseMessage response = await client.GetAsync(requestUrl);
+
+            if (response.IsSuccessStatusCode)
+            {
+                string content = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<GoogleMapsDirectionResponse>(content);
+
+                if (result != null && result.Routes.Count > 0)
+                {
+                    var route = result.Routes[0];
+
+                    if (route.Legs.Count > 0)
+                    {
+                        var leg = route.Legs[0];
+                        double distanceInMeters = leg.Distance.Value;
+                        double distanceInKilometers = distanceInMeters / 1000;
+
+                        return distanceInKilometers;
+                    }
+                }
+            }
+        }
+
+        return double.PositiveInfinity;
     }
 }

@@ -7,7 +7,6 @@ using FleetFlow.Shared.Helpers;
 using FleetFlow.Service.Mappers;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,8 +50,9 @@ app.ApplyMigrations();
 app.InitAccessor();
 
 // Getting wwwroot path
-//EnvironmentHelper.WebRootPath = app.Services.GetRequiredService<IWebHostEnvironment>().WebRootPath;
 EnvironmentHelper.WebRootPath = Path.GetFullPath("wwwroot");
+EnvironmentHelper.RegionPath = Path.GetFullPath(builder.Configuration.GetValue<string>("FilePath:RegionPath"));
+EnvironmentHelper.DistrictPath = Path.GetFullPath(builder.Configuration.GetValue<string>("FilePath:DistrictPath"));
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

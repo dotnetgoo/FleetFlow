@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
 {
-    public class ProductInventoryAssignmentsController : RestfulSense
+    public class ProductInventorysController : RestfulSense
     {
-        private readonly IProductInventoryAssignmentService service;
+        private readonly IProductInventoryService service;
 
-        public ProductInventoryAssignmentsController(IProductInventoryAssignmentService service)
+        public ProductInventorysController(IProductInventoryService service)
         {
             this.service = service;
         }
@@ -48,7 +48,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPut("id")]
-        public async ValueTask<ActionResult<ProductInventoryAssignment>> PutAsync([FromRoute] long id, [FromBody] ProductInventoryAssignmentForUpdateDto dto)
+        public async ValueTask<ActionResult<ProductInventory>> PutAsync([FromRoute] long id, [FromBody] ProductInventoryAssignmentForUpdateDto dto)
            => Ok(new Response
            {
                Code = 200,

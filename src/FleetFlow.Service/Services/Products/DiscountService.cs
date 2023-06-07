@@ -28,7 +28,7 @@ public class DiscountService : IDiscountService
 
     public async Task<DiscountResultDto> AddAsync(DiscountCreationDto dto)
     {
-        if (dto.PercentageToCheapen < 1 || dto.PercentageToCheapen > 100)
+        if (dto.Amount < 1 || dto.Amount > 100)
             throw new FleetFlowException(401, "PercentageToCheapen must be between 1 and 100.");
 
         var product = await this.productRepository.SelectAsync(t => t.Id == dto.ProductId && !t.IsDeleted);

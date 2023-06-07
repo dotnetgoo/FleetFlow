@@ -1,33 +1,42 @@
 ﻿using AutoMapper;
+using FleetFlow.Shared.Helpers;
 using FleetFlow.DAL.IRepositories;
-using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities.Warehouses;
-using FleetFlow.Service.DTOs.Inventories;
 using FleetFlow.Service.Exceptions;
+using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.Extentions;
+using Microsoft.EntityFrameworkCore;
+using FleetFlow.Service.DTOs.Inventories;
+using FleetFlow.Domain.Entities.Addresses;
+using FleetFlow.Domain.Entities.Warehouses;
 using FleetFlow.Service.Interfaces.Addresses;
 using FleetFlow.Service.Interfaces.Warehouses;
-using FleetFlow.Shared.Helpers;
-using Microsoft.EntityFrameworkCore;
 
 namespace FleetFlow.Service.Services.Warehouses
 {
     public class InventoryService : IInventoryService
     {
-        private readonly IRepository<Inventory> repository;
         private readonly IMapper mapper;
         private readonly IAddressService addressService;
-        public InventoryService(IRepository<Inventory> repository, IMapper mapper, IAddressService addressService)
+        private readonly IRepository<Inventory> repository;
+        private readonly IRepository<Region> regionRepository;
+        private readonly IRepository<District> districtRepository;
+        public InventoryService(
+            IMapper mapper, 
+            IAddressService addressService, 
+            IRepository<Inventory> repository, 
+            IRepository<Region> regionRepository, 
+            IRepository<District> districtRepository)
         {
-            this.repository = repository;
             this.mapper = mapper;
+            this.repository = repository;
             this.addressService = addressService;
+            this.regionRepository = regionRepository;
+            this.districtRepository = districtRepository;
         }
 
         public async Task<InventoryForResultDto> AddAsync(InventoryForCreationDto dto)
         {
-            var existInventory = await this.repository.SelectAsync(i => i.Name.ToLower()
-            .Equals(dto.Name.ToLower()));
+            var existInventory = await this.repository.SelectAsync(i => i.Name.ToLower().Equals(dto.Name.ToLower()));
             if (existInventory is not null && existInventory.IsDeleted == false)
                 throw new FleetFlowException(409, "Inventory already exist");
 
@@ -37,6 +46,8 @@ namespace FleetFlow.Service.Services.Warehouses
             var mappedInventory = this.mapper.Map<Inventory>(dto);
             mappedInventory.CreatedAt = DateTime.UtcNow;
             mappedInventory.OwnerId = HttpContextHelper.UserId;
+            mappedInventory.Region = await this.regionRepository.SelectAsync(r => r.Id == dto.RegionId);
+            mappedInventory.District = await this.districtRepository.SelectAsync(d => d.Id == dto.DistrictId);
             var addedInventory = await this.repository.InsertAsync(mappedInventory);
             await this.repository.SaveAsync();
 
@@ -54,6 +65,9 @@ namespace FleetFlow.Service.Services.Warehouses
             var mappedInventory = this.mapper.Map(dto, existInventory);
             mappedInventory.UpdatedAt = DateTime.UtcNow;
             mappedInventory.UpdatedBy = HttpContextHelper.UserId;
+            mappedInventory.OwnerId = HttpContextHelper.UserId;
+            mappedInventory.Region = await this.regionRepository.SelectAsync(r => r.Id == dto.RegionId);
+            mappedInventory.District = await this.districtRepository.SelectAsync(d => d.Id == dto.DistrictId);
             await this.repository.SaveAsync();
             return this.mapper.Map<InventoryForResultDto>(mappedInventory);
 
@@ -73,19 +87,20 @@ namespace FleetFlow.Service.Services.Warehouses
             return true;
         }
 
-        public async Task<IEnumerable<InventoryForResultDto>> RetrieveAllInventory(PaginationParams @params)
+        public async Task<IEnumerable<InventoryForResultDto>> RetrieveAllInventory(PaginationParams @params = null)
         {
-            var inventories = await this.repository.SelectAll()
-            .Where(u => u.IsDeleted == false)
-            .ToPagedList(@params)
-            .ToListAsync();
+            var inventories = await this.repository.SelectAll(includes: new string[] {"Region", "District", "Address"})
+                .Where(u => u.IsDeleted == false)
+                .ToPagedList(@params)
+                .ToListAsync();
 
             return mapper.Map<IEnumerable<InventoryForResultDto>>(inventories);
         }
 
         public async Task<InventoryForResultDto> RetrieveById(long id)
         {
-            var existInventory = await this.repository.SelectAsync(i => i.Id == id);
+            var existInventory = await this.repository.SelectAsync(i => i.Id == id, 
+                includes: new string[] { "Region", "District", "Address" });
             if (existInventory is null || existInventory.IsDeleted == true)
                 throw new FleetFlowException(404, "Inventory not found");
 
@@ -94,7 +109,8 @@ namespace FleetFlow.Service.Services.Warehouses
 
         public async Task<InventoryForResultDto> RetrieveByName(string name)
         {
-            var existInventory = await this.repository.SelectAsync(i => i.Name.ToLower().Equals(name.ToLower()));
+            var existInventory = await this.repository.SelectAsync(i => i.Name.ToLower().Equals(name.ToLower()),
+                includes: new string[] { "Region", "District", "Address" });
             if (existInventory is null || existInventory.IsDeleted == true)
                 throw new FleetFlowException(404, "Inventory not found");
 

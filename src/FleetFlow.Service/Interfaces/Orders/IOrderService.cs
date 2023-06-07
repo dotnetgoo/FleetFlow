@@ -8,12 +8,12 @@ namespace FleetFlow.Service.Interfaces.Orders
     public interface IOrderService
     {
         ValueTask<OrderResultDto> AddAsync(OrderForCreationDto orderForCreationDto);
-        ValueTask<IEnumerable<OrderResultDto>> RetrieveAllAsync(PaginationParams @params, OrderStatus status = OrderStatus.Pending);
-        ValueTask<OrderResultDto> RetrieveAsync(long id);
         ValueTask<bool> RemoveAsync(long id);
+        ValueTask<OrderResultDto> RetrieveAsync(long id);
         ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByClientIdAsync(long clientId);
-        ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByPhoneAsync(PaginationParams @params, string phone, OrderStatus? status = null);
-        ValueTask<bool> ChangeStatusAsync(long orderId, OrderStatus status);
-
+        ValueTask<IEnumerable<OrderResultDto>> RetrieveAllAsync(
+            PaginationParams @params, OrderStatus? status = null);
+        ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByPhoneAsync(
+            PaginationParams @params, string phone, OrderStatus? status = null);
     }
 }

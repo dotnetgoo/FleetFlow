@@ -32,14 +32,5 @@ namespace FleetFlow.Api.Controllers
                 Message = "OK",
                 Data = await this.cartService.RemoveItemAsync(itemId)
             });
-
-        [HttpPut("items/{id}")]
-        public async ValueTask<IActionResult> PutItemAsync([FromRoute(Name = "Id")] long itemId, int amount)
-            => Ok(new Response
-            {
-                Code = 200,
-                Message = "OK",
-                Data = await this.cartService.UpdateItemAsync(itemId, amount)
-            });
     }
 }

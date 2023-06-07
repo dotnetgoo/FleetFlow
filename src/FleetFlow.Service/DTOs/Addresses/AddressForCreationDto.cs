@@ -2,11 +2,13 @@
 
 public class AddressForCreationDto
 {
+    public long RegionId { get; set; }
+    public long DistrictId { get; set; }
     public string Street { get; set; }
-    public string City { get; set; }
-    public string State { get; set; }
-    public string ZipCode { get; set; }
-    public string Country { get; set; }
+    public string Department { get; set; }
+    public string Home { get; set; }
+    public string DomofonCode { get; set; }
+    public string Floor { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
 }

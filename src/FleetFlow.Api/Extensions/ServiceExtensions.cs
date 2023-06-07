@@ -3,6 +3,8 @@ using FleetFlow.DAL.Repositories;
 using FleetFlow.Service.Interfaces.Addresses;
 using FleetFlow.Service.Interfaces.Attachments;
 using FleetFlow.Service.Interfaces.Authorizations;
+using FleetFlow.Service.Interfaces.Bonuses;
+using FleetFlow.Service.Interfaces.Commons;
 using FleetFlow.Service.Interfaces.Insights;
 using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Service.Interfaces.Products;
@@ -13,6 +15,8 @@ using FleetFlow.Service.Interfaces.Warehouses;
 using FleetFlow.Service.Services.Addresses;
 using FleetFlow.Service.Services.Attachments;
 using FleetFlow.Service.Services.Authorizations;
+using FleetFlow.Service.Services.Bonuses;
+using FleetFlow.Service.Services.Commons;
 using FleetFlow.Service.Services.Insights;
 using FleetFlow.Service.Services.Orders;
 using FleetFlow.Service.Services.Products;
@@ -64,6 +68,7 @@ namespace FleetFlow.Api.Extensions
             // Products
             services.AddScoped<IDiscountService, DiscountService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IProductCategoryService, ProductCategoryService>();
 
             // Questions
             services.AddScoped<IQuestionService, QuestionService>();
@@ -78,10 +83,17 @@ namespace FleetFlow.Api.Extensions
             services.AddScoped<IInventoryLogService, InventoryLogService>();
             services.AddScoped<IInventoryService, InventoryService>();
             services.AddScoped<ILocationService, LocationService>();
-            services.AddScoped<IProductInventoryAssignmentService, ProductInventoryAssignmentService>();
+            services.AddScoped<IProductInventoryService, ProductInventoryService>();
 
             //Staff
             services.AddScoped<IStaffService, StaffService>();
+
+            services.AddScoped<IRegionService, RegionService>();
+            services.AddScoped<IDistrictService, DistrictService>();
+
+            //Bonus
+            services.AddScoped<IBonusService, BonusService>();
+            services.AddScoped<IBonusSettingService, BonusSettingService>();
 
         }
 
