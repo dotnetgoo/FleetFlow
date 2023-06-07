@@ -27,6 +27,8 @@ using FleetFlow.Domain.Entities.UserQuestions;
 using FleetFlow.Service.DTOs.StaffPermissions;
 using FleetFlow.Domain.Entities.Authorizations;
 using FleetFlow.Domain.Entities.StaffPermissions;
+using FleetFlow.Service.DTOs.Discounts;
+using FleetFlow.Service.DTOs.Products;
 
 namespace FleetFlow.Service.Mappers
 {
@@ -36,6 +38,10 @@ namespace FleetFlow.Service.Mappers
         {
             CreateMap<Product, ProductForCreationDto>().ReverseMap();
             CreateMap<Product, ProductForResultDto>().ReverseMap();
+
+            CreateMap<ProductCategory, ProductCategoryCreationDto>().ReverseMap();
+            CreateMap<ProductCategory, ProductCategoryUpdateDto>().ReverseMap();
+            CreateMap<ProductCategory, ProductCategoryResultDto>().ReverseMap();
 
             CreateMap<Address, AddressForCreationDto>().ReverseMap();
             CreateMap<Address, AddressForResultDto>().ReverseMap();
