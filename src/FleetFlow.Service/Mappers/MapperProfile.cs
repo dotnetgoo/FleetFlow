@@ -5,6 +5,7 @@ using FleetFlow.Service.DTOs.Carts;
 using FleetFlow.Service.DTOs.Roles;
 using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Service.DTOs.Staffs;
+using FleetFlow.Service.DTOs.Bonuses;
 using FleetFlow.Service.DTOs.Address;
 using FleetFlow.Service.DTOs.Product;
 using FleetFlow.Service.DTOs.Payments;
@@ -13,6 +14,8 @@ using FleetFlow.Domain.Entities.Staffs;
 using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Service.DTOs.Questions;
 using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Service.DTOs.Discounts;
+using FleetFlow.Domain.Entities.Bonuses;
 using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Service.DTOs.Inventories;
 using FleetFlow.Service.DTOs.Permissions;
@@ -24,7 +27,6 @@ using FleetFlow.Domain.Entities.UserQuestions;
 using FleetFlow.Service.DTOs.StaffPermissions;
 using FleetFlow.Domain.Entities.Authorizations;
 using FleetFlow.Domain.Entities.StaffPermissions;
-using FleetFlow.Service.DTOs.Discounts;
 
 namespace FleetFlow.Service.Mappers
 {
@@ -37,6 +39,7 @@ namespace FleetFlow.Service.Mappers
 
             CreateMap<Address, AddressForCreationDto>().ReverseMap();
             CreateMap<Address, AddressForResultDto>().ReverseMap();
+            CreateMap<Address, AddressAddDto>().ReverseMap();
 
             CreateMap<Discount, DiscountResultDto>().ReverseMap();
             CreateMap<Discount, DiscountUpdateDto>().ReverseMap();
@@ -90,6 +93,11 @@ namespace FleetFlow.Service.Mappers
 
             CreateMap<Region, RegionResultDto>().ReverseMap();
             CreateMap<District, DistrictResultDto>().ReverseMap();
+
+            CreateMap<Bonus, BonusResultDto>().ReverseMap();    
+            CreateMap<BonusSetting, BonusSettingCreationDto>().ReverseMap();
+            CreateMap<BonusSetting, BonusSettingUpdateDto>().ReverseMap();
+            CreateMap<BonusSetting, BonusSettingResultDto>().ReverseMap();
         }
     }
 }

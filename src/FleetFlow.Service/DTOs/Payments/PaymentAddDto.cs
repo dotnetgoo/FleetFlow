@@ -1,9 +1,10 @@
-﻿using FleetFlow.Service.DTOs.Attachments;
+﻿using Microsoft.AspNetCore.Http;
 
 namespace FleetFlow.Service.DTOs.Payments;
 
-public class PaymentCreationDto
+public class PaymentAddDto
 {
+    public IFormFile File { get; set; }
     public decimal Amount { get; set; }
     public string Description { get; set; }
     public long UserId { get; set; }

@@ -13,4 +13,5 @@ public class CartItem : Auditable
     public Product Product { get; set; }
 
     public int Amount { get; set; }
+    public decimal AmountTotal { get; set; }
 }

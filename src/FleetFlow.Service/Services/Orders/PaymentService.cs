@@ -50,10 +50,13 @@ public class PaymentService : IPaymentService
             Amount = dto.Amount,
             Description = dto.Description,
             Status = PaymentStatus.Pending,
-            IsAdmin = dto.IsAdmin
+            IsAdmin = dto.IsAdmin,
+            Attachment = new Attachment
+            {
+                FileName = file.FileName,
+                FilePath = file.FilePath
+            }
         };
-        payment.Attachment.FilePath = file.FilePath;
-        payment.Attachment.FileName = file.FileName;
         payment.UserId = (long)HttpContextHelper.UserId;
         payment.Order = order;
 
