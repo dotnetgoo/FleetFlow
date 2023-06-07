@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using FleetFlow.Domain.Enums;
-using FleetFlow.Shared.Helpers;
 using FleetFlow.DAL.IRepositories;
+using FleetFlow.Domain.Congirations;
+using FleetFlow.Domain.Entities.Products;
+using FleetFlow.Domain.Enums;
+using FleetFlow.Service.DTOs.Discounts;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
-using Microsoft.EntityFrameworkCore;
-using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.DTOs.Discounts;
-using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Service.Interfaces.Products;
+using FleetFlow.Shared.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetFlow.Service.Services.Products;
 
