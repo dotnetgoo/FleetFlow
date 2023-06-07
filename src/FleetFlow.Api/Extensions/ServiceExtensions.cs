@@ -66,6 +66,7 @@ namespace FleetFlow.Api.Extensions
             // Products
             services.AddScoped<IDiscountService, DiscountService>();
             services.AddScoped<IProductService, ProductService>();
+            services.AddScoped<IProductCategoryService, ProductCategoryService>();
 
             // Questions
             services.AddScoped<IQuestionService, QuestionService>();
