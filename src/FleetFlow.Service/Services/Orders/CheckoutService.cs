@@ -16,6 +16,9 @@ using FleetFlow.Service.DTOs.Attachments;
 using FleetFlow.Domain.Entities.Addresses;
 using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Service.Interfaces.Addresses;
+using FleetFlow.Domain.Entities.Products;
+using FleetFlow.Service.DTOs.Product;
+using FleetFlow.Service.DTOs.Discounts;
 
 namespace FleetFlow.Service.Services.Orders;
 
@@ -29,6 +32,7 @@ public class CheckoutService : ICheckoutService
     private readonly IRepository<Bonus> bonusRepository;
     private readonly IRepository<Region> regionRepository;
     private readonly IRepository<Address> addressRepository;
+    private readonly IRepository<Discount> discountRepository;
     private readonly IRepository<District> districtRepository;
     private readonly IRepository<CartItem> cartItemRepository;
     private readonly IRepository<BonusSetting> bonusSettingRepository;
@@ -41,6 +45,7 @@ public class CheckoutService : ICheckoutService
         IRepository<Order> orderRepository,
         IRepository<Region> regionRepository,
         IRepository<Address> addressRepository,
+        IRepository<Discount> discountRepository,
         IRepository<District> districtRepository,
         IRepository<CartItem> cartItemRepository,
         IRepository<BonusSetting> bonusSettingRepository)
@@ -54,6 +59,7 @@ public class CheckoutService : ICheckoutService
         this.regionRepository = regionRepository;
         this.addressRepository = addressRepository;
         this.districtRepository = districtRepository;
+        this.discountRepository = discountRepository;
         this.cartItemRepository = cartItemRepository;
         this.bonusSettingRepository = bonusSettingRepository;
     }
@@ -83,16 +89,38 @@ public class CheckoutService : ICheckoutService
         return mapper.Map<AddressForResultDto>(order.Address);
     }
 
-    public async ValueTask<OrderResultDto> SaveOrderAsync(OrderForCreationDto orderDto, string promoCode = null)
+    public async ValueTask<(OrderResultDto, List<DiscountResultDto>)> SaveOrderAsync(OrderForCreationDto orderDto, string promoCode = null)
     {
         var createdOrder = await this.orderService.AddAsync(orderDto);
         if (createdOrder.IsSaved)
             throw new FleetFlowException(400, "This order is already saved");
 
-        await CheckBonusAsync(createdOrder, promoCode);
+        await CheckBonusAsync(createdOrder, promoCode); 
+        var discounts = CheckDiscountAsync(createdOrder);
         createdOrder.IsSaved = true;
         await this.orderRepository.SaveAsync();
-        return this.mapper.Map<OrderResultDto>(createdOrder);
+
+        var result = this.mapper.Map<OrderResultDto>(createdOrder);
+        return (result, discounts);
+    }
+
+    private List<DiscountResultDto> CheckDiscountAsync(OrderResultDto createdOrder)
+    {
+        // ordered produts
+        var products = createdOrder.OrderItems.Select(p => p.Product);
+
+        // products in discount
+        var productIds = products.Select(p => p.Id).ToList();
+        var discounts = this.discountRepository
+            .SelectAll(d => d.StartedAt < DateTime.UtcNow &&
+                d.FinishedAt > DateTime.UtcNow &&
+                d.State == DiscountState.Active &&
+                !d.IsDeleted &&
+                productIds.Contains(d.ProductId),
+                includes: new string[] { "Product" })
+            .ToList();
+
+        return this.mapper.Map<List<DiscountResultDto>>(discounts);
     }
 
     private async Task<BonusResultDto> CheckBonusAsync(OrderResultDto createdOrder, string promoCode = null)
@@ -107,11 +135,9 @@ public class CheckoutService : ICheckoutService
             .SelectAll()
             .OrderBy(b => b.Id)
             .LastOrDefaultAsync(b => b.UserId == HttpContextHelper.UserId);
-
         var bonus = new Bonus();
 
         var bonusSettings = await this.bonusSettingRepository.SelectAll().ToListAsync();
-
 
         BonusSetting bonusSettingWithPromoCode = bonusSettings
             .FirstOrDefault(b => b.PromoCode.Equals(promoCode) &&
@@ -200,9 +226,9 @@ public class CheckoutService : ICheckoutService
                         bonus.Type = BonusType.Gift;
                         break;
                 }
+                bonus = await this.bonusRepository.InsertAsync(bonus);
+                await this.bonusRepository.SaveAsync();
             }
-            bonus = await this.bonusRepository.InsertAsync(bonus);
-            await this.bonusRepository.SaveAsync();
         }
 
         return this.mapper.Map<BonusResultDto>(bonus);

@@ -39,12 +39,12 @@ public class CheckoutController : RestfulSense
 
 
     [HttpPost("save-order")]
-    public async ValueTask<IActionResult> SaveOrderAsync(OrderForCreationDto dto)
+    public async ValueTask<IActionResult> SaveOrderAsync(OrderForCreationDto dto, string promoCode = null)
         => Ok(new Response
         {
             Code = 200,
             Message = "OK",
-            Data = await this.checkoutService.SaveOrderAsync(dto)
+            Data = await this.checkoutService.SaveOrderAsync(dto, promoCode)
         });
 
 

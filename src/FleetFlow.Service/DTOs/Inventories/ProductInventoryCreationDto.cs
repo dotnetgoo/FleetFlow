@@ -2,7 +2,7 @@
 
 namespace FleetFlow.Service.DTOs.Inventories
 {
-    public class ProductInventoryAssignmentForCreationDto
+    public class ProductInventoryCreationDto
     {
         [Required(ErrorMessage = "Product id is required")]
         public long ProductId { get; set; }
