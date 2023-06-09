@@ -9,6 +9,4 @@ public class ProductCategoryResultDto
 
     [MinLength(3), MaxLength(200)]
     public string Name { get; set; }
-
-    public ICollection<ProductForResultDto> Products { get; set; }
 }

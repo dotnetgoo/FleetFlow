@@ -49,6 +49,7 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<StaffPermission> StaffPermissions { get; set; }
         public DbSet<Bonus> Bonuses { get; set; }
         public DbSet<BonusSetting> BonusSettings { get; set; }
+        public DbSet<Question> Questions { get; set; }
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -111,7 +112,7 @@ namespace FleetFlow.DAL.DbContexts
 
             modelBuilder.Entity<Product>()
                 .HasOne(p => p.Category)
-                .WithMany(c => c.Products)
+                .WithMany()
                 .HasForeignKey(p => p.CategoryId)
                 .OnDelete(DeleteBehavior.NoAction);
 
