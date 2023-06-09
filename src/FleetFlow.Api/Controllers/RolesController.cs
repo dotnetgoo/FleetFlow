@@ -60,4 +60,12 @@ public class RolesController : RestfulSense
           Message = "OK",
           Data = await this.roleService.RetrieveAllAsync(@params)
       });
+    [HttpPut("assign-role")]
+    public async Task<IActionResult> AssignRoleForUser(long userId, long roleId)
+        => Ok(new Response
+        {
+            Code = 200,
+            Message = "Ok",
+            Data = await this.roleService.AssignRoleForUserAsync(userId, roleId)
+        });
 }

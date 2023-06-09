@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using FleetFlow.Service.DTOs.User;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.Interfaces.Users;
+using FleetFlow.Api.Attributes;
 
 namespace FleetFlow.Api.Controllers;
 
@@ -20,6 +21,7 @@ public class UsersController : RestfulSense
     /// <param name="params"></param>
     /// <returns></returns>
     [HttpGet]
+    [CustomAuthorize]
     public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
         => Ok(new Response
         {

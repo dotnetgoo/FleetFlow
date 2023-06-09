@@ -6,11 +6,12 @@ namespace FleetFlow.Service.Interfaces.Authorizations
 {
     public interface IRoleService
     {
-        Task<RoleResultDto> AddAsync(RoleCreationDto dto);
-        Task<bool> ModifyAsync(RoleUpdateDto dto);
         Task<bool> RemoveAsync(long id);
-        Task<IEnumerable<RoleResultDto>> RetrieveAllAsync(PaginationParams @params);
+        Task<bool> ModifyAsync(RoleUpdateDto dto);
         Task<Role> RetrieveByIdForAuthAsync(long id);
         Task<RoleResultDto> RetrieveByIdAsync(long id);
+        Task<RoleResultDto> AddAsync(RoleCreationDto dto);
+        Task<bool> AssignRoleForUserAsync(long userId, long roleId);
+        Task<IEnumerable<RoleResultDto>> RetrieveAllAsync(PaginationParams @params);
     }
 }

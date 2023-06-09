@@ -1,25 +1,30 @@
 ﻿using AutoMapper;
-using FleetFlow.DAL.IRepositories;
-using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities.Authorizations;
-using FleetFlow.Service.DTOs.Roles;
-using FleetFlow.Service.Exceptions;
-using FleetFlow.Service.Extentions;
-using FleetFlow.Service.Interfaces.Authorizations;
 using FleetFlow.Shared.Helpers;
+using FleetFlow.DAL.IRepositories;
+using FleetFlow.Service.Exceptions;
+using FleetFlow.Service.DTOs.Roles;
+using FleetFlow.Service.Extentions;
+using FleetFlow.Domain.Congirations;
 using Microsoft.EntityFrameworkCore;
+using FleetFlow.Domain.Entities.Users;
+using FleetFlow.Domain.Entities.Authorizations;
+using FleetFlow.Service.Interfaces.Authorizations;
 
 namespace FleetFlow.Service.Services.Authorizations
 {
     public class RoleService : IRoleService
     {
-        private readonly IRepository<Role> roleRepository;
         private readonly IMapper mapper;
+        private readonly IRepository<User> userRepository;
+        private readonly IRepository<Role> roleRepository;
 
-        public RoleService(IRepository<Role> roleRepository, IMapper mapper)
+        public RoleService(IMapper mapper,
+            IRepository<User> userRepository,
+			IRepository<Role> roleRepository)
         {
-            this.roleRepository = roleRepository;
             this.mapper = mapper;
+            this.userRepository = userRepository;
+            this.roleRepository = roleRepository;
         }
 
         public async Task<RoleResultDto> AddAsync(RoleCreationDto dto)
@@ -80,5 +85,17 @@ namespace FleetFlow.Service.Services.Authorizations
             var role = await this.roleRepository.SelectAsync(u => u.Id == id && u.IsDeleted == false);
             return this.mapper.Map<RoleResultDto>(role);
         }
-    }
+
+		public async Task<bool> AssignRoleForUserAsync(long userId, long roleId)
+		{
+            var user = await this.userRepository.SelectAsync(u => u.Id == userId);
+            var role = await this.roleRepository.SelectAsync(r => r.Id == roleId);
+            if (user is null || role is null)
+                throw new FleetFlowException(404, "User or Role is not found");
+            user.RoleId = roleId;
+            await this.userRepository.SaveAsync();
+
+            return true;
+		}
+	}
 }
