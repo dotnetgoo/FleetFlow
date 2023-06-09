@@ -1,18 +1,18 @@
-﻿using FleetFlow.Domain.Enums;
+﻿using Newtonsoft.Json;
+using FleetFlow.Domain.Enums;
 using FleetFlow.Shared.Helpers;
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Service.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using FleetFlow.Service.DTOs.Orders;
+using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Domain.Entities.Google;
+using FleetFlow.Service.DTOs.Inventories;
 using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Service.DTOs.InventoryLogs;
 using FleetFlow.Service.Interfaces.Addresses;
 using FleetFlow.Service.Interfaces.Warehouses;
-using FleetFlow.Domain.Entities.Google;
-using FleetFlow.Service.DTOs.Inventories;
-using Newtonsoft.Json;
-using FleetFlow.Domain.Congirations;
 
 namespace FleetFlow.Service.Services.Orders;
 
@@ -21,30 +21,30 @@ public class OrderActionService : IOrderActionService
     private readonly ICartService cartService;
     private readonly IOrderService orderService;
     private readonly IAddressService addressService;
+    private readonly IInventoryService inventoryService;
     private readonly IInventoryLogService inventoryLogService;
     private readonly IRepository<OrderAction> actionRepository;
     private readonly IRepository<OrderItem> orderItemRepository;
     private readonly IProductInventoryService productInventoryService;
-    private readonly IInventoryService inventoryService;
     public OrderActionService(
         IOrderService orderService,
         IAddressService addressService,
+        IInventoryService inventoryService,
         IInventoryLogService inventoryLogService,
         IRepository<OrderAction> actionRepository,
         IRepository<OrderItem> orderItemRepository,
-        IProductInventoryService productInventoryAssignmentService,
-        IInventoryService inventoryService)
+        IProductInventoryService productInventoryAssignmentService)
     {
         this.orderService = orderService;
         this.addressService = addressService;
         this.actionRepository = actionRepository;
+        this.inventoryService = inventoryService;
         this.inventoryLogService = inventoryLogService;
         this.orderItemRepository = orderItemRepository;
         this.productInventoryService = productInventoryAssignmentService;
-        this.inventoryService = inventoryService;
     }
 
-    public async ValueTask<OrderResultDto> CancelledAsync(int orderId)
+    public async ValueTask<OrderResultDto> CancelledAsync(long orderId)
     {
         var order = await this.orderService.RetrieveAsync(orderId);
         if (order is null)
@@ -61,8 +61,8 @@ public class OrderActionService : IOrderActionService
         return order;
     }
 
-    public async ValueTask<OrderResultDto> FinishDeliveryAsync(int orderId)
-    {
+    public async ValueTask<OrderResultDto> FinishDeliveryAsync(long orderId)
+        {
         var order = await this.orderService.RetrieveAsync(orderId);
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
@@ -76,9 +76,9 @@ public class OrderActionService : IOrderActionService
         return order;
     }
 
-    public async ValueTask<OrderResultDto> StartPendingAsync(OrderActionCreationDto action)
+    public async ValueTask<OrderResultDto> StartPendingAsync(long orderId)
     {
-        var order = await this.orderService.RetrieveAsync(action.OrderId);
+        var order = await this.orderService.RetrieveAsync(orderId);
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
 
@@ -90,9 +90,9 @@ public class OrderActionService : IOrderActionService
         return order;
     }
 
-    public async ValueTask<OrderResultDto> StartPreparingAsync(OrderActionCreationDto action)
+    public async ValueTask<OrderResultDto> StartPreparingAsync(long orderId)
     {
-        var order = await this.orderService.RetrieveAsync(action.OrderId);
+        var order = await this.orderService.RetrieveAsync(orderId);
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
 
@@ -104,9 +104,9 @@ public class OrderActionService : IOrderActionService
         return order;
     }
 
-    public async ValueTask<OrderResultDto> StartShippingAsync(OrderActionCreationDto action)
+    public async ValueTask<OrderResultDto> StartShippingAsync(long orderId)
     {
-        var order = await this.orderService.RetrieveAsync(action.OrderId);
+        var order = await this.orderService.RetrieveAsync(orderId);
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
 
@@ -192,7 +192,6 @@ public class OrderActionService : IOrderActionService
                 }
             }
         }
-
         return double.PositiveInfinity;
     }
 }

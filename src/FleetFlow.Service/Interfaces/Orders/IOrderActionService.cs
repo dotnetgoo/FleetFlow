@@ -5,9 +5,9 @@ namespace FleetFlow.Service.Interfaces.Orders;
 
 public interface IOrderActionService
 {
-    ValueTask<OrderResultDto> StartPendingAsync(OrderActionCreationDto action);
-    ValueTask<OrderResultDto> StartPreparingAsync(OrderActionCreationDto action);
-    ValueTask<OrderResultDto> StartShippingAsync(OrderActionCreationDto action);
-    ValueTask<OrderResultDto> FinishDeliveryAsync(int orderId);
-    ValueTask<OrderResultDto> CancelledAsync(int orderId);
+    ValueTask<OrderResultDto> StartPendingAsync(long orderId);
+    ValueTask<OrderResultDto> StartPreparingAsync(long orderId);
+    ValueTask<OrderResultDto> StartShippingAsync(long orderId);
+    ValueTask<OrderResultDto> FinishDeliveryAsync(long orderId);
+    ValueTask<OrderResultDto> CancelledAsync(long orderId);
 }
