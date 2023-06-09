@@ -22,6 +22,7 @@ public class OrderService : IOrderService
     private readonly IPaymentService paymentService;
     private readonly IAddressService addressService;
     private readonly IRepository<Cart> cartRepository;
+    private readonly IRepository<CartItem> cartItemRepository;
     private readonly IRepository<User> userRepository;
     private readonly IRepository<Order> orderRepository;
     private readonly IRepository<Region> regionRepository;
@@ -34,7 +35,8 @@ public class OrderService : IOrderService
         IRepository<User> userRepository,
         IRepository<Order> orderRepository,
         IRepository<Region> regionRepository,
-        IRepository<District> districtRepository)
+        IRepository<District> districtRepository,
+        IRepository<CartItem> cartItemRepository)
     {
         this.mapper = mapper;
         this.addressService = addressService;
@@ -44,6 +46,7 @@ public class OrderService : IOrderService
         this.orderRepository = orderRepository;
         this.regionRepository = regionRepository;
         this.districtRepository = districtRepository;
+        this.cartItemRepository = cartItemRepository;
     }
 
     public async ValueTask<OrderResultDto> AddAsync(OrderForCreationDto orderForCreationDto)
@@ -59,9 +62,13 @@ public class OrderService : IOrderService
         if (district is null)
             throw new FleetFlowException(404, "District is not found");
 
-        Cart cart = await cartRepository.SelectAsync(c => c.UserId == HttpContextHelper.UserId, new string[] { "Items" });
+        Cart cart = await cartRepository.SelectAsync(c => c.UserId == HttpContextHelper.UserId, new string[] { "Items.Product" });
         if (cart == null)
             throw new FleetFlowException(404, "Cart not found");
+
+        var cartItems = await this.cartItemRepository
+            .SelectAll(t => t.CartId == cart.Id, includes: new string[] {"Product"})
+            .ToListAsync();
 
         // create new order
         var order = new Order()
@@ -70,7 +77,7 @@ public class OrderService : IOrderService
             OrderItems = new List<OrderItem>(),
             AddressId = orderForCreationDto.AddressId,
             RegionId = orderForCreationDto.RegionId,
-            DistrictId = orderForCreationDto.DistrictId
+            DistrictId = orderForCreationDto.DistrictId,
         };
 
         // create order items using cart
@@ -78,8 +85,11 @@ public class OrderService : IOrderService
         {
             order.OrderItems.Add(new OrderItem
             {
-                Amount = cartItem.Amount,
+                Id = cartItem.Id,
+                AmountTotal = cartItem.AmountTotal,
+                CreatedAt = cartItem.CreatedAt,
                 ProductId = cartItem.ProductId,
+                Amount = cartItem.Amount,
             });
         }
         var createdOrder = await orderRepository.InsertAsync(order);

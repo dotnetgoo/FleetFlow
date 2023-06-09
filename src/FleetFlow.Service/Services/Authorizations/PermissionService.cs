@@ -1,25 +1,23 @@
 ﻿using AutoMapper;
 using FleetFlow.DAL.IRepositories;
-using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities.Authorizations;
-using FleetFlow.Service.DTOs.Permissions;
-using FleetFlow.Service.DTOs.User;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
-using FleetFlow.Service.Interfaces.Authorizations;
 using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
+using FleetFlow.Domain.Congirations;
+using FleetFlow.Service.DTOs.Permissions;
+using FleetFlow.Domain.Entities.Authorizations;
+using FleetFlow.Service.Interfaces.Authorizations;
 
 namespace FleetFlow.Service.Services.Authorizations
 {
 	public class PermissionService : IPermissionService
 	{
-		private readonly IRepository<Permission> permissionRepository;
 		private readonly IMapper mapper;
-		public PermissionService(IRepository<Permission> permissionRepository, IMapper mapper)
+		private readonly IRepository<Permission> permissionRepository;
+		public PermissionService(IMapper mapper, IRepository<Permission> permissionRepository)
 		{
-			this.permissionRepository = permissionRepository;
 			this.mapper = mapper;
+			this.permissionRepository = permissionRepository;
 		}
 
 		public async Task<PermissionForResultDto> CreateAsync(PermissionForCreationDto dto)
@@ -39,9 +37,9 @@ namespace FleetFlow.Service.Services.Authorizations
 		public async Task<List<PermissionForResultDto>> RetrieveAllAsync(PaginationParams @params)
 		{
 			var permissions = await permissionRepository.SelectAll()
-		  .Where(p => p.IsDeleted == false)
-		  .ToPagedList(@params)
-		  .ToListAsync();
+				.Where(p => p.IsDeleted == false)
+				.ToPagedList(@params)
+				.ToListAsync();
 
 			return mapper.Map<List<PermissionForResultDto>>(permissions);
 		}

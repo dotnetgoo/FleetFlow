@@ -6,13 +6,13 @@ namespace FleetFlow.GraphQL.Mutations
 {
     public partial class Mutation
     {
-        public async ValueTask<ProductInventoryAssignmentForResultDto> CreateProductInventoryAsync([Service]
-        IProductInventoryService service, ProductInventoryAssignmentForCreationDto dto)
+        public async ValueTask<ProductInventoryResultDto> CreateProductInventoryAsync([Service]
+        IProductInventoryService service, ProductInventoryCreationDto dto)
         {
             return await service.AddAsync(dto);
         }
-        public async ValueTask<ProductInventoryAssignmentForResultDto> UpdateProductInventoryAsync([Service]
-        IProductInventoryService service,long id,ProductInventoryAssignmentForUpdateDto dto)
+        public async ValueTask<ProductInventoryResultDto> UpdateProductInventoryAsync([Service]
+        IProductInventoryService service,long id,ProductInventoryUpdateDto dto)
         {
             return await service.ModifyAsync(id,dto);
         }
@@ -21,12 +21,12 @@ namespace FleetFlow.GraphQL.Mutations
         {
             return await service.RemoveAsync(id);
         }
-        public async ValueTask<ProductInventoryAssignmentForResultDto> CreateQuantityAsync([Service] IProductInventoryService service,
+        public async ValueTask<ProductInventoryResultDto> CreateQuantityAsync([Service] IProductInventoryService service,
             long productId, long inventoryId, int amount)
         {
             return await service.AddQuantity(productId, inventoryId, amount);
         }
-        public async ValueTask<ProductInventoryAssignmentForResultDto> DeleteQuantityAsync([Service] IProductInventoryService service,
+        public async ValueTask<ProductInventoryResultDto> DeleteQuantityAsync([Service] IProductInventoryService service,
            long productId, long inventoryId, int amount)
         {
             return await service.RemoveQuantity(productId, inventoryId, amount);
