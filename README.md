@@ -16,32 +16,29 @@ To get started with FleetFlow, follow these steps:
 3. Build the project.
 4. Run the application.
 
-## Features
-
-FleetFlow includes the following features:
-
-- User registration and authentication for customers and drivers.
-- Delivery request system for creating and managing delivery requests.
-- Dispatch system for assigning drivers to delivery requests.
-- Real-time tracking system for monitoring the status of delivery requests.
-- Payment integration with popular payment gateways.
-- Customer and driver mobile applications for managing deliveries on-the-go.
-- Admin panel for managing customers, drivers, and deliveries.
-
-## Architecture
-
-The project is built on the basis of N-Tier architecture
-
-
-## Contributing
-
-Contributions to FleetFlow are welcome and encouraged! To contribute, follow these steps:
-
-1. Fork the repository.
-2. Create a new branch.
-3. Make your changes.
-4. Submit a pull request.
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
+# Documentation
+## 1. Introduction
+### ㅤㅤ• [About](github.com)
+###  ㅤㅤ• [Used technologies](github.com)
+###  ㅤㅤ• [System architecture](github.com)
+###  ㅤㅤ• [Solution references](github.com)
+### ㅤㅤ• [Configure environment](github.com)
+## 2. Technical part
+###  ㅤㅤ• [Authentication and authorization (client, admin)](github.com)
+###  ㅤㅤ• [Manageable role with permissions (super admin)](github.com)
+###  ㅤㅤ• [Place order (client)](github.com)
+###  ㅤㅤ• [Actions (client, admin)](github.com)
+### ㅤㅤ• [Feedback (client, admin)](github.com)
+###  ㅤㅤ• [Discount (client, admin)](github.com)
+### ㅤㅤ• [Inventory management (admin)](github.com)
+###  ㅤㅤ• [Staff management (admin)](github.com)
+### ㅤㅤ• [Insights (admin)](github.com)
+### ㅤㅤ• [Support](github.com)
+## 3. Production
+### ㅤㅤ• [Deploy application and telegram bot to Linux and nginx](github.com)
+###  ㅤㅤ• [Deploy application and telegram bot to Windows Server and IIS](github.com)
+### ㅤㅤ• [Deploy and configure PostgreSQL and SQL Server database](github.com)
+### ㅤㅤ• [Domain integration](github.com)
+### ㅤㅤ• [Configure SSL](github.com)
+## 4. Developers
+## 5. Summary
