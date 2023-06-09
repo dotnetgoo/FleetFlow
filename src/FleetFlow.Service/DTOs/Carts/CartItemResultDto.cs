@@ -10,4 +10,5 @@ public class CartItemResultDto
     public ProductForResultDto Product { get; set; }
     public int Amount { get; set; }
     public decimal AmountTotal { get; set; }
+    public bool IsOrdered { get; set; }
 }

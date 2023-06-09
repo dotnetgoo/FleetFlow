@@ -1,4 +1,5 @@
 ﻿using FleetFlow.Api.Models;
+using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.Carts;
 using FleetFlow.Service.Interfaces.Orders;
 using Microsoft.AspNetCore.Authorization;
@@ -31,6 +32,15 @@ namespace FleetFlow.Api.Controllers
                 Code = 200,
                 Message = "OK",
                 Data = await this.cartService.RemoveItemAsync(itemId)
+            });
+
+        [HttpGet("items")]
+        public async ValueTask<IActionResult> GetAll([FromQuery] PaginationParams @params)
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await this.cartService.RetrieveAllAsync(@params)
             });
     }
 }

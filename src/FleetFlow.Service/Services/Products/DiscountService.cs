@@ -42,14 +42,16 @@ public class DiscountService : IDiscountService
             throw new FleetFlowException(403, "Discount already exist in this product.");
 
         var mappedDiscount = this.mapper.Map<Discount>(dto);
+        mappedDiscount.PriceInDiscount = product.Price - ((product.Price / 100) * dto.Amount);
         var insertedDiscount = await this.discountRepository.InsertAsync(mappedDiscount);
         await this.discountRepository.SaveAsync();
+        
         return this.mapper.Map<DiscountResultDto>(insertedDiscount);
     }
 
     public async Task<DiscountResultDto> ModifyAsync(long id, DiscountUpdateDto dto)
     {
-        if (dto.PercentageToCheapen < 1 || dto.PercentageToCheapen > 100)
+        if (dto.Amount < 1 || dto.Amount > 100)
             throw new FleetFlowException(401, "PercentageToCheapen must be between 1 and 100.");
 
         var product = await this.productRepository.SelectAsync(t => t.Id == dto.ProductId && !t.IsDeleted);
@@ -61,6 +63,7 @@ public class DiscountService : IDiscountService
             throw new FleetFlowException(404, "Discount not found");
 
         var modifiedDiscount = this.mapper.Map(dto, discount);
+        modifiedDiscount.PriceInDiscount = product.Price - ((product.Price / 100) * dto.Amount);
         modifiedDiscount.UpdatedAt = DateTime.UtcNow;
         modifiedDiscount.UpdatedBy = HttpContextHelper.UserId;
         await this.productRepository.SaveAsync();

@@ -89,19 +89,21 @@ public class CheckoutService : ICheckoutService
         return mapper.Map<AddressForResultDto>(order.Address);
     }
 
-    public async ValueTask<(OrderResultDto, List<DiscountResultDto>)> SaveOrderAsync(OrderForCreationDto orderDto, string promoCode = null)
+    public async ValueTask<OrderResultDto> SaveOrderAsync(OrderForCreationDto orderDto, string promoCode = null)
     {
         var createdOrder = await this.orderService.AddAsync(orderDto);
         if (createdOrder.IsSaved)
             throw new FleetFlowException(400, "This order is already saved");
 
+        var order = await this.orderRepository.SelectAsync(order => order.Id == createdOrder.Id);
         await CheckBonusAsync(createdOrder, promoCode); 
         var discounts = CheckDiscountAsync(createdOrder);
-        createdOrder.IsSaved = true;
+        order.IsSaved = true;
         await this.orderRepository.SaveAsync();
 
-        var result = this.mapper.Map<OrderResultDto>(createdOrder);
-        return (result, discounts);
+        var result = this.mapper.Map<OrderResultDto>(order);
+        result.Discounts = discounts;
+        return result;
     }
 
     private List<DiscountResultDto> CheckDiscountAsync(OrderResultDto createdOrder)
@@ -256,5 +258,33 @@ public class CheckoutService : ICheckoutService
             .LastOrDefaultAsync();
 
         return await addressService.GetByIdAsync(order?.AddressId ?? 0);
+    }
+
+    public async ValueTask<OrderResultDto> PayWithBonusAsync(decimal amount)
+    {
+        var order = await this.orderRepository
+            .SelectAll(includes: new string[] { "Address", "Region", "District", "User" })
+            .OrderBy(order => order.Id)
+            .LastOrDefaultAsync(order => !order.IsDeleted &&
+                order.UserId == HttpContextHelper.UserId &&
+                order.IsSaved);
+
+        var bonus = await this.bonusRepository
+            .SelectAll()
+            .OrderBy(o => o.Id)
+            .LastOrDefaultAsync(b => !b.IsDeleted && b.UserId == HttpContextHelper.UserId);
+
+        if (bonus.Amount < amount) 
+            throw new FleetFlowException(400, "Not enough money");
+        if (order.TotalAmount < amount)
+            throw new FleetFlowException(400, "Amount to spend is more than payment of order");
+
+        bonus.Amount -= amount;
+        order.TotalAmount -= amount;
+
+        await orderRepository.SaveAsync();
+        await bonusRepository.SaveAsync();
+    
+        return this.mapper.Map<OrderResultDto>(order);
     }
 }

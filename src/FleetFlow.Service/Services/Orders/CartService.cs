@@ -7,6 +7,8 @@ using FleetFlow.Service.Exceptions;
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Service.Interfaces.Orders;
+using FleetFlow.Service.Extentions;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetFlow.Service.Services.Orders;
 
@@ -43,8 +45,8 @@ public class CartService : ICartService
 
         var cartItem = new CartItem
         {
-            Amount = dto.Amount,
             CartId = cart.Id,
+            Amount = dto.Amount,
             ProductId = dto.ProductId,
             AmountTotal = product.Price * dto.Amount,
         };
@@ -69,9 +71,16 @@ public class CartService : ICartService
         throw new NotImplementedException();
     }
 
-    public ValueTask<IEnumerable<CartItemResultDto>> RetrieveAllAsync(PaginationParams @params, long? clientId)
+    public async ValueTask<IEnumerable<CartItemResultDto>> RetrieveAllAsync(PaginationParams @params)
     {
-        throw new NotImplementedException();
+        var itemsQuery = this.cartItemRepository
+            .SelectAll(item => !item.IsDeleted && !item.IsOrdered && item.Cart.UserId == HttpContextHelper.UserId,
+            new string[] { "Product" });
+
+
+        var items = await itemsQuery.ToPagedList(@params).ToListAsync();
+
+        return this.mapper.Map<IEnumerable<CartItemResultDto>>(items);
     }
 
     public ValueTask<CartItemResultDto> RetrieveByItemIdAsync(long id)
