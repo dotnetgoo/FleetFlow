@@ -17,7 +17,7 @@ public class CustomAuthorizeAttribute : TypeFilterAttribute
 
     public  class CustomAuthorizationFilter : IAuthorizationFilter
     {
-        private readonly IRolePermissionService rolePermissionService;
+        private readonly IRolePermissionService rolePermissionService;  
 
         public CustomAuthorizationFilter(IRolePermissionService rolePermissionService)
         {

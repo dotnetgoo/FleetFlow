@@ -1,25 +1,24 @@
 ﻿using AutoMapper;
 using FleetFlow.DAL.IRepositories;
-using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities.Authorizations;
-using FleetFlow.Service.DTOs.RolePermissions;
-using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
-using FleetFlow.Service.Interfaces.Authorizations;
-using Microsoft.AspNetCore.Http;
+using FleetFlow.Service.Exceptions;
+using FleetFlow.Domain.Congirations;
 using Microsoft.EntityFrameworkCore;
+using FleetFlow.Service.DTOs.RolePermissions;
+using FleetFlow.Domain.Entities.Authorizations;
+using FleetFlow.Service.Interfaces.Authorizations;
 
 
 namespace FleetFlow.Service.Services.Authorizations
 {
 	public class RolePermissionService : IRolePermissionService
 	{
-		private readonly IRepository<RolePermission> rolePermissionRepository;
 		private readonly IMapper mapper;
-		public RolePermissionService(IRepository<RolePermission> rolePermissionRepository, IMapper mapper)
+		private readonly IRepository<RolePermission> rolePermissionRepository;
+		public RolePermissionService(IMapper mapper, IRepository<RolePermission> rolePermissionRepository)
 		{
-			this.rolePermissionRepository = rolePermissionRepository;
 			this.mapper = mapper;
+			this.rolePermissionRepository = rolePermissionRepository;
 		}
 
 		public async Task<RolePermissionForResultDto> CreateAsync(RolePermissionForCreateDto permission)
@@ -48,9 +47,9 @@ namespace FleetFlow.Service.Services.Authorizations
 		public async Task<List<RolePermissionForResultDto>> RetrieveAllAsync(PaginationParams @params)
 		{
 			var permissions = await rolePermissionRepository.SelectAll(p => p.IsDeleted == false && p.Permisson.IsDeleted == false && p.Role.IsDeleted == false, new string[] { "Permisson","Role" })
-		  .Where(p => p.IsDeleted == false)
-		  .ToPagedList(@params)
-		  .ToListAsync();
+					.Where(p => p.IsDeleted == false)
+					.ToPagedList(@params)
+					.ToListAsync();
 
 			return this.mapper.Map<List<RolePermissionForResultDto>>(permissions);
 		}
