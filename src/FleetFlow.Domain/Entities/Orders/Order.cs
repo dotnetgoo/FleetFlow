@@ -23,6 +23,8 @@ public class Order : Auditable
 
     public long? PaymentId { get; set; }
     public Payment Payment { get; set; }
+    public decimal TotalAmount { get; set; }
+
     public bool IsSaved { get; set; }
     public OrderStatus Status { get; set; }
     public PaymentStatus PaymentStatus { get; set; }

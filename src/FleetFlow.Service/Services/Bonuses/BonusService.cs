@@ -7,6 +7,7 @@ using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.Bonuses;
 using FleetFlow.Domain.Entities.Bonuses;
 using FleetFlow.Service.Interfaces.Bonuses;
+using FleetFlow.Shared.Helpers;
 
 namespace FleetFlow.Service.Services.Bonuses;
 
@@ -35,5 +36,14 @@ public class BonusService : IBonusService
             throw new FleetFlowException(404, "Bonus is not found");
 
         return this.mapper.Map<BonusResultDto>(bonus);
+    }
+
+    public async ValueTask<decimal> RetrieveUserBonus()
+    {
+        var bonus = await this.bonusRepository
+            .SelectAll()
+            .OrderBy(o => o.Id)
+            .LastOrDefaultAsync(b => !b.IsDeleted && b.UserId == HttpContextHelper.UserId);
+        return (decimal) bonus.Amount;
     }
 }

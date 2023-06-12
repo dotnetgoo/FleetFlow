@@ -67,9 +67,11 @@ public class OrderService : IOrderService
             throw new FleetFlowException(404, "Cart not found");
 
         var cartItems = await this.cartItemRepository
-            .SelectAll(t => t.CartId == cart.Id, includes: new string[] {"Product"})
+            .SelectAll(t => !t.IsDeleted && t.CartId == cart.Id && !t.IsOrdered, includes: new string[] { "Product" })
             .ToListAsync();
 
+        if (!cartItems.Any())
+            throw new FleetFlowException(404, "CartItems not found");
         // create new order
         var order = new Order()
         {
@@ -81,7 +83,7 @@ public class OrderService : IOrderService
         };
 
         // create order items using cart
-        foreach (var cartItem in cart.Items)
+        foreach (var cartItem in cartItems)
         {
             order.OrderItems.Add(new OrderItem
             {
@@ -91,7 +93,11 @@ public class OrderService : IOrderService
                 ProductId = cartItem.ProductId,
                 Amount = cartItem.Amount,
             });
+            cartItem.IsOrdered = true;
+            order.TotalAmount += cartItem.Product.Price;
         }
+
+        await this.cartItemRepository.SaveAsync();
         var createdOrder = await orderRepository.InsertAsync(order);
         await orderRepository.SaveAsync();
 
