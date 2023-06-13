@@ -24,7 +24,7 @@ namespace FleetFlow.Api.Controllers
             });
 
 
-        [HttpGet]
+        [HttpGet("bonuses")]
         public async ValueTask<IActionResult> GetAllAsync(PaginationParams @params) =>
            Ok(new Response
            {
@@ -32,5 +32,14 @@ namespace FleetFlow.Api.Controllers
                Message = "Ok",
                Data = await this.bonusService.RetrieveAll(@params)
            });
+
+        [HttpGet("user-bonus")]
+        public async ValueTask<IActionResult> GetUserBonus()
+            => Ok(new Response
+            {
+                Code = 200,
+                Message = "OK",
+                Data = await this.bonusService.RetrieveUserBonus()
+            });
     }
 }

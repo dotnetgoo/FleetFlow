@@ -1,6 +1,5 @@
 ﻿using FleetFlow.Domain.Commons;
 using FleetFlow.Domain.Entities.Products;
-using FleetFlow.Domain.Entities.Warehouses;
 
 namespace FleetFlow.Domain.Entities;
 
@@ -14,4 +13,5 @@ public class CartItem : Auditable
 
     public int Amount { get; set; }
     public decimal AmountTotal { get; set; }
+    public bool IsOrdered { get; set; }
 }
