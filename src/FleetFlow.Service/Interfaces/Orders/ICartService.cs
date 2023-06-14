@@ -10,5 +10,5 @@ public interface ICartService
     ValueTask<bool> RemoveItemAsync(long id);
     ValueTask<CartItemResultDto> RetrieveByItemIdAsync(long id);
     ValueTask<IEnumerable<CartItemResultDto>> RetrieveAllAsync(PaginationParams @params);
-    ValueTask<CartResultDto> RetrieveByClientIdAsync(long clientId);
+    ValueTask<CartResultDto> RetrieveByClientIdAsync();
 }
