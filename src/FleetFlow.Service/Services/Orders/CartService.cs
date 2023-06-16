@@ -4,11 +4,11 @@ using FleetFlow.Domain.Entities;
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Service.DTOs.Carts;
 using FleetFlow.Service.Exceptions;
+using FleetFlow.Service.Extentions;
 using FleetFlow.Domain.Congirations;
+using Microsoft.EntityFrameworkCore;
 using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Service.Interfaces.Orders;
-using FleetFlow.Service.Extentions;
-using Microsoft.EntityFrameworkCore;
 
 namespace FleetFlow.Service.Services.Orders;
 
@@ -56,26 +56,53 @@ public class CartService : ICartService
         return mapper.Map<CartItemResultDto>(insertedCartItem);
     }
 
-    public ValueTask<CartItemResultDto> ModifyItemAsync(CartItemUpdateDto dto)
+    public async ValueTask<CartItemResultDto> ModifyItemAsync(CartItemUpdateDto dto)
     {
-        throw new NotImplementedException();
+        var cartItem = await this.cartItemRepository
+            .SelectAsync(item => !item.IsDeleted && !item.IsOrdered && item.Id == dto.Id,
+            includes: new string[] { "Product" });
+        if (cartItem is null)
+            throw new FleetFlowException(404, "Cart item not found");
+
+        cartItem.Amount = dto.Amount;
+        cartItem.AmountTotal = cartItem.Product.Price * dto.Amount;
+        cartItem.UpdatedBy = HttpContextHelper.UserId;
+        cartItem.UpdatedAt = DateTime.UtcNow;
+        var result = this.cartItemRepository.Update(cartItem);
+        await this.cartItemRepository.SaveAsync();
+
+        return this.mapper.Map<CartItemResultDto>(result);
     }
 
-    public ValueTask<bool> RemoveItemAsync(long id)
+    public async ValueTask<bool> RemoveItemAsync(long id)
     {
-        throw new NotImplementedException();
+        var cartItem = await this.cartItemRepository
+            .SelectAsync(item => !item.IsDeleted && !item.IsOrdered && item.Id == id);
+        if (cartItem is null)
+            throw new FleetFlowException(404, "Cart item not found");
+
+        cartItem.DeletedBy = HttpContextHelper.UserId;
+        bool result = await this.cartItemRepository.DeleteAsync(item => item.Id == id);
+        await this.cartItemRepository.SaveAsync();
+        return result;
     }
 
-    public ValueTask<CartResultDto> RetrieveByClientIdAsync(long clientId)
+    public async ValueTask<CartResultDto> RetrieveByClientIdAsync()
     {
-        throw new NotImplementedException();
+        var cart = await this.cartRepository
+            .SelectAsync(item => !item.IsDeleted && item.UserId == HttpContextHelper.UserId,
+            includes: new string[] { "Items" });
+        if (cart is null)
+            throw new FleetFlowException(404, "Cart item not found.");
+
+        return this.mapper.Map<CartResultDto>(cart);
     }
 
     public async ValueTask<IEnumerable<CartItemResultDto>> RetrieveAllAsync(PaginationParams @params)
     {
         var itemsQuery = this.cartItemRepository
             .SelectAll(item => !item.IsDeleted && !item.IsOrdered && item.Cart.UserId == HttpContextHelper.UserId,
-            new string[] { "Product" });
+            includes: new string[] { "Product" });
 
 
         var items = await itemsQuery.ToPagedList(@params).ToListAsync();
@@ -83,8 +110,14 @@ public class CartService : ICartService
         return this.mapper.Map<IEnumerable<CartItemResultDto>>(items);
     }
 
-    public ValueTask<CartItemResultDto> RetrieveByItemIdAsync(long id)
+    public async ValueTask<CartItemResultDto> RetrieveByItemIdAsync(long id)
     {
-        throw new NotImplementedException();
+        var cartItem = await this.cartItemRepository
+            .SelectAsync(item => !item.IsDeleted && !item.IsOrdered && item.Id == id,
+            includes: new string[] { "Product" });
+        if (cartItem is null)
+            throw new FleetFlowException(404, "Cart item not found.");
+
+        return this.mapper.Map<CartItemResultDto>(cartItem);
     }
 }
