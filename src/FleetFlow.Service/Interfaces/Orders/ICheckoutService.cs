@@ -14,4 +14,5 @@ public interface ICheckoutService
     ValueTask<PaymentResultDto> PayAsync(PaymentCreationDto dto, AttachmentCreationDto attachment);
     ValueTask<IEnumerable<CartItemResultDto>> GetAllCartItemsAsync();
     ValueTask<OrderResultDto> SaveOrderAsync(OrderForCreationDto orderDto, string promoCode = null);
+    ValueTask<OrderResultDto> PayWithBonusAsync(decimal amount);
 }

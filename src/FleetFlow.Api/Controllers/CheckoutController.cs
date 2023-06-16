@@ -6,6 +6,7 @@ using FleetFlow.Service.DTOs.Address;
 using FleetFlow.Service.DTOs.Payments;
 using FleetFlow.Service.DTOs.Attachments;
 using FleetFlow.Service.Interfaces.Orders;
+using FleetFlow.Service.DTOs.Discounts;
 
 namespace FleetFlow.Api.Controllers;
 
@@ -39,12 +40,12 @@ public class CheckoutController : RestfulSense
 
 
     [HttpPost("save-order")]
-    public async ValueTask<IActionResult> SaveOrderAsync(OrderForCreationDto dto)
+    public async ValueTask<ActionResult<(OrderResultDto, List<DiscountResultDto>)>> SaveOrderAsync(OrderForCreationDto dto, string promoCode = null)
         => Ok(new Response
         {
             Code = 200,
             Message = "OK",
-            Data = await this.checkoutService.SaveOrderAsync(dto)
+            Data = await this.checkoutService.SaveOrderAsync(dto, promoCode)
         });
 
 
@@ -65,5 +66,14 @@ public class CheckoutController : RestfulSense
             Code = 200,
             Message = "OK",
             Data = await this.checkoutService.RetrieveLastAddressAsync()
+        });
+
+    [HttpPost("pay-with-bonus")]
+    public async ValueTask<IActionResult> PayWithBonusAsync(decimal amount)
+        => Ok(new Response
+        {
+            Code = 200,
+            Message = "OK",
+            Data = await this.checkoutService.PayWithBonusAsync(amount)
         });
 }

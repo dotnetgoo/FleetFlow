@@ -12,6 +12,14 @@ namespace FleetFlow.Service.Extentions
         public static IQueryable<TEntity> ToPagedList<TEntity>(this IQueryable<TEntity> entities, PaginationParams @params)
             where TEntity : Auditable
         {
+            if (@params.PageSize ==0 && @params.PageIndex== 0)
+            {
+                @params = new PaginationParams()
+                {
+                    PageSize = 10,
+                    PageIndex = 1
+                };
+            }
             var metaData = new PaginationMetaData(entities.Count(), @params);
 
             var json = JsonConvert.SerializeObject(metaData);

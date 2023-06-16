@@ -8,6 +8,7 @@ using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.DTOs.Orders;
 using Microsoft.EntityFrameworkCore;
 using FleetFlow.Service.DTOs.Address;
+using FleetFlow.Service.DTOs.Bonuses;
 using FleetFlow.Service.DTOs.Payments;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Bonuses;
@@ -15,6 +16,9 @@ using FleetFlow.Service.DTOs.Attachments;
 using FleetFlow.Domain.Entities.Addresses;
 using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Service.Interfaces.Addresses;
+using FleetFlow.Domain.Entities.Products;
+using FleetFlow.Service.DTOs.Product;
+using FleetFlow.Service.DTOs.Discounts;
 
 namespace FleetFlow.Service.Services.Orders;
 
@@ -28,6 +32,7 @@ public class CheckoutService : ICheckoutService
     private readonly IRepository<Bonus> bonusRepository;
     private readonly IRepository<Region> regionRepository;
     private readonly IRepository<Address> addressRepository;
+    private readonly IRepository<Discount> discountRepository;
     private readonly IRepository<District> districtRepository;
     private readonly IRepository<CartItem> cartItemRepository;
     private readonly IRepository<BonusSetting> bonusSettingRepository;
@@ -40,6 +45,7 @@ public class CheckoutService : ICheckoutService
         IRepository<Order> orderRepository,
         IRepository<Region> regionRepository,
         IRepository<Address> addressRepository,
+        IRepository<Discount> discountRepository,
         IRepository<District> districtRepository,
         IRepository<CartItem> cartItemRepository,
         IRepository<BonusSetting> bonusSettingRepository)
@@ -53,6 +59,7 @@ public class CheckoutService : ICheckoutService
         this.regionRepository = regionRepository;
         this.addressRepository = addressRepository;
         this.districtRepository = districtRepository;
+        this.discountRepository = discountRepository;
         this.cartItemRepository = cartItemRepository;
         this.bonusSettingRepository = bonusSettingRepository;
     }
@@ -85,27 +92,61 @@ public class CheckoutService : ICheckoutService
     public async ValueTask<OrderResultDto> SaveOrderAsync(OrderForCreationDto orderDto, string promoCode = null)
     {
         var createdOrder = await this.orderService.AddAsync(orderDto);
+        if (createdOrder.IsSaved)
+            throw new FleetFlowException(400, "This order is already saved");
+
+        var order = await this.orderRepository.SelectAsync(order => order.Id == createdOrder.Id);
+        await CheckBonusAsync(createdOrder, promoCode); 
+        var discounts = CheckDiscountAsync(createdOrder);
+        order.IsSaved = true;
+        await this.orderRepository.SaveAsync();
+
+        var result = this.mapper.Map<OrderResultDto>(order);
+        result.Discounts = discounts;
+        return result;
+    }
+
+    private List<DiscountResultDto> CheckDiscountAsync(OrderResultDto createdOrder)
+    {
+        // ordered produts
+        var products = createdOrder.OrderItems.Select(p => p.Product);
+
+        // products in discount
+        var productIds = products.Select(p => p.Id).ToList();
+        var discounts = this.discountRepository
+            .SelectAll(d => d.StartedAt < DateTime.UtcNow &&
+                d.FinishedAt > DateTime.UtcNow &&
+                d.State == DiscountState.Active &&
+                !d.IsDeleted &&
+                productIds.Contains(d.ProductId),
+                includes: new string[] { "Product" })
+            .ToList();
+
+        return this.mapper.Map<List<DiscountResultDto>>(discounts);
+    }
+
+    private async Task<BonusResultDto> CheckBonusAsync(OrderResultDto createdOrder, string promoCode = null)
+    {
         var order = await this.orderRepository.SelectAsync(o => o.Id == createdOrder.Id);
 
         decimal sumOfOrder = 0.0m;
-        foreach(var item in createdOrder.OrderItems)
+        foreach (var item in createdOrder.OrderItems)
             sumOfOrder += item.AmountTotal;
 
         var oldBonus = await this.bonusRepository
             .SelectAll()
             .OrderBy(b => b.Id)
             .LastOrDefaultAsync(b => b.UserId == HttpContextHelper.UserId);
-
         var bonus = new Bonus();
 
         var bonusSettings = await this.bonusSettingRepository.SelectAll().ToListAsync();
 
-        if (!string.IsNullOrEmpty(promoCode))
-        {
-            var bonusSettingWithPromoCode = bonusSettings
-                .FirstOrDefault(b => b.PromoCode.Equals(promoCode) &&
-                b.StartTime <= DateTime.UtcNow && b.EndTime >= DateTime.UtcNow);
+        BonusSetting bonusSettingWithPromoCode = bonusSettings
+            .FirstOrDefault(b => b.PromoCode.Equals(promoCode) &&
+            b.StartTime <= DateTime.UtcNow && b.EndTime >= DateTime.UtcNow);
 
+        if (!string.IsNullOrEmpty(promoCode) && bonusSettingWithPromoCode.IsPromoCodeUsed)
+        {
             string validPromoCode = bonusSettingWithPromoCode.PromoCode;
 
             if (string.IsNullOrEmpty(validPromoCode))
@@ -114,12 +155,37 @@ public class CheckoutService : ICheckoutService
             switch (bonusSettingWithPromoCode.Type)
             {
                 case BonusType.Amount:
+                    bonus.Amount = oldBonus.Amount + bonusSettingWithPromoCode.Amount;
+                    bonus.OrderDate = order.CreatedAt;
+                    bonus.OrderId = order.Id;
+                    bonus.UserId = (long)HttpContextHelper.UserId;
+                    bonus.Type = BonusType.Amount;
+                    bonus.IsPromoCodeUsed = true;
+                    bonus.UsedPromoCode = validPromoCode;
                     break;
                 case BonusType.Percentage:
+                    bonus.Amount = oldBonus.Amount + (bonusSettingWithPromoCode.Amount / 100) * sumOfOrder;
+                    bonus.OrderDate = order.CreatedAt;
+                    bonus.OrderId = order.Id;
+                    bonus.UserId = (long)HttpContextHelper.UserId;
+                    bonus.Type = BonusType.Amount;
+                    bonus.IsPromoCodeUsed = true;
+                    bonus.UsedPromoCode = validPromoCode;
                     break;
                 case BonusType.Gift:
+                    bonus.Amount = oldBonus.Amount;
+                    bonus.ProductId = bonusSettingWithPromoCode.ProductId;
+                    bonus.OrderDate = order.CreatedAt;
+                    bonus.OrderId = order.Id;
+                    bonus.UserId = (long)HttpContextHelper.UserId;
+                    bonus.OrderCashBack = bonusSettingWithPromoCode.Amount;
+                    bonus.Type = BonusType.Gift;
+                    bonus.IsPromoCodeUsed = true;
+                    bonus.UsedPromoCode = validPromoCode;
                     break;
             }
+            bonus = await this.bonusRepository.InsertAsync(bonus);
+            await this.bonusRepository.SaveAsync();
         }
 
         var bonusSetting = new BonusSetting();
@@ -129,14 +195,15 @@ public class CheckoutService : ICheckoutService
                 bonusSetting = item;
         }
 
+        // for amount
         if (bonusSetting is not null)
         {
-            if(bonusSetting.StartTime <= DateTime.UtcNow && bonusSetting.EndTime >= DateTime.UtcNow)
+            if (bonusSetting.StartTime <= DateTime.UtcNow && bonusSetting.EndTime >= DateTime.UtcNow)
             {
                 switch (bonusSetting.Type)
                 {
                     case BonusType.Amount:
-                        bonus.Amount = oldBonus.Amount + bonusSetting.Amount;
+                        bonus.Amount = oldBonus?.Amount ?? 0.0m + bonusSetting.Amount;
                         bonus.OrderDate = order.CreatedAt;
                         bonus.OrderId = order.Id;
                         bonus.UserId = (long)HttpContextHelper.UserId;
@@ -161,12 +228,14 @@ public class CheckoutService : ICheckoutService
                         bonus.Type = BonusType.Gift;
                         break;
                 }
+                bonus = await this.bonusRepository.InsertAsync(bonus);
+                await this.bonusRepository.SaveAsync();
             }
-            
         }
 
-        throw new NotImplementedException();
+        return this.mapper.Map<BonusResultDto>(bonus);
     }
+
 
     public async ValueTask<PaymentResultDto> PayAsync(PaymentCreationDto dto, AttachmentCreationDto attachment)
     {
@@ -189,5 +258,33 @@ public class CheckoutService : ICheckoutService
             .LastOrDefaultAsync();
 
         return await addressService.GetByIdAsync(order?.AddressId ?? 0);
+    }
+
+    public async ValueTask<OrderResultDto> PayWithBonusAsync(decimal amount)
+    {
+        var order = await this.orderRepository
+            .SelectAll(includes: new string[] { "Address", "Region", "District", "User" })
+            .OrderBy(order => order.Id)
+            .LastOrDefaultAsync(order => !order.IsDeleted &&
+                order.UserId == HttpContextHelper.UserId &&
+                order.IsSaved);
+
+        var bonus = await this.bonusRepository
+            .SelectAll()
+            .OrderBy(o => o.Id)
+            .LastOrDefaultAsync(b => !b.IsDeleted && b.UserId == HttpContextHelper.UserId);
+
+        if (bonus.Amount < amount) 
+            throw new FleetFlowException(400, "Not enough money");
+        if (order.TotalAmount < amount)
+            throw new FleetFlowException(400, "Amount to spend is more than payment of order");
+
+        bonus.Amount -= amount;
+        order.TotalAmount -= amount;
+
+        await orderRepository.SaveAsync();
+        await bonusRepository.SaveAsync();
+    
+        return this.mapper.Map<OrderResultDto>(order);
     }
 }

@@ -16,7 +16,7 @@ namespace FleetFlow.Api.Controllers
             this.discountService = discountService;
         }
 
-        [HttpPost("discount")]
+        [HttpPost("create")]
         public async Task<IActionResult> PostAsync(DiscountCreationDto dto)
             => Ok(new Response
             {
@@ -25,7 +25,7 @@ namespace FleetFlow.Api.Controllers
                 Data = await this.discountService.AddAsync(dto)
             });
 
-        [HttpPut("discount")]
+        [HttpPut("update")]
         public async Task<IActionResult> PutAsync(long id, DiscountUpdateDto dto)
             => Ok(new Response
             {

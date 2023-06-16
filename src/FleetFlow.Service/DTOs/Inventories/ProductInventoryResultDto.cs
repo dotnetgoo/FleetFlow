@@ -1,6 +1,6 @@
 ﻿namespace FleetFlow.Service.DTOs.Inventories
 {
-    public class ProductInventoryAssignmentForResultDto
+    public class ProductInventoryResultDto
     {
         public long Id { get; set; }
         public long ProductId { get; set; }
