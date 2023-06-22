@@ -42,7 +42,7 @@ namespace FleetFlow.Service.Services.Staffs
 
             if (await this.roleService.RetrieveByIdAsync(dto.RoleId) is null)
                 throw new FleetFlowException(404, "Role not found");
-            
+
             var mapped = this.mapper.Map<Staff>(dto);
             mapped.CreatedAt = DateTime.UtcNow;
             await this.repository.InsertAsync(mapped);

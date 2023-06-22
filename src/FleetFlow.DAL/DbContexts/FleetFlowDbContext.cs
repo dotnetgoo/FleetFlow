@@ -11,7 +11,6 @@ using FleetFlow.Domain.Entities.Staffs;
 using FleetFlow.Domain.Entities.UserQuestions;
 using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Domain.Entities.Warehouses;
-using FleetFlow.Domain.Enums;
 using FleetFlow.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;
 
@@ -44,12 +43,12 @@ namespace FleetFlow.DAL.DbContexts
         public DbSet<Role> Roles { get; set; }
         public DbSet<RolePermission> RolePermissions { get; set; }
         public DbSet<Payment> Payments { get; set; }
-        public DbSet<Answer>  Answers { get; set; }
+        public DbSet<Answer> Answers { get; set; }
         public DbSet<Staff> Staffs { get; set; }
         public DbSet<StaffPermission> StaffPermissions { get; set; }
         public DbSet<Bonus> Bonuses { get; set; }
         public DbSet<BonusSetting> BonusSettings { get; set; }
-        
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             #region Fluent API relations

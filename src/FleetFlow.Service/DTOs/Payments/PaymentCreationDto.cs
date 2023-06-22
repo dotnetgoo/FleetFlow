@@ -1,6 +1,4 @@
-﻿using FleetFlow.Service.DTOs.Attachments;
-
-namespace FleetFlow.Service.DTOs.Payments;
+﻿namespace FleetFlow.Service.DTOs.Payments;
 
 public class PaymentCreationDto
 {

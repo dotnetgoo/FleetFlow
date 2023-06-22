@@ -11,5 +11,5 @@ public class Discount : Auditable
     public DateTime? FinishedAt { get; set; }
     public decimal Amount { get; set; }
     public DiscountState State { get; set; } = DiscountState.Active;
-    public decimal PriceInDiscount {  get; set; }
+    public decimal PriceInDiscount { get; set; }
 }

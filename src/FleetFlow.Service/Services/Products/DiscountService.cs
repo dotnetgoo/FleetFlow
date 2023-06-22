@@ -45,7 +45,7 @@ public class DiscountService : IDiscountService
         mappedDiscount.PriceInDiscount = product.Price - ((product.Price / 100) * dto.Amount);
         var insertedDiscount = await this.discountRepository.InsertAsync(mappedDiscount);
         await this.discountRepository.SaveAsync();
-        
+
         return this.mapper.Map<DiscountResultDto>(insertedDiscount);
     }
 

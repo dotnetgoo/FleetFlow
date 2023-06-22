@@ -46,7 +46,7 @@ namespace FleetFlow.Api.Controllers
 
 
         [HttpGet]
-        public async ValueTask<IActionResult> GetAllAsync([FromQuery]PaginationParams @params) =>
+        public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params) =>
             Ok(new Response()
             {
                 Code = 200,

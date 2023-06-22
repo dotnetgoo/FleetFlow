@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
-using FleetFlow.Shared.Helpers;
 using FleetFlow.DAL.IRepositories;
+using FleetFlow.Domain.Congirations;
+using FleetFlow.Domain.Entities.Bonuses;
+using FleetFlow.Service.DTOs.Bonuses;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
-using FleetFlow.Domain.Congirations;
-using Microsoft.EntityFrameworkCore;
-using FleetFlow.Service.DTOs.Bonuses;
-using FleetFlow.Domain.Entities.Bonuses;
 using FleetFlow.Service.Interfaces.Bonuses;
+using FleetFlow.Shared.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetFlow.Service.Services.Bonuses;
 
@@ -44,7 +44,7 @@ public class BonusSettingService : IBonusSettingService
 
     public async ValueTask<bool> RemoveAsyn(long id)
     {
-        var isDeleted =  await this.bonusSettingRepository.DeleteAsync(b => b.Id  == id && !b.IsDeleted);
+        var isDeleted = await this.bonusSettingRepository.DeleteAsync(b => b.Id  == id && !b.IsDeleted);
         if (!isDeleted)
             throw new FleetFlowException(404, "Not Found");
         await this.bonusSettingRepository.SaveAsync();
@@ -53,7 +53,7 @@ public class BonusSettingService : IBonusSettingService
 
     public async ValueTask<IEnumerable<BonusSettingResultDto>> RetrieveAll(PaginationParams @params)
     {
-        var bonusSettings = this.bonusSettingRepository.SelectAll(b => !b.IsDeleted,includes: new string[] { "Product" });
+        var bonusSettings = this.bonusSettingRepository.SelectAll(b => !b.IsDeleted, includes: new string[] { "Product" });
         var pagedBonusSettings = await bonusSettings.ToPagedList(@params).ToListAsync();
         return this.mapper.Map<IEnumerable<BonusSettingResultDto>>(pagedBonusSettings);
     }
@@ -61,7 +61,7 @@ public class BonusSettingService : IBonusSettingService
     public async ValueTask<BonusSettingResultDto> RetrieveByIdAsyn(long id)
     {
         var bonusSetting = await this.bonusSettingRepository.SelectAsync(b => b.Id == id && !b.IsDeleted);
-        if(bonusSetting is null)
+        if (bonusSetting is null)
             throw new FleetFlowException(404, "Not Found");
         return this.mapper.Map<BonusSettingResultDto>(bonusSetting);
     }

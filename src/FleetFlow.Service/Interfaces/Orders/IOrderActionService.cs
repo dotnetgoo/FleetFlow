@@ -1,5 +1,4 @@
-﻿using FleetFlow.Service.DTOs.Inventories;
-using FleetFlow.Service.DTOs.Orders;
+﻿using FleetFlow.Service.DTOs.Orders;
 
 namespace FleetFlow.Service.Interfaces.Orders;
 

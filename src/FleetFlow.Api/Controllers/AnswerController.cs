@@ -107,7 +107,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPut("{id:long}")]
-        public async ValueTask<IActionResult> UpdateAnswerAsync([FromRoute]long id, [FromBody]string message)
+        public async ValueTask<IActionResult> UpdateAnswerAsync([FromRoute] long id, [FromBody] string message)
             => Ok(new Response
             {
                 Code = 200,

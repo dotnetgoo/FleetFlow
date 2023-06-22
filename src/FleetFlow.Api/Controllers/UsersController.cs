@@ -1,9 +1,9 @@
-using FleetFlow.Api.Models;
-using Microsoft.AspNetCore.Mvc;
-using FleetFlow.Service.DTOs.User;
-using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.Interfaces.Users;
 using FleetFlow.Api.Attributes;
+using FleetFlow.Api.Models;
+using FleetFlow.Domain.Congirations;
+using FleetFlow.Service.DTOs.User;
+using FleetFlow.Service.Interfaces.Users;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers;
 

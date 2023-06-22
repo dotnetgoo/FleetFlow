@@ -1,6 +1,5 @@
 ﻿using FleetFlow.Service.DTOs.Inventories;
 using FleetFlow.Service.Interfaces.Warehouses;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.GraphQL.Mutations
 {
@@ -12,9 +11,9 @@ namespace FleetFlow.GraphQL.Mutations
             return await service.AddAsync(dto);
         }
         public async ValueTask<ProductInventoryResultDto> UpdateProductInventoryAsync([Service]
-        IProductInventoryService service,long id,ProductInventoryUpdateDto dto)
+        IProductInventoryService service, long id, ProductInventoryUpdateDto dto)
         {
-            return await service.ModifyAsync(id,dto);
+            return await service.ModifyAsync(id, dto);
         }
         public async ValueTask<bool> DeleteProductInventoryAsync([Service] IProductInventoryService service,
             long id)

@@ -1,5 +1,4 @@
-﻿using FleetFlow.Service.DTOs.Address;
-using FleetFlow.Service.Interfaces.Commons;
+﻿using FleetFlow.Service.Interfaces.Commons;
 
 namespace FleetFlow.GraphQL.Mutations
 {

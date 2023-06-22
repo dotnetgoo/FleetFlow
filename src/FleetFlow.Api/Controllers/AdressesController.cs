@@ -2,7 +2,6 @@
 using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.Address;
 using FleetFlow.Service.Interfaces.Addresses;
-using FleetFlow.Service.Interfaces.Orders;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers;
@@ -67,9 +66,9 @@ public class AdressesController : RestfulSense
     [HttpPut("{id}")]
     public async ValueTask<IActionResult> PutAsync(long id, AddressForCreationDto dto)
         => Ok(new Response
-        { 
-            Code = 200, 
-            Message = "OK", 
-            Data = await this.addressService.UpdateByIdAsync(id, dto) 
+        {
+            Code = 200,
+            Message = "OK",
+            Data = await this.addressService.UpdateByIdAsync(id, dto)
         });
 }

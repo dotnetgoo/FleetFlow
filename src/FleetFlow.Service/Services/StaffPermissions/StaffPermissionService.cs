@@ -9,7 +9,6 @@ using FleetFlow.Service.Interfaces.Authorizations;
 using FleetFlow.Service.Interfaces.StaffPermissions;
 using FleetFlow.Service.Interfaces.Staffs;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Math.EC.Rfc7748;
 
 namespace FleetFlow.Service.Services.StaffPermissions
 {

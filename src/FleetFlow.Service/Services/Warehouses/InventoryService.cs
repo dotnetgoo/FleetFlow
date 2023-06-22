@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using FleetFlow.Shared.Helpers;
 using FleetFlow.DAL.IRepositories;
-using FleetFlow.Service.Exceptions;
 using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.Extentions;
-using Microsoft.EntityFrameworkCore;
-using FleetFlow.Service.DTOs.Inventories;
 using FleetFlow.Domain.Entities.Addresses;
 using FleetFlow.Domain.Entities.Warehouses;
+using FleetFlow.Service.DTOs.Inventories;
+using FleetFlow.Service.Exceptions;
+using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces.Addresses;
 using FleetFlow.Service.Interfaces.Warehouses;
+using FleetFlow.Shared.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetFlow.Service.Services.Warehouses
 {
@@ -21,10 +21,10 @@ namespace FleetFlow.Service.Services.Warehouses
         private readonly IRepository<Region> regionRepository;
         private readonly IRepository<District> districtRepository;
         public InventoryService(
-            IMapper mapper, 
-            IAddressService addressService, 
-            IRepository<Inventory> repository, 
-            IRepository<Region> regionRepository, 
+            IMapper mapper,
+            IAddressService addressService,
+            IRepository<Inventory> repository,
+            IRepository<Region> regionRepository,
             IRepository<District> districtRepository)
         {
             this.mapper = mapper;
@@ -42,7 +42,7 @@ namespace FleetFlow.Service.Services.Warehouses
 
             if (await this.addressService.GetByIdAsync(dto.AddressId) is null)
                 throw new FleetFlowException(403, "There is no address with given address id");
-            
+
             var mappedInventory = this.mapper.Map<Inventory>(dto);
             mappedInventory.CreatedAt = DateTime.UtcNow;
             mappedInventory.OwnerId = HttpContextHelper.UserId;
@@ -80,7 +80,7 @@ namespace FleetFlow.Service.Services.Warehouses
                 throw new FleetFlowException(404, "Couldn't find inventory for this given Id");
 
             existInventory.DeletedBy = HttpContextHelper.UserId;
-            
+
             await this.repository.DeleteAsync(i => i.Id == id);
             await this.repository.SaveAsync();
 
@@ -89,7 +89,7 @@ namespace FleetFlow.Service.Services.Warehouses
 
         public async Task<IEnumerable<InventoryForResultDto>> RetrieveAllInventory(PaginationParams @params = null)
         {
-            var inventories = await this.repository.SelectAll(includes: new string[] {"Region", "District", "Address"})
+            var inventories = await this.repository.SelectAll(includes: new string[] { "Region", "District", "Address" })
                 .Where(u => u.IsDeleted == false)
                 .ToPagedList(@params)
                 .ToListAsync();
@@ -99,7 +99,7 @@ namespace FleetFlow.Service.Services.Warehouses
 
         public async Task<InventoryForResultDto> RetrieveById(long id)
         {
-            var existInventory = await this.repository.SelectAsync(i => i.Id == id, 
+            var existInventory = await this.repository.SelectAsync(i => i.Id == id,
                 includes: new string[] { "Region", "District", "Address" });
             if (existInventory is null || existInventory.IsDeleted == true)
                 throw new FleetFlowException(404, "Inventory not found");

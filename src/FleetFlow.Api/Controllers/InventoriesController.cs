@@ -3,7 +3,6 @@ using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Entities.Warehouses;
 using FleetFlow.Service.DTOs.Inventories;
 using FleetFlow.Service.Interfaces.Warehouses;
-using FleetFlow.Service.Services.Products;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers

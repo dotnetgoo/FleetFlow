@@ -24,6 +24,6 @@ namespace FleetFlow.Api.Controllers
                 Data = await this.authService.AuthenticateAsync(dto.Email, dto.Password)
             });
         }
-                
+
     }
 }

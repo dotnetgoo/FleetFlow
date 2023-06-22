@@ -5,7 +5,7 @@ namespace FleetFlow.GraphQL.Queries
 {
     public partial class Query
     {
-        public async ValueTask<AddressForResultDto> GetLastAddressAsync([Service]ICheckoutService service)
+        public async ValueTask<AddressForResultDto> GetLastAddressAsync([Service] ICheckoutService service)
         {
             return await service.RetrieveLastAddressAsync();
         }

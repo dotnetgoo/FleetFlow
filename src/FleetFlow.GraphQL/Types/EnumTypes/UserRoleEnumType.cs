@@ -1,5 +1,3 @@
-using FleetFlow.Domain.Enums;
-
 namespace FleetFlow.GraphQL.Types.EnumTypes
 {
     //public class UserRoleEnumType : EnumType<UserRole>

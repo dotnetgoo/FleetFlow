@@ -1,8 +1,8 @@
 ﻿using FleetFlow.Api.Models;
-using Microsoft.AspNetCore.Mvc;
+using FleetFlow.Domain.Congirations;
 using FleetFlow.Service.DTOs.Products;
 using FleetFlow.Service.Interfaces.Products;
-using FleetFlow.Domain.Congirations;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers
 {
@@ -24,7 +24,7 @@ namespace FleetFlow.Api.Controllers
             });
 
         [HttpPut("product-category")]
-        public async ValueTask<IActionResult> PutAsync([FromQuery]long id, ProductCategoryUpdateDto dto)
+        public async ValueTask<IActionResult> PutAsync([FromQuery] long id, ProductCategoryUpdateDto dto)
             => Ok(new Response
             {
                 Code = 200,
@@ -33,7 +33,7 @@ namespace FleetFlow.Api.Controllers
             });
 
         [HttpDelete("product-category")]
-        public async ValueTask<IActionResult> DeleteAsync([FromQuery]long id)
+        public async ValueTask<IActionResult> DeleteAsync([FromQuery] long id)
             => Ok(new Response
             {
                 Code = 200,

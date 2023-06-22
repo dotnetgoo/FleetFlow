@@ -1,24 +1,23 @@
 ﻿using AutoMapper;
-using FleetFlow.Domain.Enums;
-using FleetFlow.Shared.Helpers;
-using FleetFlow.Domain.Entities;
 using FleetFlow.DAL.IRepositories;
-using FleetFlow.Service.DTOs.Carts;
-using FleetFlow.Service.Exceptions;
-using FleetFlow.Service.DTOs.Orders;
-using Microsoft.EntityFrameworkCore;
-using FleetFlow.Service.DTOs.Address;
-using FleetFlow.Service.DTOs.Bonuses;
-using FleetFlow.Service.DTOs.Payments;
-using FleetFlow.Domain.Entities.Orders;
-using FleetFlow.Domain.Entities.Bonuses;
-using FleetFlow.Service.DTOs.Attachments;
+using FleetFlow.Domain.Entities;
 using FleetFlow.Domain.Entities.Addresses;
-using FleetFlow.Service.Interfaces.Orders;
-using FleetFlow.Service.Interfaces.Addresses;
+using FleetFlow.Domain.Entities.Bonuses;
+using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Products;
-using FleetFlow.Service.DTOs.Product;
+using FleetFlow.Domain.Enums;
+using FleetFlow.Service.DTOs.Address;
+using FleetFlow.Service.DTOs.Attachments;
+using FleetFlow.Service.DTOs.Bonuses;
+using FleetFlow.Service.DTOs.Carts;
 using FleetFlow.Service.DTOs.Discounts;
+using FleetFlow.Service.DTOs.Orders;
+using FleetFlow.Service.DTOs.Payments;
+using FleetFlow.Service.Exceptions;
+using FleetFlow.Service.Interfaces.Addresses;
+using FleetFlow.Service.Interfaces.Orders;
+using FleetFlow.Shared.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetFlow.Service.Services.Orders;
 
@@ -96,7 +95,7 @@ public class CheckoutService : ICheckoutService
             throw new FleetFlowException(400, "This order is already saved");
 
         var order = await this.orderRepository.SelectAsync(order => order.Id == createdOrder.Id);
-        await CheckBonusAsync(createdOrder, promoCode); 
+        await CheckBonusAsync(createdOrder, promoCode);
         var discounts = CheckDiscountAsync(createdOrder);
         order.IsSaved = true;
         await this.orderRepository.SaveAsync();
@@ -274,7 +273,7 @@ public class CheckoutService : ICheckoutService
             .OrderBy(o => o.Id)
             .LastOrDefaultAsync(b => !b.IsDeleted && b.UserId == HttpContextHelper.UserId);
 
-        if (bonus.Amount < amount) 
+        if (bonus.Amount < amount)
             throw new FleetFlowException(400, "Not enough money");
         if (order.TotalAmount < amount)
             throw new FleetFlowException(400, "Amount to spend is more than payment of order");
@@ -284,7 +283,7 @@ public class CheckoutService : ICheckoutService
 
         await orderRepository.SaveAsync();
         await bonusRepository.SaveAsync();
-    
+
         return this.mapper.Map<OrderResultDto>(order);
     }
 }

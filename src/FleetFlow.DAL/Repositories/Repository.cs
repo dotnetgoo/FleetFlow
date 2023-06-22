@@ -3,7 +3,6 @@ using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Commons;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using System.Collections;
 using System.Linq.Expressions;
 
 namespace FleetFlow.DAL.Repositories

@@ -1,18 +1,18 @@
 ﻿using AutoMapper;
-using FleetFlow.Domain.Enums;
-using FleetFlow.Shared.Helpers;
-using FleetFlow.Domain.Entities;
 using FleetFlow.DAL.IRepositories;
+using FleetFlow.Domain.Congirations;
+using FleetFlow.Domain.Entities;
+using FleetFlow.Domain.Entities.Addresses;
+using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Domain.Entities.Users;
+using FleetFlow.Domain.Enums;
+using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
-using Microsoft.EntityFrameworkCore;
-using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.DTOs.Orders;
-using FleetFlow.Domain.Entities.Users;
-using FleetFlow.Domain.Entities.Orders;
-using FleetFlow.Domain.Entities.Addresses;
-using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Service.Interfaces.Addresses;
+using FleetFlow.Service.Interfaces.Orders;
+using FleetFlow.Shared.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetFlow.Service.Services.Orders;
 
@@ -144,7 +144,7 @@ public class OrderService : IOrderService
 
     public async ValueTask<IEnumerable<OrderResultDto>> RetrieveAllByPhoneAsync(PaginationParams @params, string phone, OrderStatus? status = null)
     {
-        var user = await userRepository.SelectAsync(user => !user.IsDeleted && user.Phone == phone, 
+        var user = await userRepository.SelectAsync(user => !user.IsDeleted && user.Phone == phone,
             new string[] { "Orders.OrderItems" });
         if (user is null)
             throw new FleetFlowException(404, "User is not found");
@@ -167,8 +167,8 @@ public class OrderService : IOrderService
 
     public async ValueTask<OrderResultDto> RetrieveAsync(long id)
     {
-        var order = await orderRepository.SelectAsync(order => !order.IsDeleted && order.Id == id, 
-            new string[] { "User", "Address", "Region", "District" , "OrderItems" });
+        var order = await orderRepository.SelectAsync(order => !order.IsDeleted && order.Id == id,
+            new string[] { "User", "Address", "Region", "District", "OrderItems" });
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
 

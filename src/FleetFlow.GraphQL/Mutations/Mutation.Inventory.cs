@@ -1,6 +1,4 @@
 ﻿using FleetFlow.Service.DTOs.Inventories;
-using FleetFlow.Service.DTOs.Product;
-using FleetFlow.Service.Interfaces.Products;
 using FleetFlow.Service.Interfaces.Warehouses;
 
 namespace FleetFlow.GraphQL.Mutations
@@ -22,6 +20,6 @@ namespace FleetFlow.GraphQL.Mutations
         {
             return await inventoryService.RemoveAsync(id);
         }
-        
+
     }
 }

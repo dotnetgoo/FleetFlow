@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities.Attachments;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Orders.Feedbacks;
 using FleetFlow.Domain.Enums;
 using FleetFlow.Service.DTOs.Attachments;
-using FleetFlow.Service.DTOs.Carts;
 using FleetFlow.Service.DTOs.Feedbacks;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extensions;
@@ -21,7 +19,7 @@ public class FeedbackService : IFeedbackService
 {
     private readonly IMapper mapper;
     private readonly IRepository<Feedback> feedbackRepository;
-    private readonly IRepository<Order> orderRepository; 
+    private readonly IRepository<Order> orderRepository;
     private readonly IAttachmentService attachmentService;
     private readonly IRepository<FeedbackAttachment> feedbackAttachmentRepository;
     public FeedbackService(IMapper mapper,
@@ -33,7 +31,7 @@ public class FeedbackService : IFeedbackService
         this.feedbackAttachmentRepository = feedbackAttachmentRepository;
         this.feedbackRepository = feedbackRepository;
         this.mapper = mapper;
-        this.orderRepository = orderRepository;        
+        this.orderRepository = orderRepository;
         this.attachmentService = attachmentService;
     }
 
@@ -50,7 +48,7 @@ public class FeedbackService : IFeedbackService
         await feedbackRepository.SaveAsync();
 
         var result = mapper.Map<FeedbackResultDto>(insertedFeedback);
-        
+
         // attachment copying and saving process
         if (attachments is not null && attachments.Any())
         {
@@ -88,7 +86,7 @@ public class FeedbackService : IFeedbackService
 
         var isDeleted = await feedbackRepository.DeleteAsync(f => f.Id == id);
         await this.feedbackRepository.SaveAsync();
-        
+
         return isDeleted;
     }
 
@@ -116,7 +114,7 @@ public class FeedbackService : IFeedbackService
     public async Task<IEnumerable<FeedbackResultDto>> RetriveAllByClientIdAsync(long clientId)
     {
         var feedbacks = await this.feedbackRepository
-            .SelectAll(f => !f.IsDeleted && f.Order.User.Id == clientId, new string[] {"Attachments.Attachment"})
+            .SelectAll(f => !f.IsDeleted && f.Order.User.Id == clientId, new string[] { "Attachments.Attachment" })
             .ToArrayAsync();
         if (feedbacks is null || !feedbacks.Any())
             throw new FleetFlowException(404, "Feedback not found");
@@ -135,7 +133,7 @@ public class FeedbackService : IFeedbackService
         var feedbacks = await feedbacksQuery.ToArrayAsync();
         if (feedbacks is null || !feedbacks.Any())
             throw new FleetFlowException(404, "Feedback not found");
-     
+
         return Array.ConvertAll<Feedback, FeedbackResultDto>(feedbacks, x => x.ToFeedbackResultDto());
 
     }

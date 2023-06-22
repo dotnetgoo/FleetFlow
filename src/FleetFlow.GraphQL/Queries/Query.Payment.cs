@@ -10,7 +10,7 @@ namespace FleetFlow.GraphQL.Queries
         {
             return await service.RetrieveByIdAsync(id);
         }
-        public async ValueTask<IEnumerable<PaymentResultDto>> GetPaymentAllAsync([Service] IPaymentService service,PaginationParams @params)
+        public async ValueTask<IEnumerable<PaymentResultDto>> GetPaymentAllAsync([Service] IPaymentService service, PaginationParams @params)
         {
             return await service.RetrieveAllAsync(@params);
         }

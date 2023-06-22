@@ -1,6 +1,5 @@
 ﻿using FleetFlow.Domain.Entities.Attachments;
 using FleetFlow.GraphQL.Extensions;
-using FleetFlow.Service.DTOs.Attachments;
 using FleetFlow.Service.Interfaces.Attachments;
 
 namespace FleetFlow.GraphQL.Mutations
