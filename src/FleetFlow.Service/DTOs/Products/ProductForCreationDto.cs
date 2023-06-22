@@ -1,7 +1,4 @@
-﻿using FleetFlow.Domain.Entities;
-using FleetFlow.Domain.Enums;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace FleetFlow.Service.DTOs.Product
 {

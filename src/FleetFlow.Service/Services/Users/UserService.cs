@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
-using FleetFlow.Shared.Helpers;
-using FleetFlow.Domain.Entities;
 using FleetFlow.DAL.IRepositories;
+using FleetFlow.Domain.Congirations;
+using FleetFlow.Domain.Entities;
+using FleetFlow.Domain.Entities.Authorizations;
+using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Service.DTOs.User;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
-using FleetFlow.Domain.Congirations;
-using Microsoft.EntityFrameworkCore;
-using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Service.Interfaces.Users;
-using FleetFlow.Domain.Entities.Authorizations;
+using FleetFlow.Shared.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetFlow.Service.Services.Users;
 

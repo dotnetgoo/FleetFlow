@@ -10,6 +10,6 @@ namespace FleetFlow.Service.Interfaces.Warehouses
         Task<InventoryForResultDto> RetrieveByName(string name);
         Task<IEnumerable<InventoryForResultDto>> RetrieveAllInventory(PaginationParams @params = null);
         Task<InventoryForResultDto> ModifyAsync(long id, InventoryForUpdateDto inventoryForUpdateDto);
-        Task<bool> RemoveAsync (long id);
+        Task<bool> RemoveAsync(long id);
     }
 }

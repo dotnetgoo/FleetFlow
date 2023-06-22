@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography;
-
-namespace FleetFlow.Service.Models.Insights;
+﻿namespace FleetFlow.Service.Models.Insights;
 
 public class InsightsParams
 {

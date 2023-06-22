@@ -9,7 +9,6 @@ using FleetFlow.Service.Interfaces.Products;
 using FleetFlow.Service.Interfaces.Warehouses;
 using FleetFlow.Shared.Helpers;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace FleetFlow.Service.Services.Warehouses
 {
@@ -56,12 +55,12 @@ namespace FleetFlow.Service.Services.Warehouses
 
             var mapped = this.mapper.Map<ProductInventory>(dto);
             mapped.CreatedAt = DateTime.UtcNow;
-            
+
             var added = await this.repository.InsertAsync(mapped);
             await this.repository.SaveAsync();
 
             return this.mapper.Map<ProductInventoryResultDto>(added);
-                
+
         }
         public async Task<ProductInventoryResultDto> AddQuantity(long ProductId, long InventoryId, int amount)
         {
@@ -90,7 +89,7 @@ namespace FleetFlow.Service.Services.Warehouses
             var product = await this.repository.SelectAsync(x => x.Id == id);
             if (product is null || product.IsDeleted == true)
                 throw new FleetFlowException(404, "Product not found");
-            
+
             var productModel = await this.productService.RetrieveByIdAsync(dto.ProductId);
             if (productModel is null)
                 throw new FleetFlowException(404, "There is no product with given id");
@@ -127,16 +126,16 @@ namespace FleetFlow.Service.Services.Warehouses
             if (entity is null || entity.IsDeleted == true)
                 throw new FleetFlowException(404, "Product not found");
             return this.mapper.Map<ProductInventoryResultDto>(entity);
-            
+
         }
 
         public async Task<bool> RemoveAsync(long id)
         {
             var entity = await this.repository.SelectAsync(x => x.Id == id);
-            
+
             if (entity is null || entity.IsDeleted == true)
                 throw new FleetFlowException(404, "Product not found");
-            
+
             entity.DeletedBy = HttpContextHelper.UserId;
 
             await this.repository.DeleteAsync(i => i.Id == id);

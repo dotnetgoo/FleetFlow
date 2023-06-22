@@ -1,9 +1,6 @@
 ﻿using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities;
-using FleetFlow.Domain.Enums;
 using FleetFlow.Service.DTOs.User;
 using FleetFlow.Service.Interfaces.Users;
-using FleetFlow.Service.Services;
 
 namespace FleetFlow.GraphQL.Queries
 {
@@ -18,7 +15,7 @@ namespace FleetFlow.GraphQL.Queries
         [UseOffsetPaging(IncludeTotalCount = true)]
         [UseFiltering]
         [UseSorting]
-        public async ValueTask<IEnumerable<UserForResultDto>> GetAllUsersAsync([Service] IUserService userService, 
+        public async ValueTask<IEnumerable<UserForResultDto>> GetAllUsersAsync([Service] IUserService userService,
             PaginationParams @params)
         {
             var users = await userService.RetrieveAllAsync(@params);
@@ -27,4 +24,3 @@ namespace FleetFlow.GraphQL.Queries
         }
     }
 }
-    

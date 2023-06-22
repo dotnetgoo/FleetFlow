@@ -1,5 +1,4 @@
-﻿using FleetFlow.Domain.Commons;
-using FleetFlow.Domain.Enums;
+﻿using FleetFlow.Domain.Enums;
 
 namespace FleetFlow.Service.DTOs.InventoryLogs
 {

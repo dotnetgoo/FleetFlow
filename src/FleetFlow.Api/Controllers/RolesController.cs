@@ -1,6 +1,5 @@
 ﻿using FleetFlow.Api.Models;
 using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities.Authorizations;
 using FleetFlow.Service.DTOs.Roles;
 using FleetFlow.Service.Interfaces.Authorizations;
 using Microsoft.AspNetCore.Mvc;

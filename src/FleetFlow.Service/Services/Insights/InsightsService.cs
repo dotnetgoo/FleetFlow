@@ -1,5 +1,4 @@
 ﻿using FleetFlow.DAL.IRepositories;
-using FleetFlow.DAL.Repositories;
 using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Domain.Entities.Users;
@@ -9,11 +8,7 @@ using FleetFlow.Service.Interfaces.Insights;
 using FleetFlow.Service.Interfaces.Products;
 using FleetFlow.Service.Interfaces.Users;
 using FleetFlow.Service.Models.Insights;
-using FleetFlow.Service.Services.Products;
-using FleetFlow.Service.Services.Users;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.Design;
-using System.Xml.Schema;
 
 namespace FleetFlow.Service.Services.Insights;
 
@@ -48,7 +43,7 @@ public class InsightsService : IInsightsService
     {
         var sellsTable = new SellsTableModel();
 
-        sellsTable.SumOfSells = (decimal) await paymentRepository
+        sellsTable.SumOfSells = (decimal)await paymentRepository
             .SelectAll(p => !p.IsDeleted && p.CreatedAt <= parameters.To && p.CreatedAt >= parameters.From)
             .SumAsync(p => p.Amount);
 
@@ -63,8 +58,8 @@ public class InsightsService : IInsightsService
             .Distinct<long>()
             .CountAsync();
 
-        sellsTable.AvarageOrder = sellsTable.NumberOfOrders != 0 
-                                ? sellsTable.SumOfSells / sellsTable.NumberOfOrders 
+        sellsTable.AvarageOrder = sellsTable.NumberOfOrders != 0
+                                ? sellsTable.SumOfSells / sellsTable.NumberOfOrders
                                 : 0;
         sellsTable.From = parameters.From;
         sellsTable.To = parameters.To;
@@ -123,7 +118,7 @@ public class InsightsService : IInsightsService
         {
             var userModel = new TopUserModel() { UserId = userId };
 
-            userModel.SumOfAllOrders = (decimal) await paymentRepository
+            userModel.SumOfAllOrders = (decimal)await paymentRepository
                 .SelectAll(p => p.UserId == userId && !p.IsDeleted && p.CreatedAt <= parameters.To && p.CreatedAt >= parameters.From)
                 .Select(p => p.Amount)
                 .SumAsync();

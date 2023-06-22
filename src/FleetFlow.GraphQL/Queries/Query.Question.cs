@@ -12,7 +12,7 @@ namespace FleetFlow.GraphQL.Queries
             return await questionService.RetrieveByIdAsync(id);
         }
 
-        public async ValueTask<IEnumerable<Question>> GetAllQuestionsAsync([Service] IQuestionService  questionService,
+        public async ValueTask<IEnumerable<Question>> GetAllQuestionsAsync([Service] IQuestionService questionService,
             PaginationParams @params)
         {
             return await questionService.RetrieveAllAsync(@params);

@@ -1,5 +1,4 @@
-﻿using FleetFlow.Domain.Entities;
-using FleetFlow.Service.DTOs.Product;
+﻿using FleetFlow.Service.DTOs.Product;
 
 namespace FleetFlow.Service.DTOs.Carts;
 

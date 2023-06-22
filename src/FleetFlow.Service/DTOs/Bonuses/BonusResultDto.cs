@@ -1,7 +1,7 @@
 ﻿using FleetFlow.Domain.Enums;
-using FleetFlow.Service.DTOs.User;
 using FleetFlow.Service.DTOs.Orders;
 using FleetFlow.Service.DTOs.Product;
+using FleetFlow.Service.DTOs.User;
 
 namespace FleetFlow.Service.DTOs.Bonuses;
 

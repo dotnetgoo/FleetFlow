@@ -1,13 +1,13 @@
 ﻿using AutoMapper;
 using FleetFlow.DAL.IRepositories;
+using FleetFlow.Domain.Congirations;
+using FleetFlow.Domain.Entities.Bonuses;
+using FleetFlow.Service.DTOs.Bonuses;
 using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Extentions;
-using Microsoft.EntityFrameworkCore;
-using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.DTOs.Bonuses;
-using FleetFlow.Domain.Entities.Bonuses;
 using FleetFlow.Service.Interfaces.Bonuses;
 using FleetFlow.Shared.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetFlow.Service.Services.Bonuses;
 
@@ -23,7 +23,7 @@ public class BonusService : IBonusService
 
     public async ValueTask<IEnumerable<BonusResultDto>> RetrieveAll(PaginationParams @params)
     {
-        var bonuses = this.bonusRepository.SelectAll(b => !b.IsDeleted,  includes: new string[] { "User", "Order", "Product" });
+        var bonuses = this.bonusRepository.SelectAll(b => !b.IsDeleted, includes: new string[] { "User", "Order", "Product" });
         var pagedBonuses = await bonuses.ToPagedList(@params).ToListAsync();
 
         return this.mapper.Map<IEnumerable<BonusResultDto>>(pagedBonuses);
@@ -44,6 +44,6 @@ public class BonusService : IBonusService
             .SelectAll()
             .OrderBy(o => o.Id)
             .LastOrDefaultAsync(b => !b.IsDeleted && b.UserId == HttpContextHelper.UserId);
-        return (decimal) bonus.Amount;
+        return (decimal)bonus.Amount;
     }
 }

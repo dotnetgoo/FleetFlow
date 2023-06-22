@@ -21,7 +21,7 @@ public class AttachmentService : IAttachmentService
         var isDeleted = await this.attachmentRepository.DeleteAsync(a => a.Id == id);
         if (!isDeleted)
             throw new FleetFlowException(404, "Attachment not found");
-        
+
         return isDeleted;
     }
 

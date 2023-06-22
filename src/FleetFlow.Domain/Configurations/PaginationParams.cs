@@ -1,6 +1,4 @@
-﻿using System.Reflection.Metadata;
-
-namespace FleetFlow.Domain.Congirations;
+﻿namespace FleetFlow.Domain.Congirations;
 
 public class PaginationParams
 {

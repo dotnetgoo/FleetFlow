@@ -11,7 +11,7 @@ namespace FleetFlow.GraphQL.Mutations
             return await service.AddAsync(dto);
         }
         public async ValueTask<StaffForResultDto> UpdateStaffAsync([Service] IStaffService service,
-            long id,StaffForUpdateDto dto)
+            long id, StaffForUpdateDto dto)
         {
             return await service.ModifyAsync(id, dto);
         }

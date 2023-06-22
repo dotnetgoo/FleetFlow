@@ -1,18 +1,18 @@
-﻿using Newtonsoft.Json;
-using FleetFlow.Domain.Enums;
-using FleetFlow.Shared.Helpers;
-using FleetFlow.DAL.IRepositories;
-using FleetFlow.Service.Exceptions;
-using Microsoft.EntityFrameworkCore;
-using FleetFlow.Service.DTOs.Orders;
+﻿using FleetFlow.DAL.IRepositories;
 using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Entities.Orders;
 using FleetFlow.Domain.Entities.Google;
+using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Domain.Enums;
 using FleetFlow.Service.DTOs.Inventories;
-using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Service.DTOs.InventoryLogs;
+using FleetFlow.Service.DTOs.Orders;
+using FleetFlow.Service.Exceptions;
 using FleetFlow.Service.Interfaces.Addresses;
+using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Service.Interfaces.Warehouses;
+using FleetFlow.Shared.Helpers;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace FleetFlow.Service.Services.Orders;
 
@@ -62,7 +62,7 @@ public class OrderActionService : IOrderActionService
     }
 
     public async ValueTask<OrderResultDto> FinishDeliveryAsync(long orderId)
-        {
+    {
         var order = await this.orderService.RetrieveAsync(orderId);
         if (order is null)
             throw new FleetFlowException(404, "Order is not found");
@@ -164,7 +164,7 @@ public class OrderActionService : IOrderActionService
         string GoogleMapsApiUrl = "https://maps.googleapis.com/maps/api/directions/json";
         string GoogleMapsApiKey = "AIzaSyBLHCo7zVzMZwcvzSnmva_lVV4_lfFHeeI";
 
-       /// var address = await this.addressService.GetByIdAsync(destination.AddressId);
+        /// var address = await this.addressService.GetByIdAsync(destination.AddressId);
 
         string requestUrl = $"{GoogleMapsApiUrl}?origin={lat},{lon}&destination={destination.Address.Latitude},{destination.Address.Longitude}&key={GoogleMapsApiKey}";
 

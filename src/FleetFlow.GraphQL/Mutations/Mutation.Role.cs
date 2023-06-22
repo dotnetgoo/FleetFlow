@@ -9,10 +9,10 @@ namespace FleetFlow.GraphQL.Mutations
         {
             return await roleService.AddAsync(dto);
         }
-        public async ValueTask<bool> DeleteRoleAsync([Service] IRoleService roleService,long id)
+        public async ValueTask<bool> DeleteRoleAsync([Service] IRoleService roleService, long id)
         {
             var result = await roleService.RemoveAsync(id);
-            if(result)
+            if (result)
                 return true;
             return false;
         }

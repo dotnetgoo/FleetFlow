@@ -1,6 +1,6 @@
 ﻿using FleetFlow.Api.Models;
-using Microsoft.AspNetCore.Mvc;
 using FleetFlow.Service.Interfaces.Orders;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers;
 
@@ -20,7 +20,7 @@ public class OrderActionsController : RestfulSense
             Message = "OK",
             Data = await orderActionService.StartPendingAsync(orderId)
         });
-    
+
 
     [HttpPost("preparing")]
     public async Task<IActionResult> StartPreparingAsync(long orderId)

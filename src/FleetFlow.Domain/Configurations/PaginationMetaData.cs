@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-
-namespace FleetFlow.Domain.Congirations
+﻿namespace FleetFlow.Domain.Congirations
 {
     public class PaginationMetaData
     {
@@ -10,7 +8,7 @@ namespace FleetFlow.Domain.Congirations
         public bool HasPrevious => CurrentPage > 1;
         public bool HasNext => CurrentPage < TotalPages;
 
-        public PaginationMetaData(int totalCount,PaginationParams @params)
+        public PaginationMetaData(int totalCount, PaginationParams @params)
         {
             TotalCount = totalCount;
             TotalPages = (int)Math.Ceiling(totalCount / (double)@params.PageSize);

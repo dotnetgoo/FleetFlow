@@ -1,10 +1,8 @@
 ﻿using FleetFlow.Domain.Congirations;
-using FleetFlow.Domain.Enums;
 using FleetFlow.GraphQL.Extensions;
 using FleetFlow.GraphQL.Types.EnumTypes;
 using FleetFlow.Service.DTOs.Feedbacks;
 using FleetFlow.Service.Interfaces.Orders;
-using FleetFlow.Service.Interfaces.Products;
 
 namespace FleetFlow.GraphQL.Queries
 {

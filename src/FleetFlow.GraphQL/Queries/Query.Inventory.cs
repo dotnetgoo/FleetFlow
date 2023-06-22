@@ -1,7 +1,5 @@
 ﻿using FleetFlow.Domain.Congirations;
-using FleetFlow.Service.DTOs.Discounts;
 using FleetFlow.Service.DTOs.Inventories;
-using FleetFlow.Service.Interfaces.Products;
 using FleetFlow.Service.Interfaces.Warehouses;
 
 namespace FleetFlow.GraphQL.Queries

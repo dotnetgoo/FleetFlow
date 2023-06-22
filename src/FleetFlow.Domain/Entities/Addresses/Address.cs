@@ -1,5 +1,4 @@
 ﻿using FleetFlow.Domain.Commons;
-using FleetFlow.Domain.Entities.Orders;
 
 namespace FleetFlow.Domain.Entities.Addresses
 {

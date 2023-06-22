@@ -1,6 +1,4 @@
-﻿using FleetFlow.Domain.Enums;
-
-namespace FleetFlow.Service.DTOs.Orders;
+﻿namespace FleetFlow.Service.DTOs.Orders;
 
 public class OrderActionCreationDto
 {

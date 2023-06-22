@@ -1,6 +1,4 @@
-﻿using FleetFlow.Service.DTOs.Attachments;
-
-namespace FleetFlow.Service.DTOs.Feedbacks;
+﻿namespace FleetFlow.Service.DTOs.Feedbacks;
 
 public class FeedbackCreationDto
 {

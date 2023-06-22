@@ -3,7 +3,6 @@ using FleetFlow.Domain.Congirations;
 using FleetFlow.Domain.Enums;
 using FleetFlow.Service.DTOs.Discounts;
 using FleetFlow.Service.Interfaces.Products;
-using FleetFlow.Service.Services.Products;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers

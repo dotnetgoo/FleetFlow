@@ -1,5 +1,4 @@
-﻿using FleetFlow.Service.DTOs.Product;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace FleetFlow.Service.DTOs.Products;
 

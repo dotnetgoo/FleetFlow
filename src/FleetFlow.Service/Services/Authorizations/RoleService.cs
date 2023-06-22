@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using FleetFlow.Shared.Helpers;
 using FleetFlow.DAL.IRepositories;
-using FleetFlow.Service.Exceptions;
-using FleetFlow.Service.DTOs.Roles;
-using FleetFlow.Service.Extentions;
 using FleetFlow.Domain.Congirations;
-using Microsoft.EntityFrameworkCore;
-using FleetFlow.Domain.Entities.Users;
 using FleetFlow.Domain.Entities.Authorizations;
+using FleetFlow.Domain.Entities.Users;
+using FleetFlow.Service.DTOs.Roles;
+using FleetFlow.Service.Exceptions;
+using FleetFlow.Service.Extentions;
 using FleetFlow.Service.Interfaces.Authorizations;
+using FleetFlow.Shared.Helpers;
+using Microsoft.EntityFrameworkCore;
 
 namespace FleetFlow.Service.Services.Authorizations
 {
@@ -20,7 +20,7 @@ namespace FleetFlow.Service.Services.Authorizations
 
         public RoleService(IMapper mapper,
             IRepository<User> userRepository,
-			IRepository<Role> roleRepository)
+            IRepository<Role> roleRepository)
         {
             this.mapper = mapper;
             this.userRepository = userRepository;
@@ -86,8 +86,8 @@ namespace FleetFlow.Service.Services.Authorizations
             return this.mapper.Map<RoleResultDto>(role);
         }
 
-		public async Task<bool> AssignRoleForUserAsync(long userId, long roleId)
-		{
+        public async Task<bool> AssignRoleForUserAsync(long userId, long roleId)
+        {
             var user = await this.userRepository.SelectAsync(u => u.Id == userId);
             var role = await this.roleRepository.SelectAsync(r => r.Id == roleId);
             if (user is null || role is null)
@@ -96,6 +96,6 @@ namespace FleetFlow.Service.Services.Authorizations
             await this.userRepository.SaveAsync();
 
             return true;
-		}
-	}
+        }
+    }
 }

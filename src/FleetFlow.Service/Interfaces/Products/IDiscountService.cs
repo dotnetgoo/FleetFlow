@@ -10,7 +10,7 @@ public interface IDiscountService
     Task<DiscountResultDto> ModifyAsync(long id, DiscountUpdateDto dto);
     Task<DiscountResultDto> RetrieveAsync(long id);
     Task<IEnumerable<DiscountResultDto>> RetrieveAllAsync(PaginationParams @params, DiscountState? state = null);
-    
+
 
     Task<bool> StopAsync(long id);
     Task<bool> StopByProductIdAsync(long productId);

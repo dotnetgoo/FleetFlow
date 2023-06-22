@@ -5,7 +5,7 @@ namespace FleetFlow.GraphQL.Mutations
 {
     public partial class Mutation
     {
-        public async ValueTask<OrderResultDto> CreateOrderAsync([Service] IOrderService orderService,OrderForCreationDto dto)
+        public async ValueTask<OrderResultDto> CreateOrderAsync([Service] IOrderService orderService, OrderForCreationDto dto)
         {
             return await orderService.AddAsync(dto);
         }

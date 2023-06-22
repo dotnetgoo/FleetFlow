@@ -1,7 +1,7 @@
 ﻿using FleetFlow.GraphQL.Extensions;
 using FleetFlow.Service.DTOs.Attachments;
 using FleetFlow.Service.DTOs.Feedbacks;
-using FleetFlow.Service.Interfaces.Orders ;
+using FleetFlow.Service.Interfaces.Orders;
 
 
 namespace FleetFlow.GraphQL.Mutations;
@@ -16,7 +16,7 @@ public partial class Mutation
             attachments.Add(await file.ToAttachmentAsync());
         }
 
-        return await feedbackService.AddAsync(feedback,attachments);
+        return await feedbackService.AddAsync(feedback, attachments);
     }
 
     public async ValueTask<bool> DeleteFeedbackAsync([Service] IFeedbackService feedbackService,
@@ -31,7 +31,7 @@ public partial class Mutation
         return await feedbackService.MarkAsReadAsync(id);
     }
 
-    
+
 
 
 }

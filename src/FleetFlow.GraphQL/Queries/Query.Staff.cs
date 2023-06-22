@@ -6,7 +6,7 @@ namespace FleetFlow.GraphQL.Queries
 {
     public partial class Query
     {
-        public async ValueTask<StaffForResultDto> GetStaffById([Service] IStaffService service,long id)
+        public async ValueTask<StaffForResultDto> GetStaffById([Service] IStaffService service, long id)
         {
             return await service.RetrieveByIdAsync(id);
         }
@@ -15,14 +15,14 @@ namespace FleetFlow.GraphQL.Queries
         {
             return await service.RetrieveAllAsync(@params);
         }
-        public async ValueTask<StaffForResultDto> GetStaffByUserId([Service] IStaffService service,long userId)
+        public async ValueTask<StaffForResultDto> GetStaffByUserId([Service] IStaffService service, long userId)
         {
             return await service.RetrieveByUserIdAsync(userId);
         }
         public async ValueTask<IEnumerable<StaffForResultDto>> GetStaffByRoleId([Service] IStaffService service,
-            PaginationParams @params,long roleId)
+            PaginationParams @params, long roleId)
         {
-            return await service.RetrieveAllByRoleAsync(@params,roleId);
+            return await service.RetrieveAllByRoleAsync(@params, roleId);
         }
     }
 }

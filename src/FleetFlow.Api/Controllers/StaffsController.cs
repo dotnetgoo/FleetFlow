@@ -8,7 +8,7 @@ namespace FleetFlow.Api.Controllers
 {
     public class StaffsController : RestfulSense
     {
-        private  IStaffService staffService;
+        private IStaffService staffService;
 
         public StaffsController(IStaffService staffService)
         {
@@ -22,7 +22,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
-        public async ValueTask<IActionResult> CreateAsync([FromBody]StaffForCreationDto dto)
+        public async ValueTask<IActionResult> CreateAsync([FromBody] StaffForCreationDto dto)
         => Ok(new Response
         {
             Code = 200,
@@ -36,7 +36,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPut]
-        public async ValueTask<IActionResult> UpdateAsync(long id,[FromBody] StaffForUpdateDto dto)
+        public async ValueTask<IActionResult> UpdateAsync(long id, [FromBody] StaffForUpdateDto dto)
             => Ok(new Response
             {
                 Code = 200,
@@ -76,7 +76,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="params"></param>
         /// <returns></returns>
         [HttpGet]
-        public async ValueTask<IActionResult> GetAllAsync([FromQuery]PaginationParams @params)
+        public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
             => Ok(new Response
             {
                 Code = 200,
@@ -110,6 +110,6 @@ namespace FleetFlow.Api.Controllers
                 Message = "Ok",
                 Data = await staffService.RetrieveByUserIdAsync(userId)
             });
-        
+
     }
 }

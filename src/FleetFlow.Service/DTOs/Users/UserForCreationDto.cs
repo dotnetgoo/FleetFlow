@@ -1,5 +1,4 @@
-﻿using FleetFlow.Domain.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace FleetFlow.Service.DTOs.User;
 public class UserForCreationDto

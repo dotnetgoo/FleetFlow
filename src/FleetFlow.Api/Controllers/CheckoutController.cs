@@ -1,12 +1,12 @@
-﻿using FleetFlow.Api.Models;
-using Microsoft.AspNetCore.Mvc;
-using FleetFlow.Api.Extensions;
-using FleetFlow.Service.DTOs.Orders;
+﻿using FleetFlow.Api.Extensions;
+using FleetFlow.Api.Models;
 using FleetFlow.Service.DTOs.Address;
-using FleetFlow.Service.DTOs.Payments;
 using FleetFlow.Service.DTOs.Attachments;
-using FleetFlow.Service.Interfaces.Orders;
 using FleetFlow.Service.DTOs.Discounts;
+using FleetFlow.Service.DTOs.Orders;
+using FleetFlow.Service.DTOs.Payments;
+using FleetFlow.Service.Interfaces.Orders;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FleetFlow.Api.Controllers;
 

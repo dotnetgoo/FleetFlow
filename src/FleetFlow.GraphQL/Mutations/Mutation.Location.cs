@@ -1,6 +1,5 @@
 ﻿using FleetFlow.Service.DTOs.Location;
 using FleetFlow.Service.Interfaces.Warehouses;
-using HotChocolate;
 
 namespace FleetFlow.GraphQL.Mutations
 {

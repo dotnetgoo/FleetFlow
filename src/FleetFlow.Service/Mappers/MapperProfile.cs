@@ -1,33 +1,33 @@
 ﻿using AutoMapper;
 using FleetFlow.Domain.Entities;
-using FleetFlow.Service.DTOs.User;
-using FleetFlow.Service.DTOs.Carts;
-using FleetFlow.Service.DTOs.Roles;
-using FleetFlow.Service.DTOs.Orders;
-using FleetFlow.Service.DTOs.Staffs;
-using FleetFlow.Service.DTOs.Bonuses;
-using FleetFlow.Service.DTOs.Address;
-using FleetFlow.Service.DTOs.Product;
-using FleetFlow.Service.DTOs.Payments;
-using FleetFlow.Service.DTOs.Location;
-using FleetFlow.Domain.Entities.Staffs;
-using FleetFlow.Domain.Entities.Users;
-using FleetFlow.Service.DTOs.Questions;
-using FleetFlow.Domain.Entities.Orders;
-using FleetFlow.Service.DTOs.Discounts;
-using FleetFlow.Domain.Entities.Bonuses;
-using FleetFlow.Domain.Entities.Products;
-using FleetFlow.Service.DTOs.Inventories;
-using FleetFlow.Service.DTOs.Permissions;
 using FleetFlow.Domain.Entities.Addresses;
-using FleetFlow.Service.DTOs.InventoryLogs;
-using FleetFlow.Domain.Entities.Warehouses;
-using FleetFlow.Service.DTOs.RolePermissions;
-using FleetFlow.Domain.Entities.UserQuestions;
-using FleetFlow.Service.DTOs.StaffPermissions;
 using FleetFlow.Domain.Entities.Authorizations;
+using FleetFlow.Domain.Entities.Bonuses;
+using FleetFlow.Domain.Entities.Orders;
+using FleetFlow.Domain.Entities.Products;
 using FleetFlow.Domain.Entities.StaffPermissions;
+using FleetFlow.Domain.Entities.Staffs;
+using FleetFlow.Domain.Entities.UserQuestions;
+using FleetFlow.Domain.Entities.Users;
+using FleetFlow.Domain.Entities.Warehouses;
+using FleetFlow.Service.DTOs.Address;
+using FleetFlow.Service.DTOs.Bonuses;
+using FleetFlow.Service.DTOs.Carts;
+using FleetFlow.Service.DTOs.Discounts;
+using FleetFlow.Service.DTOs.Inventories;
+using FleetFlow.Service.DTOs.InventoryLogs;
+using FleetFlow.Service.DTOs.Location;
+using FleetFlow.Service.DTOs.Orders;
+using FleetFlow.Service.DTOs.Payments;
+using FleetFlow.Service.DTOs.Permissions;
+using FleetFlow.Service.DTOs.Product;
 using FleetFlow.Service.DTOs.Products;
+using FleetFlow.Service.DTOs.Questions;
+using FleetFlow.Service.DTOs.RolePermissions;
+using FleetFlow.Service.DTOs.Roles;
+using FleetFlow.Service.DTOs.StaffPermissions;
+using FleetFlow.Service.DTOs.Staffs;
+using FleetFlow.Service.DTOs.User;
 
 namespace FleetFlow.Service.Mappers
 {
@@ -110,7 +110,7 @@ namespace FleetFlow.Service.Mappers
             CreateMap<Region, RegionResultDto>().ReverseMap();
             CreateMap<District, DistrictResultDto>().ReverseMap();
 
-            CreateMap<Bonus, BonusResultDto>().ReverseMap();    
+            CreateMap<Bonus, BonusResultDto>().ReverseMap();
             CreateMap<BonusSetting, BonusSettingCreationDto>().ReverseMap();
             CreateMap<BonusSetting, BonusSettingUpdateDto>().ReverseMap();
             CreateMap<BonusSetting, BonusSettingResultDto>().ReverseMap();
