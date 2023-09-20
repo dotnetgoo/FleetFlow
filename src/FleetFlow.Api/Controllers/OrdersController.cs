@@ -26,7 +26,7 @@ public class OrdersController : RestfulSense
 
 
     [HttpDelete("id")]
-    public async ValueTask<IActionResult> DeleteAsync(long id)
+    public async ValueTask<IActionResult> DeleteAsync([FromRoute(Name = "id")] long id)
         => Ok(new Response
         {
             Code = 200,
@@ -71,7 +71,7 @@ public class OrdersController : RestfulSense
 
 
     [HttpGet("id")]
-    public async ValueTask<IActionResult> GetAsync(long id)
+    public async ValueTask<IActionResult> GetAsync([FromRoute(Name = "id")] long id)
         => Ok(new Response
         {
             Code = 200,

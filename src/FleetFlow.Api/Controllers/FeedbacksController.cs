@@ -73,7 +73,7 @@ public class FeedbacksController : RestfulSense
     }
 
     [HttpGet("client-id")]
-    public async ValueTask<IActionResult> GetAllByClientIdAsync(long clientId)
+    public async ValueTask<IActionResult> GetAllByClientIdAsync([FromRoute(Name = "client-id")]long clientId)
     {
         return Ok(new Response()
         {

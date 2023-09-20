@@ -34,7 +34,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("id")]
-        public async ValueTask<ActionResult<bool>> DeleteAsync(int id)
+        public async ValueTask<ActionResult<bool>> DeleteAsync([FromRoute(Name = "id")] int id)
             => Ok(new Response
             {
                 Code = 200,
@@ -75,7 +75,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("get-by-id")]
-        public async ValueTask<IActionResult> GetByIdAsync(long id)
+        public async ValueTask<IActionResult> GetByIdAsync([FromRoute(Name = "get-by-id")] long id)
             => Ok(new Response
             {
                 Code = 200,
@@ -88,7 +88,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("get-product-by-id")]
-        public async ValueTask<IActionResult> GetProductByIdAsync(long productId)
+        public async ValueTask<IActionResult> GetProductByIdAsync([FromRoute(Name = "get-product-by-id")] long productId)
             => Ok(new Response
             {
                 Code = 200,

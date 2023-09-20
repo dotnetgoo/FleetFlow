@@ -62,7 +62,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="params"></param>
         /// <returns></returns>
         [HttpGet("answers")]
-        public async ValueTask<IActionResult> GetAllAsync([FromQuery] PaginationParams @params)
+        public async ValueTask<IActionResult> GetAllAsync([FromRoute(Name = "answers")] PaginationParams @params)
             => Ok(new Response
             {
                 Code = 200,
@@ -77,7 +77,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="adminId"></param>
         /// <returns></returns>
         [HttpGet("admin-id")]
-        public async ValueTask<IActionResult> GetAllByAdminIdAsync([FromQuery] PaginationParams @params, long adminId)
+        public async ValueTask<IActionResult> GetAllByAdminIdAsync([FromRoute(Name = "admin-id")] PaginationParams @params, long adminId)
             => Ok(new Response
             {
                 Code = 200,
@@ -92,7 +92,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("user-id")]
-        public async ValueTask<IActionResult> GetAllByUserIdAsync([FromQuery] PaginationParams @params, long userId)
+        public async ValueTask<IActionResult> GetAllByUserIdAsync([FromRoute(Name = "user-id")] PaginationParams @params, long userId)
             => Ok(new Response
             {
                 Code = 200,

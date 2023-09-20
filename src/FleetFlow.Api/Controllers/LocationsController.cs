@@ -34,7 +34,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("id")]
-        public async ValueTask<IActionResult> GetAsync(long id)
+        public async ValueTask<IActionResult> GetAsync([FromRoute(Name = "id")] long id)
             => Ok(new Response
             {
                 Code = 200,
@@ -63,7 +63,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpPut("id")]
-        public async ValueTask<ActionResult<LocationForResultDto>> PutAsync(LocationForCreationDto dto, long id)
+        public async ValueTask<ActionResult<LocationForResultDto>> PutAsync([FromRoute(Name = "id")] LocationForCreationDto dto, long id)
             => Ok(new Response
             {
                 Code = 200,
@@ -77,7 +77,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("id")]
-        public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
+        public async ValueTask<ActionResult<bool>> DeleteAsync([FromRoute(Name = "id")] long id)
             => Ok(new Response
             {
                 Code = 200,
