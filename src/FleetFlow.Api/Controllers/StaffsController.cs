@@ -49,7 +49,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("id")]
-        public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
+        public async ValueTask<ActionResult<bool>> DeleteAsync([FromRoute(Name = "id")] long id)
             => Ok(new Response
             {
                 Code = 200,
@@ -63,7 +63,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("id")]
-        public async ValueTask<IActionResult> GetByIdAsync(long id)
+        public async ValueTask<IActionResult> GetByIdAsync([FromRoute(Name = "id")] long id)
             => Ok(new Response
             {
                 Code = 200,
@@ -90,7 +90,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="roleId"></param>
         /// <returns></returns>
         [HttpGet("roleId")]
-        public async ValueTask<IActionResult> GetByRoleId([FromQuery] PaginationParams @params, long roleId)
+        public async ValueTask<IActionResult> GetByRoleId([FromQuery]PaginationParams @params, [FromRoute(Name = "roleId")] long roleId)
             => Ok(new Response
             {
                 Code = 200,
@@ -103,7 +103,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet("userId")]
-        public async ValueTask<IActionResult> GetByUserId(long userId)
+        public async ValueTask<IActionResult> GetByUserId([FromRoute(Name = "userId")] long userId)
             => Ok(new Response
             {
                 Code = 200,

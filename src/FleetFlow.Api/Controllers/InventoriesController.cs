@@ -35,7 +35,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPut("id")]
-        public async ValueTask<ActionResult<Inventory>> PutAsync(long id, [FromBody] InventoryForUpdateDto dto)
+        public async ValueTask<ActionResult<Inventory>> PutAsync([FromRoute(Name = "id")] long id, [FromBody] InventoryForUpdateDto dto)
             => Ok(new Response
             {
                 Code = 200,
@@ -48,7 +48,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("id")]
-        public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
+        public async ValueTask<ActionResult<bool>> DeleteAsync([FromRoute(Name = "id")] long id)
             => Ok(new Response
             {
                 Code = 200,
@@ -74,7 +74,7 @@ namespace FleetFlow.Api.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet("id")]
-        public async ValueTask<IActionResult> GetByIdAsync(long id)
+        public async ValueTask<IActionResult> GetByIdAsync([FromRoute(Name = "id")] long id)
             => Ok(new Response
             {
                 Code = 200,

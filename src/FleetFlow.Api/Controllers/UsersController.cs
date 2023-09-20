@@ -36,7 +36,7 @@ public class UsersController : RestfulSense
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpGet("id")]
-    public async ValueTask<IActionResult> GetAsync(long id)
+    public async ValueTask<IActionResult> GetAsync([FromRoute(Name = "id")] long id)
         => Ok(new Response
         {
             Code = 200,
@@ -65,7 +65,7 @@ public class UsersController : RestfulSense
     /// <param name="dto"></param>
     /// <returns></returns>
     [HttpPut("id")]
-    public async ValueTask<ActionResult<UserForResultDto>> PutAsync(long id, UserForUpdateDto dto)
+    public async ValueTask<ActionResult<UserForResultDto>> PutAsync([FromRoute(Name = "id")] long id, UserForUpdateDto dto)
         => Ok(new Response
         {
             Code = 200,
@@ -79,7 +79,7 @@ public class UsersController : RestfulSense
     /// <param name="id"></param>
     /// <returns></returns>
     [HttpDelete("id")]
-    public async ValueTask<ActionResult<bool>> DeleteAsync(long id)
+    public async ValueTask<ActionResult<bool>> DeleteAsync([FromRoute(Name = "id")] long id)
         => Ok(new Response
         {
             Code = 200,
