@@ -32,15 +32,15 @@ public class AddressService : IAddressService
 
     public async Task<bool> DeleteByIdAsync(long id)
     {
-        var CheckAddress = await addressRepository.SelectAsync(a => a.Id == id);
+        var checkAddress = await addressRepository.SelectAsync(a => a.Id == id);
 
-        bool IsDeleted = await addressRepository.DeleteAsync(a => a.Id == id);
+        bool isDeleted = await addressRepository.DeleteAsync(a => a.Id == id);
 
-        if (!IsDeleted)
+        if (!isDeleted)
             throw new FleetFlowException(404, "Couldn't find product for this given Id");
 
         await addressRepository.SaveAsync();
-        return IsDeleted;
+        return isDeleted;
     }
 
     public async Task<IEnumerable<AddressForResultDto>> GetAllAsync(PaginationParams @params)
